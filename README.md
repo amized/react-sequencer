@@ -4,7 +4,7 @@ A better way to do animations in React.
 
 ## Overview
 
-React Sequencer sets up a a step based sequencer that transitions through any number of steps with indivdual durations. When you create a sequencer you will pass in a configuration array to tell it what the steps are:
+React Sequencer sets up a a step-based sequencer that transitions through any number of steps with indivdual durations. When you create a sequencer you will pass in a configuration array to tell it what the steps are:
 
 ```
 [
@@ -59,7 +59,7 @@ export default withSequencer({
 
 ## Options
 
-###`withSequencer({...options})(MyComponent)`
+### `withSequencer({...options})(MyComponent)`
 
 Pass an options object to `withSequencer` to set up your sequencer.
 
@@ -80,8 +80,8 @@ withSequencer({
 A few things to note about the behavior:
 
 * When your component is mounted the sequencer always starts on the first step whether playing or not. 
-* When the sequencer finishes, it remains on the final step indefinately until it begins again. 
-* If in loop mode, the sequencer jumps to the first step after it finishes.
+* When the sequencer finishes, it remains on the final step indefinately until it begins again (except if in loop mode). 
+* If you specify a duration of `0ms`, it means that the step is run on next animation frame after the previous step. This guarantees that every state must be visited and rendered as the sequence plays through.
 
 #### `loop: Boolean` 
 
