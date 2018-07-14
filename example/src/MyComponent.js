@@ -68,7 +68,7 @@ class MyComponent extends React.PureComponent {
     };
   }
   handleStart = () => {
-    this.props.sequencer.start();
+    this.props.sequencer.play();
   }
 
   handleStop = () => {
