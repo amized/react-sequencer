@@ -6,7 +6,7 @@ A better way to do animations in React.
 
 React Sequencer sets up a a step-based sequencer that transitions through any number of steps with indivdual durations. 
 
-The idea here is that you get a simple, easily-configurable, non-ambiguous state machine and api to control your animation state - and it's totally up to you how you render that state. Whether it's through css animation, className animation or use of an external graphics library, you handle that side of things.
+The idea here is that you get a simple, easily-configurable, non-ambiguous state machine and api to control your animations. The state is passed to your component and it's totally up to you how you render it - whether it's through css animation, className animation or use of an external graphics library.
 
 When you create a sequencer you will pass in a configuration array to tell it what the steps are:
 
@@ -20,11 +20,11 @@ When you create a sequencer you will pass in a configuration array to tell it wh
 
 To explain how the sequencer behaves, consider the example above.
 
-* A sequencer is always in one of your provided states at any time, so when the sequencer is initialized it starts in the first step `initial`
+* A sequencer is *always* in one of your provided states at any time, so when the sequencer is initialized it starts in the first step `initial`
 * The sequencer needs to be started (through the API) to begin sequencing through the steps. When this happens the sequencer remains in `initial` for another 100ms.
 * The sequencer then transitions to `middle` and stays there for 100ms.
 * It then transitions to `final` and stays there for 200ms.
-* After the 200ms is up the sequencer remains in `final` until you reset it. Your component will recieve another flag `isComplete` (see below) to indicate the complete state of the sequencer.
+* After the 200ms is up the sequencer remains in `final` until you reset it. Your component will receive another flag `isComplete` (see below) to indicate the complete state of the sequencer.
 
 
 
@@ -56,6 +56,8 @@ export default withSequencer({
   ]
 })(MyComponent);
 ```
+
+When wrapped, your component receives a `sequencer` object as a prop that contains the sequencer state and some methods to control the sequencer.
 
 
 ## Configuration
@@ -98,7 +100,7 @@ Put the sequencer in loop mode. In loop mode, the sequencer jumps to the first s
 
 ## Props
 
-When you wrap your component with `withSequencer` a `sequencer` object gets passed as a prop into your component. This object contains both the state of the sequencer and some API methods to control it.
+The `sequencer` prop passed to your wrapped component has the following properties:
 
 ### State Props
 
@@ -222,7 +224,7 @@ Whether or not to run the 'in' sequence when the component mounts.
 
 #### `unmountOnExit: Boolean `
 
-If set to true, the child element is removed from the dom when the sequence gets to completed state. Note that your component will remain the duration of the last step before unmounting.
+If set to true, the child element is removed from the dom when the `out` sequence gets to a completed state. Note that your component will remain mounted for the duration of the last step before unmounting.
 
 ## Injected Props
 
