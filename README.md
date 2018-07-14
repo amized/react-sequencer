@@ -82,10 +82,10 @@ This makes for a powerful animation tool, since let's say you need to prepare fo
 
 ```javascript
 [
-	['prep', 0]
-	['initial', 100],
-	['middle', 100],
-	['final', 0]
+  ['prep', 0]
+  ['initial', 100],
+  ['middle', 100],
+  ['final', 0]
 ]
 ```
 
@@ -122,7 +122,7 @@ The index of the current step.
 
 ### API Props
 
-#### `sequencer.start(): Function`
+#### `sequencer.play(): Function`
 
 Starts the sequencer, or continues playing if the sequencer was paused.
 
