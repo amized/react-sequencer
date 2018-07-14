@@ -36,7 +36,7 @@ class SequencedTitle extends React.Component {
         <Wrapper>
           {
             this.chars.map((char, index) => (
-              <CharWrapper active={index === seq.index} isPrev={index === seq.index - 1}>
+              <CharWrapper key={index} active={index === seq.index} isPrev={index === seq.index - 1}>
                 {char}
               </CharWrapper>
             ))

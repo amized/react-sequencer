@@ -2,6 +2,16 @@ const STATUS_IDLE = 'sequencer/STATUS_IDLE';
 const STATUS_PLAYING = 'sequencer/STATUS_PLAYING';
 const STATUS_COMPLETE = 'sequencer/STATUS_COMPLETE';
 
+let onNextTick, cancelNextTick;
+
+if (typeof window === 'undefined') {
+  onNextTick = setImmediate;
+  cancelNextTick = clearImmediate;
+} else {
+  onNextTick = window.requestAnimationFrame;
+  cancelNextTick = window.cancelAnimationFrame;
+}
+
 class Sequencer {
 
   constructor(props) {
@@ -78,7 +88,7 @@ class Sequencer {
       }
       this.notifyChange();
     }
-    this.requestID = window.requestAnimationFrame(this.onLoop);
+    this.requestID = onNextTick(this.onLoop);
   }
 
   notifyChange() {
@@ -102,13 +112,13 @@ class Sequencer {
     this.startedAt = Date.now() - this.currentTimeIn;
     this.status = STATUS_PLAYING;
     this.notifyChange();
-    this.requestID = window.requestAnimationFrame(this.onLoop);
+    this.requestID = onNextTick(this.onLoop);
   }
 
   pause = () => {
     if (this.status !== STATUS_IDLE) {
       this.status = STATUS_IDLE;
-      window.cancelAnimationFrame(this.requestID);
+      cancelNextTick(this.requestID);
       this.notifyChange();
     }
   }
@@ -118,7 +128,7 @@ class Sequencer {
       this.currentStep = 0;
       this.currentTimeIn = 0;
       this.status = STATUS_IDLE;
-      window.cancelAnimationFrame(this.requestID);
+      cancelNextTick(this.requestID);
       this.notifyChange();
     }
   }
