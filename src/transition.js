@@ -17,22 +17,6 @@ class Transition extends React.PureComponent {
     runOnMount: false
   }
 
-  componentDidMount() {
-    if (this.props.in && this.props.runOnMount) {
-      this.inSeq.start();
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    if (!prevProps.in && this.props.in) {
-      this.outSeq.stop();
-      this.inSeq.start();
-    } else if (prevProps.in && !this.props.in) {
-      this.inSeq.stop();
-      this.outSeq.start();
-    }
-  }
-
   constructor(props) {
     super(props);
     this.inSeq = new Sequencer({
@@ -52,6 +36,22 @@ class Transition extends React.PureComponent {
     };
 
     this.state = state;
+  }
+
+  componentDidMount() {
+    if (this.props.in && this.props.runOnMount) {
+      this.inSeq.play();
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!prevProps.in && this.props.in) {
+      this.outSeq.stop();
+      this.inSeq.play();
+    } else if (prevProps.in && !this.props.in) {
+      this.inSeq.stop();
+      this.outSeq.play();
+    }
   }
 
   handleInSeqChange = seq => {

@@ -4,9 +4,13 @@ A better way to do animations in React.
 
 ## Overview
 
-React Sequencer sets up a a step-based sequencer that transitions through any number of steps with indivdual durations. When you create a sequencer you will pass in a configuration array to tell it what the steps are:
+React Sequencer sets up a a step-based sequencer that transitions through any number of steps with indivdual durations. 
 
-```
+The idea here is that you get a simple, easily-configurable, non-ambiguous state machine and api to control your animation state - and it's totally up to you how you render that state. Whether it's through css animation, className animation or use of an external graphics library, you handle that side of things.
+
+When you create a sequencer you will pass in a configuration array to tell it what the steps are:
+
+```javascript
 [
   ['initial', 100],
   ['middle', 100],
@@ -17,12 +21,12 @@ React Sequencer sets up a a step-based sequencer that transitions through any nu
 To explain how the sequencer behaves, consider the example above.
 
 * A sequencer is always in one of your provided states at any time, so when the sequencer is initialized it starts in the first step `initial`
-* The sequencer needs to be started (through the API) to begin sequencing through the steps. When this happens the sequencer remains in `inital` for another 100ms.
+* The sequencer needs to be started (through the API) to begin sequencing through the steps. When this happens the sequencer remains in `initial` for another 100ms.
 * The sequencer then transitions to `middle` and stays there for 100ms.
-* Finally the sequencer transition to `final` and stays there for 200ms.
+* It then transitions to `final` and stays there for 200ms.
 * After the 200ms is up the sequencer remains in `final` until you reset it. Your component will recieve another flag `isComplete` (see below) to indicate the complete state of the sequencer.
 
-The idea here is that you get a simple, easily-configurable, non-ambiguous state machine and api to control your animation state - and it's totally up to you how you render that state. Whether it's through css animation, className animation or use of an external graphics library, you handle that side of things.
+
 
 
 ## Getting started
@@ -31,7 +35,7 @@ The idea here is that you get a simple, easily-configurable, non-ambiguous state
 npm install react-sequencer
 ```
 
-Inject your component with sequencer state by wrapping it in the `withSequencer` HOC.
+The most basic usage of react sequencer is to wrap your component with the `withSequencer` HOC.
 
 ```javascript
 import { withSequencer } from 'react-sequencer';
@@ -57,11 +61,9 @@ export default withSequencer({
 ```
 
 
-## Options
+## Configuration
 
-### `withSequencer({...options})(MyComponent)`
-
-Pass an options object to `withSequencer` to set up your sequencer.
+Pass an options object to `withSequencer` to configure up your sequencer.
 
 #### `steps: Array` [required]
 
@@ -77,11 +79,20 @@ withSequencer({
 })(MyComponent);
 ```
 
-A few things to note about the behavior:
+If you specify a duration of `0ms`, it means that the step is run on next animation frame after the previous step. This guarantees that every state must be visited and rendered before transitioning to the next state.
 
-* When your component is mounted the sequencer always starts on the first step whether playing or not. 
-* When the sequencer finishes, it remains on the final step indefinately until it begins again (except if in loop mode). 
-* If you specify a duration of `0ms`, it means that the step is run on next animation frame after the previous step. This guarantees that every state must be visited and rendered as the sequence plays through.
+This makes for a powerful animation tool, since let's say you need to prepare for an animation with css before it starts, you can simply do this:
+
+```javascript
+[
+	['prep', 0]
+	['initial', 100],
+	['middle', 100],
+	['final', 0]
+]
+```
+
+And then `prep` is becomes the starting state before we get to initial.
 
 #### `loop: Boolean` 
 
@@ -124,7 +135,7 @@ Pauses the sequencer. The sequencer remembers how far through the current step y
 
 #### `sequencer.stop(): Function`
 
-Stops playback and resets the sequencr back to the first step.
+Stops playback and resets the sequencer back to the first step.
 
 -------
 
@@ -158,7 +169,11 @@ const outSteps = [
   outSteps={outSteps}
   in={true}
 >
-  <MyComponent/>
+  {
+    current => (
+    	<MyComponent/>
+    )
+  }
 </Transition>
 ```
 

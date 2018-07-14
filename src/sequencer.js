@@ -91,7 +91,7 @@ class Sequencer {
     this.subscriptions.push(fn);
   }
 
-  start = () => {
+  play = () => {
     if (this.status === STATUS_PLAYING) {
       return;
     }
@@ -137,7 +137,7 @@ class Sequencer {
       index: this.currentStep,
       isPlaying: this.isPlaying(),
       isComplete: this.isComplete(),
-      start: this.start,
+      play: this.play,
       stop: this.stop,
       pause: this.pause
     };
