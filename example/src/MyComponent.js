@@ -24,7 +24,6 @@ const InnerWrapper = styled.div`
   transition: opacity 0.5s, transform 1s;
   transform-origin: 0px 0px;
   ${props => {
-    console.log("props currenr??", props.current);
     switch (props.current) {
       case 'not-entered':
         return `
@@ -90,7 +89,7 @@ class MyComponent extends React.PureComponent {
         <div>
           <button onClick={this.handleToggle}>Toggle</button>
         </div>
-        <Transition
+        {/*<Transition
           in={this.state.in}
           inSteps={[
             ['left', 0],
@@ -108,6 +107,7 @@ class MyComponent extends React.PureComponent {
         >
           <InnerWrapper>Hellloo!!</InnerWrapper>
         </Transition>
+        */}
         <Sequencer>
           {
             steps.map((step, index) => (

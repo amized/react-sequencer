@@ -4,7 +4,7 @@ A better way to do animations in React.
 
 ## Overview
 
-React Sequencer sets up a a step-based sequencer that transitions through any number of steps with indivdual durations. 
+React Sequencer sets up a step-based sequencer that transitions through any number of steps with indivdual durations. 
 
 The idea here is that you get a simple, easily-configurable, non-ambiguous state machine and api to control your animations. The state is passed to your component and it's totally up to you how you render it - whether it's through css animation, className animation or use of an external graphics library.
 
@@ -42,7 +42,7 @@ class MyComponent extends React.Component {
     return (
       <div>
         <div>This is the sequence state: {this.props.sequencer.current}</div>
-        <button onClick={this.props.sequencer.start}>Start</button>
+        <button onClick={this.props.sequencer.play}>Start</button>
       </div>    
     );
   }

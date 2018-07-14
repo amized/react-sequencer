@@ -77,10 +77,11 @@ class Transition extends React.PureComponent {
       return null;
     }
 
-    const updatedChildren = React.Children.map(children, child =>
-      React.cloneElement(child, { current }));
+    if (typeof children !== 'function') {
+      throw new Error('Child passed into Transition must be a function');
+    }
 
-    return updatedChildren;
+    return children(current);
   }
 }
 

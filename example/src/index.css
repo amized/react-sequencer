@@ -3,3 +3,39 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+.fade {
+  transition: opacity 0.5s linear, transform 0.5s ease-in-out;
+  transform: translateX(300px);
+}
+
+.enter-start {
+  display: block;
+  opacity: 0;
+}
+
+.enter-active {
+  display: block;
+  opacity: 1;
+}
+
+.entered {
+  display: block;
+  opacity: 1;
+  transform: translateX(0px);
+}
+
+.leave-start {
+  display: block;
+  opacity: 1;
+  transform: translateX(0px);
+}
+
+.leave-active {
+  display: block;
+  opacity: 0;
+}
+
+.gone {
+  display: none;
+}

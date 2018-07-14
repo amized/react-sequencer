@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import MyComponent from './MyComponent';
 import SequencedTitle from './title';
+import TransitionExample from './transition-example';
 
 class App extends Component {
   render() {
@@ -9,6 +10,7 @@ class App extends Component {
         Hello
         <MyComponent/>
         <SequencedTitle/>
+        <TransitionExample/>
       </div>
     );
   }
