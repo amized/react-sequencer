@@ -31,9 +31,6 @@ To explain how the sequencer behaves, consider the example above.
 
 ## Getting started
 
-```
-npm install react-sequencer
-```
 
 The most basic usage of react sequencer is to wrap your component with the `withSequencer` HOC.
 
