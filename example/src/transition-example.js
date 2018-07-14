@@ -25,7 +25,6 @@ const Fade = props => (
     inSteps={inSteps}
     outSteps={outSteps}
     unmountOnExit
-    runOnMount
   >
     {current => (
       <div className={'fade ' + current}>
@@ -39,7 +38,7 @@ class TransitionExample extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      in: false
+      in: true
     };
   }
 

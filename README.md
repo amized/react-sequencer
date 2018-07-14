@@ -26,7 +26,7 @@ To explain how the sequencer behaves, consider the example above.
 * It then transitions to `final` and stays there for 200ms.
 * After the 200ms is up the sequencer remains in `final` until you reset it. Your component will receive another flag `isComplete` (see below) to indicate the complete state of the sequencer.
 
-
+<img src="https://user-images.githubusercontent.com/13376866/42727760-04eade32-877a-11e8-9d2c-22850977b486.png" alt="drawing" width="600px" style="margin: 20px 0px;"/>
 
 
 ## Getting started
