@@ -78,7 +78,7 @@ withSequencer({
 })(MyComponent);
 ```
 
-If you specify a duration of `0ms`, it means that the step is run on next animation frame after the previous step. This guarantees that every state must be visited and rendered before transitioning to the next state.
+If you specify a duration of `0ms` for a step, it means that the following step will fire on the next animation frame. This guarantees that every state must be visited and rendered before transitioning to the next state.
 
 This is a useful animation tool, since let's say you'd like a different initial state for an animation before it starts, but you don't want to effect the rest of the sequence. You can simply do this:
 
@@ -91,7 +91,7 @@ This is a useful animation tool, since let's say you'd like a different initial 
 ]
 ```
 
-And then `pre` becomes the default state when your component mounts, until the sequencer in started. By defining all the states explicitly in this fashion, it makes your animation easier to understand and manipulate.
+And then `pre` becomes the default state when your component mounts, until the sequencer is started. By defining all the states explicitly in this fashion, it makes your animation easier to understand and manipulate.
 
 #### `loop: Boolean` 
 

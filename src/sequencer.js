@@ -4,18 +4,16 @@ const STATUS_COMPLETE = 'sequencer/STATUS_COMPLETE';
 
 let onNextTick, cancelNextTick;
 
-if (typeof window === 'undefined') {
-  onNextTick = setImmediate;
-  cancelNextTick = clearImmediate;
-} else {
+if (typeof window !== 'undefined' && window.requestAnimationFrame) {
   onNextTick = window.requestAnimationFrame;
   cancelNextTick = window.cancelAnimationFrame;
+} else {
+  onNextTick = setImmediate;
+  cancelNextTick = clearImmediate;
 }
 
 class Sequencer {
-
   constructor(props) {
-
     const defaults = {
       steps: [],
       loop: false
@@ -37,7 +35,6 @@ class Sequencer {
   }
 
   _generateSteps(stepsInput) {
-
     if (!stepsInput || typeof stepsInput !== 'object') {
       return null;
     }
@@ -129,6 +126,15 @@ class Sequencer {
     }
   }
 
+  complete = () => {
+    if (this.status !== STATUS_COMPLETE) {
+      this.currentStep = this.steps.length - 1;
+      this.status = STATUS_COMPLETE;
+      cancelNextTick(this.requestID);
+      this._notifyChange();
+    }
+  }
+
   isComplete = () => {
     return this.status === STATUS_COMPLETE;
   }
@@ -150,7 +156,6 @@ class Sequencer {
 
     return state;
   }
-
 }
 
 export default Sequencer;

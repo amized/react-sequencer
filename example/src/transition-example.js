@@ -4,18 +4,16 @@ import styled from 'styled-components';
 
 /* Define the sequence for when the component enters */
 const inSteps = [
-  ['gone', 0],
   ['enter-start', 0],
   ['enter-active', 500],
-  ['entered', 100]
+  ['entered', 0]
 ];
 
 /* Define the sequence for when the component leaves */
 const outSteps = [
-  ['entered', 0],
   ['leave-start', 0],
   ['leave-active', 500],
-  ['gone', 100]
+  ['gone', 500]
 ];
 
 /* Build a Fade transition wrapper component out of our Transition component */
@@ -25,6 +23,7 @@ const Fade = props => (
     inSteps={inSteps}
     outSteps={outSteps}
     unmountOnExit
+    runOnMount
   >
     {current => (
       <div className={'fade ' + current}>

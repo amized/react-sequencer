@@ -4,10 +4,18 @@ import Sequencer from 'sequencer';
 
 class Transition extends React.PureComponent {
   static propTypes = {
+    /** Toggles the component in and out. */
     in: PropTypes.bool,
+    /** Sequence to perform when in becomes true. */
     inSteps: PropTypes.array.isRequired,
+    /** Sequence to perform when in becomes false. */
     outSteps: PropTypes.array.isRequired,
+    /** Whether or not to run the 'in' sequence when the component mounts. */
     unmountOnExit: PropTypes.bool,
+    /** If set to true, the child element is removed from the dom when
+     * the out sequence gets to a completed state. Note that your
+     * component will remain mounted for the duration of the last
+     * step before unmounting. */
     runOnMount: PropTypes.bool
   }
 
@@ -26,16 +34,25 @@ class Transition extends React.PureComponent {
       steps: props.outSteps
     });
 
-    this.inSeq.onChange(this.handleInSeqChange);
-    this.outSeq.onChange(this.handleOutSeqChange);
+    let current;
 
-    const state = {
-      current: (props.in && props.runOnMount) || !props.in ?
-        this.inSeq.getState().current : this.outSeq.getState().current,
+    if (props.in && props.runOnMount) {
+      current = this.inSeq.getState().current;
+    } else if (!props.in) {
+      this.outSeq.complete();
+      current = this.outSeq.getState().current;
+    } else {
+      this.inSeq.complete();
+      current = this.inSeq.getState().current;
+    }
+
+    this.state = {
+      current,
       exitComplete: !props.in
     };
 
-    this.state = state;
+    this.inSeq.onChange(this.handleInSeqChange);
+    this.outSeq.onChange(this.handleOutSeqChange);
   }
 
   componentDidMount() {

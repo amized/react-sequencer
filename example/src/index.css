@@ -5,37 +5,36 @@ body {
 }
 
 .fade {
+  display: inline-block;
   transition: opacity 0.5s linear, transform 0.5s ease-in-out;
+  transform-origin: 50% 50%;
   transform: translateX(300px);
 }
 
 .enter-start {
-  display: block;
   opacity: 0;
 }
 
 .enter-active {
-  display: block;
   opacity: 1;
+  transform: translateX(0px);
 }
 
 .entered {
-  display: block;
   opacity: 1;
   transform: translateX(0px);
 }
 
 .leave-start {
-  display: block;
   opacity: 1;
   transform: translateX(0px);
 }
 
 .leave-active {
-  display: block;
-  opacity: 0;
+  opacity: 0.2;
 }
 
 .gone {
-  display: none;
+  opacity: 0;
+  transform: translateX(300px) scale(2);
 }

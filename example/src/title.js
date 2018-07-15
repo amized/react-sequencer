@@ -45,7 +45,7 @@ class SequencedTitle extends React.Component {
         {
           seq.isPlaying ?
             <button onClick={seq.pause}>Pause</button> :
-            <button onClick={seq.start}>Start</button>
+            <button onClick={seq.play}>Start</button>
 
         }
       </div>
