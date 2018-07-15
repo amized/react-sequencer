@@ -9,6 +9,13 @@ let libraryName = pkg.name;
 
 let outputFile, mode;
 
+const reactExternal = {
+  root: 'React',
+  commonjs2: 'react',
+  commonjs: 'react',
+  amd: 'react'
+};
+
 if (env === 'build') {
   mode = 'production';
   outputFile = libraryName + '.min.js';
@@ -27,6 +34,9 @@ const config = {
     library: libraryName,
     libraryTarget: 'umd',
     umdNamedDefine: true
+  },
+  externals: {
+    react: reactExternal
   },
   module: {
     rules: [

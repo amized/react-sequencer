@@ -7,9 +7,11 @@ let onNextTick, cancelNextTick;
 if (typeof window !== 'undefined' && window.requestAnimationFrame) {
   onNextTick = window.requestAnimationFrame;
   cancelNextTick = window.cancelAnimationFrame;
-} else {
+} else if (typeof setImmediate === 'function') {
   onNextTick = setImmediate;
   cancelNextTick = clearImmediate;
+} else {
+  throw new Error('React sequence requires requestAnimationFrame or setImmediate.');
 }
 
 class Sequencer {

@@ -4,7 +4,9 @@ A better way to do animations in React.
 
 ## Overview
 
-React Sequencer gives you a step-based sequencer that transitions through any number of steps with indivdual durations. You can inject your components with that state in order to perform animations, transitions, music, or any complex time-sequenced set of events. When you create a sequencer you will pass in a configuration array to tell it what the steps are:
+React Sequencer gives you a step-based sequencer that transitions through any number of steps with indivdual durations. You can inject your components with the state of the sequencer in order to perform animations, transitions, music, or any complex time-sequenced set of events. 
+
+When you create a sequencer you will pass in a configuration array to tell it what the steps are:
 
 ```javascript
 [
@@ -62,7 +64,7 @@ Your component then receives a `sequencer` object as a prop that contains the se
 
 ## Configuration
 
-Pass an options object to `withSequencer` to configure up your sequencer.
+Pass an options object to `withSequencer` to configure your sequencer.
 
 #### `steps: Array` [required]
 
