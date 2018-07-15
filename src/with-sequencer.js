@@ -15,7 +15,7 @@ const withSequencer = function (options) {
     return class SequencerWrapper extends React.PureComponent {
       constructor(props) {
         super(props);
-        this.sequencer = new Sequencer({steps, loop});
+        this.sequencer = props.sequencer ? props.sequencer : new Sequencer({steps, loop});
         this.state = this.sequencer.getState();
 
         this.sequencer.onChange(this.handleChange);

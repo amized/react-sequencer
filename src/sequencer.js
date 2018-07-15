@@ -23,7 +23,7 @@ class Sequencer {
 
     const options = Object.assign(defaults, props);
 
-    this.steps = this.generateSteps(options.steps);
+    this.steps = this._generateSteps(options.steps);
     if (this.steps === null) {
       throw new Error('Invalid input to Sequencer, see docs for correct format.');
     }
@@ -36,7 +36,7 @@ class Sequencer {
     this.subscriptions = [];
   }
 
-  generateSteps(stepsInput) {
+  _generateSteps(stepsInput) {
 
     if (!stepsInput || typeof stepsInput !== 'object') {
       return null;
@@ -57,19 +57,15 @@ class Sequencer {
     return steps;
   }
 
-  getCurrentStepName() {
-    return this.steps[this.currentStep].name;
-  }
-
-  getStep(stepId) {
+  _getStep(stepId) {
     return this.steps[stepId];
   }
 
-  onLoop = () => {
+  _onLoop = () => {
     if (this.status !== STATUS_PLAYING) {
       return;
     }
-    const currentStep = this.getStep(this.currentStep);
+    const currentStep = this._getStep(this.currentStep);
     const now = Date.now();
     const currentTimeIn = this.currentTimeIn = now - this.startedAt;
     const completesAt = currentStep.position;
@@ -86,12 +82,12 @@ class Sequencer {
       } else {
         this.currentStep++;
       }
-      this.notifyChange();
+      this._notifyChange();
     }
-    this.requestID = onNextTick(this.onLoop);
+    this.requestID = onNextTick(this._onLoop);
   }
 
-  notifyChange() {
+  _notifyChange() {
     const state = this.getState();
 
     this.subscriptions.forEach(fn => { fn(state); });
@@ -111,15 +107,15 @@ class Sequencer {
     }
     this.startedAt = Date.now() - this.currentTimeIn;
     this.status = STATUS_PLAYING;
-    this.notifyChange();
-    this.requestID = onNextTick(this.onLoop);
+    this._notifyChange();
+    this.requestID = onNextTick(this._onLoop);
   }
 
   pause = () => {
     if (this.status !== STATUS_IDLE) {
       this.status = STATUS_IDLE;
       cancelNextTick(this.requestID);
-      this.notifyChange();
+      this._notifyChange();
     }
   }
 
@@ -129,7 +125,7 @@ class Sequencer {
       this.currentTimeIn = 0;
       this.status = STATUS_IDLE;
       cancelNextTick(this.requestID);
-      this.notifyChange();
+      this._notifyChange();
     }
   }
 

@@ -4,11 +4,7 @@ A better way to do animations in React.
 
 ## Overview
 
-React Sequencer sets up a step-based sequencer that transitions through any number of steps with indivdual durations. 
-
-The idea here is that you get a simple, easily-configurable, non-ambiguous state machine and api to control your animations. The state is passed to your component and it's totally up to you how you render it - whether it's through css animation, className animation or use of an external graphics library.
-
-When you create a sequencer you will pass in a configuration array to tell it what the steps are:
+React Sequencer gives you a step-based sequencer that transitions through any number of steps with indivdual durations. You can inject your components with that state in order to perform animations, transitions, music, or any complex time-sequenced set of events. When you create a sequencer you will pass in a configuration array to tell it what the steps are:
 
 ```javascript
 [
@@ -24,10 +20,11 @@ To explain how the sequencer behaves, consider the example above.
 * The sequencer needs to be started (through the API) to begin sequencing through the steps. When this happens the sequencer remains in `initial` for another 100ms.
 * The sequencer then transitions to `middle` and stays there for 100ms.
 * It then transitions to `final` and stays there for 200ms.
-* After the 200ms is up the sequencer remains in `final` until you reset it. Your component will receive another flag `isComplete` (see below) to indicate the complete state of the sequencer.
+* After the 200ms is up the sequencer remains in `final` until you reset it.
 
-<img src="https://user-images.githubusercontent.com/13376866/42727760-04eade32-877a-11e8-9d2c-22850977b486.png" alt="drawing" width="600px" style="margin: 20px 0px;"/>
+<img src="https://user-images.githubusercontent.com/13376866/42727760-04eade32-877a-11e8-9d2c-22850977b486.png" alt="drawing" width="600px" style="margin: 40px 0px;"/> 
 
+The idea here is that you get a simple, easily configurable, non-ambiguous state machine and api to control your animations. The state is passed to your component and it's totally up to you how you render it - whether it's through css animation, className animation or a graphics library.
 
 ## Getting started
 
@@ -39,10 +36,13 @@ import { withSequencer } from 'react-sequencer';
 
 class MyComponent extends React.Component {
   render() {
+    const { current, play } = this.props.sequencer;
     return (
-      <div>
-        <div>This is the sequence state: {this.props.sequencer.current}</div>
-        <button onClick={this.props.sequencer.play}>Start</button>
+      <div className={current}>
+        <div>
+          The sequencer state: {current}
+        </div>
+        <button onClick={ play }>Start</button>
       </div>    
     );
   }
@@ -57,7 +57,7 @@ export default withSequencer({
 })(MyComponent);
 ```
 
-When wrapped, your component receives a `sequencer` object as a prop that contains the sequencer state and some methods to control the sequencer.
+Your component then receives a `sequencer` object as a prop that contains the sequencer state and some methods to control the sequencer.
 
 
 ## Configuration
@@ -66,7 +66,7 @@ Pass an options object to `withSequencer` to configure up your sequencer.
 
 #### `steps: Array` [required]
 
-Pass an array of tuples that configures the ordered steps of the sequence and their transition times.
+Pass an array of tuples that defines the steps of the sequence and their transition times.
 
 ```javascript
 withSequencer({
@@ -80,18 +80,18 @@ withSequencer({
 
 If you specify a duration of `0ms`, it means that the step is run on next animation frame after the previous step. This guarantees that every state must be visited and rendered before transitioning to the next state.
 
-This makes for a powerful animation tool, since let's say you need to prepare for an animation with css before it starts, you can simply do this:
+This is a useful animation tool, since let's say you'd like a different initial state for an animation before it starts, but you don't want to effect the rest of the sequence. You can simply do this:
 
 ```javascript
 [
-  ['prep', 0]
+  ['pre', 0],
   ['initial', 100],
   ['middle', 100],
   ['final', 0]
 ]
 ```
 
-And then `prep` is becomes the starting state before we get to initial.
+And then `pre` becomes the default state when your component mounts, until the sequencer in started. By defining all the states explicitly in this fashion, it makes your animation easier to understand and manipulate.
 
 #### `loop: Boolean` 
 
