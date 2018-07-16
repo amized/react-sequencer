@@ -29,8 +29,11 @@ To explain how the sequencer behaves, consider the example above.
 The idea here is that you get a simple, easily configurable, non-ambiguous state machine and api to control your animations. The state is passed to your component and it's totally up to you how you render it - whether it's through css animation, className animation or a graphics library.
 
 ## Getting started
+Install from NPM:
 
-
+```
+npm install react-sequencer
+```
 The most basic usage of react sequencer is to wrap your component with the `withSequencer` HOC.
 
 ```javascript
