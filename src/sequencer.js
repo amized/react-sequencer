@@ -37,13 +37,25 @@ class Sequencer {
   }
 
   _generateSteps(stepsInput) {
-    if (!stepsInput || typeof stepsInput !== 'object') {
+    if (!stepsInput || !Array.isArray(stepsInput)) {
       return null;
     }
 
     let prev = 0;
 
     const steps = stepsInput.map(step => {
+      if (!Array.isArray(step)) {
+        throw new Error('Step must be array.');
+      }
+
+      if (step.length !== 2) {
+        throw new Error('Step must have only 2 elements.');
+      }
+
+      if (typeof step[0] !== 'string' && typeof step[1] !== 'number') {
+        throw new Error('Step is incorrect format');
+      }
+
       const position = step[1] + prev;
 
       prev = position;

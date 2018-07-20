@@ -10,6 +10,8 @@ const expect = chai.expect;
 let s;
 
 describe('Given an instance of my Sequencer library', () => {
+
+
   describe('when I initialise the sequence', () => {
     it('should generate a sequence array', () => {
       s = new Sequencer({
@@ -39,6 +41,49 @@ describe('Given an instance of my Sequencer library', () => {
           position: 38
         }
       ]);
+    });
+  });
+
+  describe('if i initalise it with a badly formatted steps property', () => {
+    it('should error', () => {
+      expect(function() {
+        s = new Sequencer({
+          steps: [
+            5,
+            ['two', 10],
+            ['three', 5],
+            ['four', 23]
+          ]
+        });
+      }).to.throw();
+    });
+
+    it('should error', () => {
+      expect(function() {
+        s = new Sequencer({
+          steps: 'hello'
+        });
+      }).to.throw();
+    });
+
+    it('should error', () => {
+      expect(function() {
+        s = new Sequencer({
+          steps: [
+            ['threww', 5, 600]
+          ]
+        });
+      }).to.throw();
+    });
+
+    it('should error', () => {
+      expect(function() {
+        s = new Sequencer({
+          steps: [
+            [6, 'hello']
+          ]
+        });
+      }).to.throw();
     });
   });
 
