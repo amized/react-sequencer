@@ -2,6 +2,14 @@
 
 A better way to do animations in React.
 
+## Docs
+
+- [Examples](https://amized.github.io/react-sequencer/)
+- [Getting Started](#getting-started)
+- [withSequencer](#with-sequencer)
+- [Transition](#transition)
+
+
 ## Overview
 
 React Sequencer gives you a step-based sequencer that transitions through any number of steps with indivdual durations. You can inject your components with the state of the sequencer in order to perform animations, transitions, music, or any complex time-sequenced set of events. 
@@ -28,6 +36,7 @@ To explain how the sequencer behaves, consider the example above.
 
 The idea here is that you get a simple, easily configurable, non-ambiguous state machine and api to control your animations. The state is passed to your component and it's totally up to you how you render it - whether it's through css animation, className animation or a graphics library.
 
+<a name="getting-started"></a>
 ## Getting started
 Install from NPM:
 
@@ -64,7 +73,7 @@ export default withSequencer({
 
 Your component then receives a `sequencer` object as a prop that contains the sequencer state and some methods to control the sequencer.
 
-
+<a name="with-sequencer"></a>
 ## Configuration
 
 Pass an options object to `withSequencer` to configure your sequencer.
@@ -141,9 +150,8 @@ Pauses the sequencer. The sequencer remembers how far through the current step y
 
 Stops playback and resets the sequencer back to the first step.
 
+<a name="transition"></a>
 -------
-
-
 # `<Transition>`
 
 `Transition` is a wrapper component to help make in/out transitions easy to manage. The concept is losely based off the React Transition Group `<Transition>`, but uses Sequencers as the machinery and remains unopionated about render.  

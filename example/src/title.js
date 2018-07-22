@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import {withSequencer} from 'react-sequencer';
 import styled from 'styled-components';
 
-const Wrapper = styled.div`
+const Wrapper = styled.h1`
   display: flex;
 `;
 
-const CharWrapper = styled.div`
+const CharWrapper = styled.span`
   transform: ${props => props.isPrev ? 'translate3d(0,0,0) scale(2)' : props.active ? 'translate3d(0,0,0) scale(2)' : 'translate3d(0,0,0) scale(1)'};
   color: ${props => props.isPrev ? '#6fcef5' : props.active ? '#7ae87a' : '#000'};
   transform-origin: 50% 50%;
@@ -21,7 +21,7 @@ class SequencedTitle extends React.Component {
   }
   constructor(props) {
     super(props);
-    this.chars = ('React Sequence').split('');
+    this.chars = ('React Sequencer').split('');
   }
 
   componentDidMount() {
@@ -42,18 +42,19 @@ class SequencedTitle extends React.Component {
             ))
           }
         </Wrapper>
-        {
+
+        {/*
           seq.isPlaying ?
             <button onClick={seq.pause}>Pause</button> :
             <button onClick={seq.play}>Start</button>
 
-        }
+        */}
       </div>
     );
   }
 }
 
-const steps = Array(14).fill(['a', 200]);
+const steps = Array(15).fill(['a', 200]);
 
 export default withSequencer({
   steps: steps,
