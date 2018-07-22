@@ -1,0 +1,1 @@
+{"version":3,"sources":["styles.css"],"names":[],"mappings":"AAAA,KACE,gBACA,iBAAmB","file":"static/css/main.d6347039.css","sourcesContent":["body {\n  background: #EEE;\n  font-family: Arial;\n}\n\n\n// WEBPACK FOOTER //\n// ./src/styles.css"],"sourceRoot":""}
