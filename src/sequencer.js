@@ -7,9 +7,11 @@ let onNextTick, cancelNextTick;
 if (typeof window !== 'undefined' && window.requestAnimationFrame) {
   onNextTick = window.requestAnimationFrame;
   cancelNextTick = window.cancelAnimationFrame;
-} else if (typeof setImmediate === 'function') {
-  onNextTick = setImmediate;
-  cancelNextTick = clearImmediate;
+} else if (typeof setTimeout === 'function') {
+  onNextTick = func => {
+    return setTimeout(func, 1);
+  };
+  cancelNextTick = clearTimeout;
 } else {
   throw new Error('React sequence requires requestAnimationFrame or setImmediate.');
 }
@@ -23,9 +25,11 @@ class Sequencer {
 
     const options = Object.assign(defaults, props);
 
-    this.steps = this._generateSteps(options.steps);
-    if (this.steps === null) {
-      throw new Error('Invalid input to Sequencer, see docs for correct format.');
+    try {
+      this.steps = this._generateSteps(options.steps);
+    } catch (err) {
+      console.log('Invalid input to Sequencer, see docs for correct format.');
+      throw err;
     }
 
     this.loop = options.loop;
@@ -38,7 +42,7 @@ class Sequencer {
 
   _generateSteps(stepsInput) {
     if (!stepsInput || !Array.isArray(stepsInput)) {
-      return null;
+      throw new Error('Invalid format.');
     }
 
     let prev = 0;

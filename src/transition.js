@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Sequencer from 'sequencer';
+import Sequencer from './sequencer';
 
 class Transition extends React.PureComponent {
   static propTypes = {
@@ -61,6 +61,13 @@ class Transition extends React.PureComponent {
     }
   }
 
+  componentWillUnmount() {
+    this.inSeq.stop();
+    this.inSeq = null;
+    this.outSeq.stop();
+    this.outSeq = null;
+  }
+
   componentDidUpdate(prevProps) {
     if (!prevProps.in && this.props.in) {
       this.outSeq.stop();
@@ -91,6 +98,10 @@ class Transition extends React.PureComponent {
     const {current, exitComplete} = this.state;
 
     if (unmountOnExit && show === false && exitComplete === true) {
+      return null;
+    }
+
+    if (!children) {
       return null;
     }
 

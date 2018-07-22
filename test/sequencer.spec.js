@@ -10,8 +10,6 @@ const expect = chai.expect;
 let s;
 
 describe('Given an instance of my Sequencer library', () => {
-
-
   describe('when I initialise the sequence', () => {
     it('should generate a sequence array', () => {
       s = new Sequencer({
