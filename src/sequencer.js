@@ -169,7 +169,8 @@ class Sequencer {
       isComplete: this.isComplete(),
       play: this.play,
       stop: this.stop,
-      pause: this.pause
+      pause: this.pause,
+      complete: this.complete
     };
 
     return state;
