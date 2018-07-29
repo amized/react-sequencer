@@ -12,7 +12,7 @@ A better way to do animations in React.
 
 ## Overview
 
-React Sequencer gives you a step-based sequencer that transitions through any number of steps with indivdual durations. You can inject your components with the state of the sequencer in order to perform animations, transitions, music, or any complex time-sequenced set of events. 
+React Sequencer gives you a step-based sequencer that transitions through any number of steps with indivdual durations. You can inject your components with the state of the sequencer in order to perform animations, transitions, music, or any complex time-sequenced set of events.
 
 When you create a sequencer you will pass in a configuration array to tell it what the steps are:
 
@@ -32,7 +32,7 @@ To explain how the sequencer behaves, consider the example above.
 * It then transitions to `final` and stays there for 200ms.
 * After the 200ms is up the sequencer remains in `final` until you reset it.
 
-<img src="https://user-images.githubusercontent.com/13376866/42727760-04eade32-877a-11e8-9d2c-22850977b486.png" alt="drawing" width="600px" style="margin: 40px 0px;"/> 
+<img src="https://user-images.githubusercontent.com/13376866/42727760-04eade32-877a-11e8-9d2c-22850977b486.png" alt="drawing" width="600px" style="margin: 40px 0px;"/>
 
 The idea here is that you get a simple, easily configurable, non-ambiguous state machine and api to control your animations. The state is passed to your component and it's totally up to you how you render it - whether it's through css animation, className animation or a graphics library.
 
@@ -57,7 +57,7 @@ class MyComponent extends React.Component {
           The sequencer state: {current}
         </div>
         <button onClick={ play }>Start</button>
-      </div>    
+      </div>
     );
   }
 }
@@ -107,10 +107,13 @@ This is a useful animation tool, since let's say you'd like a different initial 
 
 And then `pre` becomes the default state when your component mounts, until the sequencer is started. By defining all the states explicitly in this fashion, it makes your animation easier to understand and manipulate.
 
-#### `loop: Boolean` 
+#### `loop: Boolean`
 
 Put the sequencer in loop mode. In loop mode, the sequencer jumps to the first step when it finishes the final step. Default is `false`.
 
+#### `initialStep: string`
+
+Pass the step name for the step to initialise the sequencer in. Default is null, which will initialise the sequencer in the first step.
 
 ## Props
 
@@ -154,7 +157,7 @@ Stops playback and resets the sequencer back to the first step.
 -------
 # `<Transition>`
 
-`Transition` is a wrapper component to help make in/out transitions easy to manage. The concept is losely based off the React Transition Group `<Transition>`, but uses Sequencers as the machinery and remains unopionated about render.  
+`Transition` is a wrapper component to help make in/out transitions easy to manage. The concept is losely based off the React Transition Group `<Transition>`, but uses Sequencers as the machinery and remains unopionated about render.
 
 ### Usage
 

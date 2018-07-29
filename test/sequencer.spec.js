@@ -85,6 +85,35 @@ describe('Given an instance of my Sequencer library', () => {
     });
   });
 
+  describe('when I initialise with an initial step', () => {
+    it('should be in the correct step initially', () => {
+      const s = new Sequencer({
+        steps: [
+          ['one', 100],
+          ['two', 2000]
+        ],
+        initialStep: 'two'
+      });
+
+      expect(s.currentStep).to.equal(1);
+      expect(s.currentTimeIn).to.equal(100);
+    });
+
+    it('should set to step 0 if the initial step is not found', () => {
+      const s = new Sequencer({
+        steps: [
+          ['two', 10],
+          ['three', 5],
+          ['four', 23]
+        ],
+        initialStep: 'one'
+      });
+
+      expect(s.currentStep).to.equal(0);
+      expect(s.currentTimeIn).to.equal(0);
+    });
+  });
+
   describe('when I start the sequencer', () => {
     before(() => {
       s = new Sequencer({

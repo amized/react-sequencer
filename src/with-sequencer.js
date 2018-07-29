@@ -4,7 +4,8 @@ import Sequencer from './sequencer';
 const withSequencer = function (options) {
   const {
     steps,
-    loop
+    loop,
+    initialStep
   } = options;
 
   if (!steps) {
@@ -15,7 +16,7 @@ const withSequencer = function (options) {
     return class SequencerWrapper extends React.PureComponent {
       constructor(props) {
         super(props);
-        this.sequencer = props.sequencer ? props.sequencer : new Sequencer({steps, loop});
+        this.sequencer = props.sequencer ? props.sequencer : new Sequencer({steps, loop, initialStep});
         this.state = this.sequencer.getState();
 
         this.sequencer.onChange(this.handleChange);

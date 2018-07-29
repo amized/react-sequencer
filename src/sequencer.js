@@ -13,14 +13,17 @@ if (typeof window !== 'undefined' && window.requestAnimationFrame) {
   };
   cancelNextTick = clearTimeout;
 } else {
-  throw new Error('React sequence requires requestAnimationFrame or setImmediate.');
+  throw new Error(
+    'React sequencer depends on requestAnimationFrame, please use a polyfill if not available in the browser.'
+  );
 }
 
 class Sequencer {
   constructor(props) {
     const defaults = {
       steps: [],
-      loop: false
+      loop: false,
+      initialStep: null
     };
 
     const options = Object.assign(defaults, props);
@@ -28,13 +31,23 @@ class Sequencer {
     try {
       this.steps = this._generateSteps(options.steps);
     } catch (err) {
-      console.log('Invalid input to Sequencer, see docs for correct format.');
+      console.warn('Invalid input to Sequencer, see docs for correct format.');
       throw err;
     }
 
-    this.loop = options.loop;
     this.currentStep = 0;
     this.currentTimeIn = 0;
+
+    if (options.initialStep !== null) {
+      const index = this.steps.findIndex(step => step.name === options.initialStep);
+
+      if (index !== -1 && index !== 0) {
+        this.currentStep = index;
+        this.currentTimeIn = this.steps[index - 1].position;
+      }
+    }
+
+    this.loop = options.loop;
     this.status = STATUS_IDLE;
     this.requestID = null;
     this.subscriptions = [];
