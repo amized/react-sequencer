@@ -46,17 +46,17 @@ npm install react-sequencer
 The most basic usage of react sequencer is to wrap your component with the `withSequencer` HOC.
 
 ```javascript
-import { withSequencer } from 'react-sequencer';
+import {withSequencer} from 'react-sequencer';
 
 class MyComponent extends React.Component {
   render() {
-    const { current, play } = this.props.sequencer;
+    const {current, play} = this.props.sequencer;
     return (
       <div className={current}>
         <div>
           The sequencer state: {current}
         </div>
-        <button onClick={ play }>Start</button>
+        <button onClick={play}>Start</button>
       </div>
     );
   }
@@ -186,7 +186,7 @@ const outSteps = [
 >
   {
     current => (
-    	<MyComponent/>
+    	<MyComponent current={current}/>
     )
   }
 </Transition>

@@ -1,6 +1,8 @@
-const STATUS_IDLE = 'sequencer/STATUS_IDLE';
-const STATUS_PLAYING = 'sequencer/STATUS_PLAYING';
-const STATUS_COMPLETE = 'sequencer/STATUS_COMPLETE';
+import {
+  STATUS_IDLE,
+  STATUS_PLAYING,
+  STATUS_COMPLETE
+} from './constants';
 
 let onNextTick, cancelNextTick;
 
