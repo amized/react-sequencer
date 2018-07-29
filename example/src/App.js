@@ -26,10 +26,6 @@ const Main = styled.main`
   padding: 100px 50px;
 `;
 
-const Title = styled.h1`
-
-`;
-
 const Intro = styled.p`
   margin: 40px 0;
 `;
@@ -53,8 +49,8 @@ class App extends Component {
           <SequencedTitle/>
           <Intro>The smarter way to perform complex animations and transitions in React.</Intro>
           <HeaderButtons>
-            <a class="github-button" href="https://github.com/amized/react-sequencer" data-icon="octicon-star" data-size="large" aria-label="Star ntkme/github-buttons on GitHub">Star</a>
-            <a class="github-button" href="https://github.com/amized/react-sequencer/fork" data-icon="octicon-repo-forked" data-size="large" aria-label="Fork ntkme/github-buttons on GitHub">Fork</a>
+            <a className="github-button" href="https://github.com/amized/react-sequencer" data-icon="octicon-star" data-size="large" aria-label="Star ntkme/github-buttons on GitHub">Star</a>
+            <a className="github-button" href="https://github.com/amized/react-sequencer/fork" data-icon="octicon-repo-forked" data-size="large" aria-label="Fork ntkme/github-buttons on GitHub">Fork</a>
           </HeaderButtons>
         </Header>
         <Main>

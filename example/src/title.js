@@ -42,19 +42,12 @@ class SequencedTitle extends React.Component {
             ))
           }
         </Wrapper>
-
-        {/*
-          seq.isPlaying ?
-            <button onClick={seq.pause}>Pause</button> :
-            <button onClick={seq.play}>Start</button>
-
-        */}
       </div>
     );
   }
 }
 
-const steps = Array(15).fill(['a', 200]);
+const steps = Array(15).fill(null).map((item, index) => ([index, 200]));
 
 export default withSequencer({
   steps: steps,
