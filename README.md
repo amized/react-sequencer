@@ -111,7 +111,7 @@ And then `pre` becomes the default state when your component mounts, until the s
 
 Put the sequencer in loop mode. In loop mode, the sequencer jumps to the first step when it finishes the final step. Default is `false`.
 
-#### `initialStep: string`
+#### `initialStep: String`
 
 Pass the step name for the step to initialise the sequencer in. Default is null, which will initialise the sequencer in the first step.
 
@@ -236,7 +236,7 @@ Sequence to perform when `in` becomes `false`.
 
 #### `runOnMount: Boolean `
 
-Whether or not to run the 'in' sequence when the component mounts.
+Whether or not to run the `in` sequence when the component mounts.
 
 #### `unmountOnExit: Boolean `
 
@@ -245,7 +245,7 @@ If set to true, the child element is removed from the dom when the `out` sequenc
 ## Injected Props
 
 #### `current: String `
-Your wrapped component gets passed the step name of the current step of either the In Sequence or the Out Sequence.
+Your wrapped component gets passed the step name of the current step of either the `in` Sequencer or the `out` Sequencer.
 
 
 
