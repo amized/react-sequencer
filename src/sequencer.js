@@ -6,13 +6,11 @@ import {
 
 let onNextTick, cancelNextTick;
 
-if (typeof window !== 'undefined' && window.requestAnimationFrame) {
+if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
   onNextTick = window.requestAnimationFrame;
   cancelNextTick = window.cancelAnimationFrame;
 } else if (typeof setTimeout === 'function') {
-  onNextTick = func => {
-    return setTimeout(func, 1);
-  };
+  onNextTick = func => setTimeout(func, 1);
   cancelNextTick = clearTimeout;
 } else {
   throw new Error(
@@ -27,16 +25,8 @@ class Sequencer {
       loop: false,
       initialStep: null
     };
-
     const options = Object.assign(defaults, props);
-
-    try {
-      this.steps = this._generateSteps(options.steps);
-    } catch (err) {
-      console.warn('Invalid input to Sequencer, see docs for correct format.');
-      throw err;
-    }
-
+    this.steps = this._generateSteps(options.steps);
     this.currentStep = 0;
     this.currentTimeIn = 0;
 
@@ -45,7 +35,7 @@ class Sequencer {
 
       if (index !== -1 && index !== 0) {
         this.currentStep = index;
-        this.currentTimeIn = this.steps[index - 1].position;
+        this.currentTimeIn = this.steps[index].startPos;
       }
     }
 
@@ -63,23 +53,20 @@ class Sequencer {
     let prev = 0;
 
     const steps = stepsInput.map(step => {
-      if (!Array.isArray(step)) {
-        throw new Error('Step must be array.');
+      if (
+        !Array.isArray(step) ||
+        step.length !== 2 ||
+        (typeof step[0] !== 'string' && typeof step[1] !== 'number')
+      ) {
+        throw new Error('Invalid format. See docs for correct structure.');
       }
 
-      if (step.length !== 2) {
-        throw new Error('Step must have only 2 elements.');
-      }
-
-      if (typeof step[0] !== 'string' && typeof step[1] !== 'number') {
-        throw new Error('Step is incorrect format');
-      }
-
-      const position = step[1] + prev;
-
-      prev = position;
+      const startPos = prev;
+      const endPos = step[1] + prev;
+      prev = endPos;
       return {
-        position,
+        startPos,
+        endPos,
         name: step[0]
       };
     });
@@ -98,7 +85,7 @@ class Sequencer {
     const currentStep = this._getStep(this.currentStep);
     const now = Date.now();
     const currentTimeIn = this.currentTimeIn = now - this.startedAt;
-    const completesAt = currentStep.position;
+    const completesAt = currentStep.endPos;
 
     if (currentTimeIn >= completesAt) {
       if (this.currentStep === this.steps.length - 1) {

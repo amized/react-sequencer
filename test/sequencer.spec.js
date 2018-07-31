@@ -24,19 +24,23 @@ describe('Given an instance of my Sequencer library', () => {
       expect(s.steps).to.deep.equal([
         {
           name: 'one',
-          position: 0
+          startPos: 0,
+          endPos: 0
         },
         {
           name: 'two',
-          position: 10
+          startPos: 0,
+          endPos: 10
         },
         {
           name: 'three',
-          position: 15
+          startPos: 10,
+          endPos: 15
         },
         {
           name: 'four',
-          position: 38
+          startPos: 15,
+          endPos: 38
         }
       ]);
     });

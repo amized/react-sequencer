@@ -105,7 +105,7 @@ This is a useful animation tool, since let's say you'd like a different initial 
 ]
 ```
 
-And then `pre` becomes the default state when your component mounts, until the sequencer is started. By defining all the states explicitly in this fashion, it makes your animation easier to understand and manipulate.
+And then `pre` becomes the default state when your component mounts, until the sequencer is started. By defining all the states explicitly in this fashion, it becomes easy to insert steps, change durations, swap steps and generally understand how your animation behaves.
 
 #### `loop: Boolean`
 
@@ -186,13 +186,13 @@ const outSteps = [
 >
   {
     current => (
-    	<MyComponent current={current}/>
+      <MyComponent current={current}/>
     )
   }
 </Transition>
 ```
 
-In the example above, `MyComponent` gets injected with a `current` prop to indicate the current step. You can also pass a function to get access to the state from your top level component. You could then do what you please with the state:
+In the example above, `MyComponent` gets injected with a `current` prop to indicate the current step. You could then do what you please with the state. The example below uses React's `style` attrubte, but you could build your animation how you like - using styled components, classNames, or other graphics libraries. 
 
 ```javascript
 const getStyle = current => {

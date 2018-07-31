@@ -36,7 +36,8 @@ const config = {
     umdNamedDefine: true
   },
   externals: {
-    react: reactExternal
+    react: reactExternal,
+    'prop-types': 'prop-types'
   },
   module: {
     rules: [
