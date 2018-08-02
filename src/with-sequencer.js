@@ -2,13 +2,7 @@ import React from 'react';
 import Sequencer from './sequencer';
 
 const withSequencer = function (options) {
-  const {
-    steps,
-    loop,
-    initialStep
-  } = options;
-
-  if (!steps) {
+  if (!options.steps) {
     throw new Error('Missing steps configuration in withSequencer');
   }
 
@@ -16,9 +10,8 @@ const withSequencer = function (options) {
     return class SequencerWrapper extends React.PureComponent {
       constructor(props) {
         super(props);
-        this.sequencer = props.sequencer ? props.sequencer : new Sequencer({steps, loop, initialStep});
+        this.sequencer = props.sequencer ? props.sequencer : new Sequencer({...options});
         this.state = this.sequencer.getState();
-
         this.sequencer.onChange(this.handleChange);
       }
 

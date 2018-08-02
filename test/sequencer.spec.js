@@ -89,6 +89,7 @@ describe('Given an instance of my Sequencer library', () => {
     });
   });
 
+  /*
   describe('when I initialise with an initial step', () => {
     it('should be in the correct step initially', () => {
       const s = new Sequencer({
@@ -117,6 +118,23 @@ describe('Given an instance of my Sequencer library', () => {
       expect(s.currentTimeIn).to.equal(0);
     });
   });
+  */
+ describe('when I initialise in complete state', () => {
+  it('should be in complete state initially', () => {
+    const s = new Sequencer({
+      steps: [
+        ['one', 100],
+        ['two', 2000]
+      ],
+      complete: true
+    });
+
+    expect(s.currentStep).to.equal(1);
+    expect(s.status).to.equal('sequencer/STATUS_COMPLETE');
+  });
+});
+
+
 
   describe('when I start the sequencer', () => {
     before(() => {

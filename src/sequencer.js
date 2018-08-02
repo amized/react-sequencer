@@ -23,26 +23,21 @@ class Sequencer {
     const defaults = {
       steps: [],
       loop: false,
-      initialStep: null
+      complete: false
     };
     const options = Object.assign(defaults, props);
     this.steps = this._generateSteps(options.steps);
     this.currentStep = 0;
     this.currentTimeIn = 0;
-
-    if (options.initialStep !== null) {
-      const index = this.steps.findIndex(step => step.name === options.initialStep);
-
-      if (index !== -1 && index !== 0) {
-        this.currentStep = index;
-        this.currentTimeIn = this.steps[index].startPos;
-      }
-    }
-
+    this.timeIntoStep = 0;
     this.loop = options.loop;
     this.status = STATUS_IDLE;
     this.requestID = null;
     this.subscriptions = [];
+
+    if (options.complete === true) {
+      this.complete();
+    }
   }
 
   _generateSteps(stepsInput) {
@@ -86,6 +81,7 @@ class Sequencer {
     const now = Date.now();
     const currentTimeIn = this.currentTimeIn = now - this.startedAt;
     const completesAt = currentStep.endPos;
+    this.timeIntoStep = currentTimeIn - currentStep.startPos;
 
     if (currentTimeIn >= completesAt) {
       if (this.currentStep === this.steps.length - 1) {
@@ -125,6 +121,7 @@ class Sequencer {
     this.startedAt = Date.now() - this.currentTimeIn;
     this.status = STATUS_PLAYING;
     this._notifyChange();
+
     this.requestID = onNextTick(this._onLoop);
   }
 

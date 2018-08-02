@@ -111,10 +111,9 @@ And then `pre` becomes the default state when your component mounts, until the s
 
 Put the sequencer in loop mode. In loop mode, the sequencer jumps to the first step when it finishes the final step. Default is `false`.
 
-#### `initialStep: String`
+#### `complete: Boolean`
 
-Pass the step name for the step to initialise the sequencer in. Default is null, which will initialise the sequencer in the first step.
-
+If set to `true`, the state of the sequencer will be set to the end of the final step and idle when the component is initialised. Default is `false`.
 ## Props
 
 The `sequencer` prop passed to your wrapped component has the following properties:
@@ -143,7 +142,7 @@ The index of the current step.
 
 #### `sequencer.play(): Function`
 
-Starts the sequencer, or continues playing if the sequencer was paused.
+Starts the sequencer, or continues playing if the sequencer was paused. If this is called when the sequencer is in a `complete` state, it will jump back to the start and begin playing. 
 
 #### `sequencer.pause(): Function`
 
