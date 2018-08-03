@@ -84,6 +84,7 @@ class Sequencer {
     this.timeIntoStep = currentTimeIn - currentStep.startPos;
 
     if (currentTimeIn >= completesAt) {
+      console.log('updating', this.currentStep, this.startedAt);
       if (this.currentStep === this.steps.length - 1) {
         if (this.loop) {
           this.currentStep = 0;

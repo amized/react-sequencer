@@ -68,6 +68,17 @@ class Transition extends React.PureComponent {
     this.outSeq = null;
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.in && this.props.in) {
+      this.inSeq.stop();
+      this.outSeq.play();
+    } else if (nextProps.in && !this.props.in) {
+      this.outSeq.stop();
+      this.inSeq.play();
+    }
+  }
+
+  /*
   componentDidUpdate(prevProps) {
     if (!prevProps.in && this.props.in) {
       this.outSeq.stop();
@@ -77,6 +88,7 @@ class Transition extends React.PureComponent {
       this.outSeq.play();
     }
   }
+  */
 
   handleInSeqChange = seq => {
     this.setState({

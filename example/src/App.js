@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import SequencedTitle from './title';
 import styled from 'styled-components';
+import ContentFader from './content-fader';
 
 const Header = styled.div`
   height: 400px;
@@ -46,7 +47,7 @@ class App extends Component {
     return (
       <div>
         <Header>
-          <SequencedTitle/>
+          {/*<SequencedTitle/>*/}
           <Intro>The smarter way to perform complex animations and transitions in React.</Intro>
           <HeaderButtons>
             <a className="github-button" href="https://github.com/amized/react-sequencer" data-icon="octicon-star" data-size="large" aria-label="Star ntkme/github-buttons on GitHub">Star</a>
@@ -54,6 +55,7 @@ class App extends Component {
           </HeaderButtons>
         </Header>
         <Main>
+          <ContentFader/>
           <Section>
             <h2>withSequencer</h2>
             <p>
