@@ -28,14 +28,20 @@ When you create a sequencer you will pass in a configuration array to tell it wh
 To explain how the sequencer behaves, consider the example above.
 
 * A sequencer is *always* in one of your provided states at any time, so when the sequencer is initialized it starts in the first step `initial`
-* The sequencer needs to be started (through the API) to begin sequencing through the steps. When this happens the sequencer remains in `initial` for another 100ms.
+* When the sequencer starts playing, it remains in `initial` for another 100ms.
 * The sequencer then transitions to `middle` and stays there for 100ms.
 * It then transitions to `final` and stays there for 200ms.
 * After the 200ms is up the sequencer remains in `final` until you reset it.
 
 <img src="https://user-images.githubusercontent.com/13376866/42727760-04eade32-877a-11e8-9d2c-22850977b486.png" alt="drawing" width="600px" style="margin: 40px 0px;"/>
 
-The idea here is that you get a simple, easily configurable, non-ambiguous state machine and api to control your animations. The state is passed to your component and it's totally up to you how you render it - whether it's through css animation, className animation or a graphics library.
+###Why use it?
+
+* You have full control over what the steps in your sequence are and their duration
+* You can render your animation how you like
+* Because each state of your sequencer is bound to a name rather than an index, it makes it easy to change durations, insert steps, swap steps etc. from one place
+* Every step in your sequence runs in it's own animationFrame, so every step is guaranteed to be rendered in the browser before proceeding to the next state - no timeout or repaint hacks needed!
+* You can syncronise two sequencers just by starting them in the same block of code
 
 <a name="getting-started"></a>
 ## Getting started
@@ -46,7 +52,6 @@ npm install react-sequencer
 ```
 
 <a name="transition"></a>
--------
 # `<Transition>`
 
 `Transition` is a wrapper component to help make in/out transitions easy to manage. The concept is losely based off the React Transition Group `<Transition>`, but uses Sequencers as the machinery and remains unopinionated about how you render the state.
@@ -70,20 +75,31 @@ const outSteps = [
   ['out', 100]
 ]
 
-<Transition
-  inSteps={inSteps}
-  outSteps={outSteps}
-  in={true}
->
-  {
-    current => (
-      <MyComponent current={current}/>
-    )
-  }
-</Transition>
+const Fade = props => (
+  <Transition
+    inSteps={inSteps}
+    outSteps={outSteps}
+    in={this.state.in}
+  >
+    {
+      current => (
+        <div style={getStyle(current)}>
+          {props.children}
+        </div>
+      )
+    }
+  </Transition>
+);
+
+/* Usage in higher level component */
+...
+<Fade in={this.state.in}>
+  My content
+</Fade>
+...
 ```
 
-In the example above, `MyComponent` gets injected with a `current` prop holds the stepName of the current step. The example below uses React's `style` attribute to render out the animation, but you could implement your animation how you like - using styled components, classNames, or other graphics libraries. 
+As you can see here the child passed to a Transition must be a function which receives the `current` argument - this holds the stepName of the current step. This example uses React's `style` attribute to render out the animation, but you could implement your animation how ever you like - using styled components, classNames, or other graphics libraries. 
 
 ```javascript
 const getStyle = current => {
@@ -93,7 +109,7 @@ const getStyle = current => {
         opacity: 0
       };
     case 'enter-active':
-    case 'enter-entered':
+    case 'in':
       return {
         opacity: 1
       };
@@ -101,15 +117,9 @@ const getStyle = current => {
   }
 }
 
-const MyComponent = props => (
-  <div style={getStyle(props.current)}>
-	...
-  </div>
-);
-
 ```
 
-We recommend to name the final steps for each transition as `in` and `out` to make it clear that those are the states component remains in after transition finishes.
+We recommend to name the final steps for each transition as `in` and `out` to make it clear that those are the states that the component remains in after the transition finishes.
 
 ## Props
 
