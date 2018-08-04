@@ -9,7 +9,7 @@ class Transition extends React.PureComponent {
     /** Sequence to perform when in becomes true. */
     inSteps: PropTypes.array.isRequired,
     /** Sequence to perform when in becomes false. */
-    outSteps: PropTypes.array.isRequired,
+    outSteps: PropTypes.array,
     /** Whether or not to run the 'in' sequence when the component mounts. */
     unmountOnExit: PropTypes.bool,
     /** If set to true, the child element is removed from the dom when
@@ -22,29 +22,43 @@ class Transition extends React.PureComponent {
   static defaultProps = {
     in: false,
     unmountOnExit: false,
-    runOnMount: false
+    runOnMount: false,
+    outSteps: null
   }
 
   constructor(props) {
     super(props);
-
+    let current = null;
     this.inSeq = manager.createSequencer({
       steps: props.inSteps
     });
-    this.outSeq = manager.createSequencer({
-      steps: props.outSteps
-    });
 
-    let current;
+    if (props.outSteps) {
+      this.outSeq = manager.createSequencer({
+        steps: props.outSteps
+      });
+    }
 
-    if (props.in && props.runOnMount) {
-      current = this.inSeq.getState().current;
-    } else if (!props.in) {
-      this.outSeq.complete();
-      current = this.outSeq.getState().current;
-    } else {
-      this.inSeq.complete();
-      current = this.inSeq.getState().current;
+    switch (true) {
+      case props.in && props.runOnMount: {
+        this.inSeq.stop();
+        current = this.inSeq.getState().current;
+        break;
+      }
+      case !props.in: {
+        if (this.outSeq) {
+          this.outSeq.complete();
+          current = this.outSeq.getState().current;
+        } else {
+          this.inSeq.stop();
+          current = this.inSeq.getState().current;
+        }
+        break;
+      }
+      default: {
+        this.inSeq.complete();
+        current = this.inSeq.getState().current;
+      }
     }
 
     this.state = {
@@ -53,7 +67,9 @@ class Transition extends React.PureComponent {
     };
 
     this.inSeq.onChange(this.handleInSeqChange);
-    this.outSeq.onChange(this.handleOutSeqChange);
+    if (this.outSeq) {
+      this.outSeq.onChange(this.handleOutSeqChange);
+    }
   }
 
   componentDidMount() {
@@ -65,16 +81,22 @@ class Transition extends React.PureComponent {
   componentWillUnmount() {
     this.inSeq.stop();
     this.inSeq = null;
-    this.outSeq.stop();
-    this.outSeq = null;
+    if (this.outSeq) {
+      this.outSeq.stop();
+      this.outSeq = null;
+    }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!nextProps.in && this.props.in) {
+    if (this.props.in && !nextProps.in) {
       this.inSeq.stop();
-      this.outSeq.play();
-    } else if (nextProps.in && !this.props.in) {
-      this.outSeq.stop();
+      if (this.outSeq) {
+        this.outSeq.play();
+      }
+    } else if (!this.props.in && nextProps.in) {
+      if (this.outSeq) {
+        this.outSeq.stop();
+      }
       this.inSeq.play();
     }
   }

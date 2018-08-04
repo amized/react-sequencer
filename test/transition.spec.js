@@ -64,6 +64,25 @@ describe('<Transition>', () => {
     });
   });
 
+  describe('when I mount a Transition with only one sequence defined', () => {
+    it('should only run that sequence', (done) => {
+      const wrapper = mount(
+        <Transition
+          inSteps={inSteps}
+          in={true}
+          runOnMount
+        />
+      );
+      expect(wrapper.state().current).to.equal('in1');
+      wrapper.setProps({ in: true });
+      setTimeout(() => {
+        expect(wrapper.state().current).to.equal('in2');
+        wrapper.unmount();
+        done();
+      }, 130);
+    });
+  });
+
   describe('when a Transition goes through the in sequence', () => {
     let renderSpy, wrapper;
 

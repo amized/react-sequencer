@@ -35,13 +35,12 @@ To explain how the sequencer behaves, consider the example above.
 
 <img src="https://user-images.githubusercontent.com/13376866/42727760-04eade32-877a-11e8-9d2c-22850977b486.png" alt="drawing" width="600px" style="margin: 40px 0px;"/>
 
-###Why use it?
-
-* You have full control over what the steps in your sequence are and their duration
-* You can render your animation how you like
-* Because each state of your sequencer is bound to a name rather than an index, it makes it easy to change durations, insert steps, swap steps etc. from one place
-* Every step in your sequence runs in it's own animationFrame, so every step is guaranteed to be rendered in the browser before proceeding to the next state - no timeout or repaint hacks needed!
-* You can syncronise two sequencers just by starting them in the same block of code
+### Advantages
+1. You have full control over the steps and durations of your sequence
+2. The sequencer is essentially just a state machine, allowing you to render out your animations in any implementation you choose
+3. It's easy to change durations, insert steps, swap steps etc. from one place, so you can test and perfect your sequences
+4. Every step in your sequence runs in it's own animationFrame, so every step is guaranteed to be rendered in the browser before proceeding to the next state - no timeout or repaint hacks needed!
+5. You can syncronise two sequencers just by starting them in the same block of code, and this allows you to do some pretty cool stuff (see examples)
 
 <a name="getting-started"></a>
 ## Getting started
@@ -52,7 +51,7 @@ npm install react-sequencer
 ```
 
 <a name="transition"></a>
-# `<Transition>`
+## `<Transition>`
 
 `Transition` is a wrapper component to help make in/out transitions easy to manage. The concept is losely based off the React Transition Group `<Transition>`, but uses Sequencers as the machinery and remains unopinionated about how you render the state.
 
@@ -79,7 +78,7 @@ const Fade = props => (
   <Transition
     inSteps={inSteps}
     outSteps={outSteps}
-    in={this.state.in}
+    in={props.in}
   >
     {
       current => (
@@ -99,7 +98,10 @@ const Fade = props => (
 ...
 ```
 
-As you can see here the child passed to a Transition must be a function which receives the `current` argument - this holds the stepName of the current step. This example uses React's `style` attribute to render out the animation, but you could implement your animation how ever you like - using styled components, classNames, or other graphics libraries. 
+When the `in` prop of your Transition becomes true, it begins playing the `inSteps` until it finishes and then stays idle in the final step of that sequence. When `in` becomes false, it plays the `outSteps` sequence and behaves the same way. If `in` becomes true while the `out` sequence is playing, or vice versa, it interupts the current sequencer and starts playing the new sequencer from the start.
+
+
+The child passed to a Transition must be a function which receives the `current` argument - this holds the stepName of the current step. This example uses React's `style` attribute to render out the animation, but you could implement your animation how ever you like - using styled components, classNames, or other graphics libraries. 
 
 ```javascript
 const getStyle = current => {
@@ -121,7 +123,7 @@ const getStyle = current => {
 
 We recommend to name the final steps for each transition as `in` and `out` to make it clear that those are the states that the component remains in after the transition finishes.
 
-## Props
+### Props
 
 Props that you pass to `<Transition>` to configure the behavior.
 
@@ -145,13 +147,13 @@ Whether or not to run the `in` sequence when the component mounts.
 
 If set to true, the child element is removed from the dom when the `out` sequence gets to a completed state. Note that your component will remain mounted for the duration of the last step before unmounting.
 
-## Injected Props
+### Injected Props
 
 #### `current: String `
 Your wrapped component gets passed the step name of the current step of either the `in` Sequencer or the `out` Sequencer.
 
 <a name="with-sequencer"></a>
-# `withSequencer`
+##  `withSequencer`
 
 For lower level usage you can wrap your component with the `withSequencer` HOC.
 
@@ -183,7 +185,7 @@ export default withSequencer({
 
 Your component then receives a `sequencer` object as a prop that contains the sequencer state and some methods to control the sequencer.
 
-## Configuration
+### Configuration
 
 Pass an options object to `withSequencer` to configure your sequencer.
 
@@ -223,7 +225,7 @@ Put the sequencer in loop mode. In loop mode, the sequencer jumps to the first s
 #### `complete: Boolean`
 
 If set to `true`, the state of the sequencer will be set to the end of the final step and idle when the component is initialised. Default is `false`.
-## Props
+### Props
 
 The `sequencer` prop passed to your wrapped component has the following properties:
 

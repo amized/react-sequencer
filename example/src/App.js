@@ -55,7 +55,6 @@ class App extends Component {
           </HeaderButtons>
         </Header>
         <Main>
-          <ContentFader/>
           <Section>
             <h2>withSequencer</h2>
             <p>

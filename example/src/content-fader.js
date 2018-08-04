@@ -23,7 +23,6 @@ const FadeWrapper = styled.div`
   left: 0;
   width: 100%;
   ${props => {
-    console.log("THe current", props.current);
     switch (props.current) {
       case 'initial':
       case 'fade-in-start':
