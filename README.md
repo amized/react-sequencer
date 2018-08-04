@@ -6,8 +6,9 @@ A better way to do animations in React.
 
 - [Examples](https://amized.github.io/react-sequencer/)
 - [Getting Started](#getting-started)
-- [withSequencer](#with-sequencer)
 - [Transition](#transition)
+- [withSequencer](#with-sequencer)
+
 
 
 ## Overview
@@ -43,7 +44,106 @@ Install from NPM:
 ```
 npm install react-sequencer
 ```
-The most basic usage of react sequencer is to wrap your component with the `withSequencer` HOC.
+
+<a name="transition"></a>
+-------
+# `<Transition>`
+
+`Transition` is a wrapper component to help make in/out transitions easy to manage. The concept is losely based off the React Transition Group `<Transition>`, but uses Sequencers as the machinery and remains unopinionated about how you render the state.
+
+### Usage
+
+```javascript
+import {Transition} from 'react-sequencer';
+
+/* Define the sequence for when the component enters */
+const inSteps = [
+  ['enter-start', 0]
+  ['enter-active', 500],
+  ['in', 100]
+]
+
+/* Define the sequence for when the component leaves */
+const outSteps = [
+  ['leave-start', 0],
+  ['leave-active', 500],
+  ['out', 100]
+]
+
+<Transition
+  inSteps={inSteps}
+  outSteps={outSteps}
+  in={true}
+>
+  {
+    current => (
+      <MyComponent current={current}/>
+    )
+  }
+</Transition>
+```
+
+In the example above, `MyComponent` gets injected with a `current` prop holds the stepName of the current step. The example below uses React's `style` attribute to render out the animation, but you could implement your animation how you like - using styled components, classNames, or other graphics libraries. 
+
+```javascript
+const getStyle = current => {
+  switch(current) {
+    case 'enter-start':
+      return {
+        opacity: 0
+      };
+    case 'enter-active':
+    case 'enter-entered':
+      return {
+        opacity: 1
+      };
+    ...
+  }
+}
+
+const MyComponent = props => (
+  <div style={getStyle(props.current)}>
+	...
+  </div>
+);
+
+```
+
+We recommend to name the final steps for each transition as `in` and `out` to make it clear that those are the states component remains in after transition finishes.
+
+## Props
+
+Props that you pass to `<Transition>` to configure the behavior.
+
+#### `in: Boolean`
+
+Toggles the component in and out.
+
+#### `inSteps: Array` [required]
+
+Sequence to perform when `in` becomes `true`.
+
+#### `outSteps: Array` [required]
+
+Sequence to perform when `in` becomes `false`.
+
+#### `runOnMount: Boolean `
+
+Whether or not to run the `in` sequence when the component mounts.
+
+#### `unmountOnExit: Boolean `
+
+If set to true, the child element is removed from the dom when the `out` sequence gets to a completed state. Note that your component will remain mounted for the duration of the last step before unmounting.
+
+## Injected Props
+
+#### `current: String `
+Your wrapped component gets passed the step name of the current step of either the `in` Sequencer or the `out` Sequencer.
+
+<a name="with-sequencer"></a>
+# `withSequencer`
+
+For lower level usage you can wrap your component with the `withSequencer` HOC.
 
 ```javascript
 import {withSequencer} from 'react-sequencer';
@@ -73,7 +173,6 @@ export default withSequencer({
 
 Your component then receives a `sequencer` object as a prop that contains the sequencer state and some methods to control the sequencer.
 
-<a name="with-sequencer"></a>
 ## Configuration
 
 Pass an options object to `withSequencer` to configure your sequencer.
@@ -151,103 +250,4 @@ Pauses the sequencer. The sequencer remembers how far through the current step y
 #### `sequencer.stop(): Function`
 
 Stops playback and resets the sequencer back to the first step.
-
-<a name="transition"></a>
--------
-# `<Transition>`
-
-`Transition` is a wrapper component to help make in/out transitions easy to manage. The concept is losely based off the React Transition Group `<Transition>`, but uses Sequencers as the machinery and remains unopionated about render.
-
-### Usage
-
-```javascript
-import {Transition} from 'react-sequencer';
-
-/* Define the sequence for when the component enters */
-const inSteps = [
-  ['enter-start', 0]
-  ['enter-active', 500],
-  ['entered', 100]
-]
-
-/* Define the sequence for when the component leaves */
-const outSteps = [
-  ['entered', 0],
-  ['leave-start', 0],
-  ['leave-active', 500],
-  ['gone', 100]
-]
-
-<Transition
-  inSteps={inSteps}
-  outSteps={outSteps}
-  in={true}
->
-  {
-    current => (
-      <MyComponent current={current}/>
-    )
-  }
-</Transition>
-```
-
-In the example above, `MyComponent` gets injected with a `current` prop to indicate the current step. You could then do what you please with the state. The example below uses React's `style` attrubte, but you could build your animation how you like - using styled components, classNames, or other graphics libraries. 
-
-```javascript
-const getStyle = current => {
-  switch(current) {
-    case 'enter-start':
-      return {
-        opacity: 0
-      };
-    case 'enter-active':
-    case 'enter-entered':
-      return {
-        opacity: 1
-      };
-    ...
-  }
-}
-
-const MyComponent = props => (
-  <div style={getStyle(props.current)}>
-	...
-  </div>
-);
-
-```
-
-## Props
-
-Props that you pass to `<Transition>` to configure the behavior.
-
-#### `in: Boolean`
-
-Toggles the component in and out.
-
-#### `inSteps: Array` [required]
-
-Sequence to perform when `in` becomes `true`.
-
-#### `outSteps: Array` [required]
-
-Sequence to perform when `in` becomes `false`.
-
-#### `runOnMount: Boolean `
-
-Whether or not to run the `in` sequence when the component mounts.
-
-#### `unmountOnExit: Boolean `
-
-If set to true, the child element is removed from the dom when the `out` sequence gets to a completed state. Note that your component will remain mounted for the duration of the last step before unmounting.
-
-## Injected Props
-
-#### `current: String `
-Your wrapped component gets passed the step name of the current step of either the `in` Sequencer or the `out` Sequencer.
-
-
-
-
-
 
