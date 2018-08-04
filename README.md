@@ -98,7 +98,7 @@ const Fade = props => (
 ...
 ```
 
-When the `in` prop of your Transition becomes true, it begins playing the `inSteps` until it finishes and then stays idle in the final step of that sequence. When `in` becomes false, it plays the `outSteps` sequence and behaves the same way. If `in` becomes true while the `out` sequence is playing, or vice versa, it interupts the current sequencer and starts playing the new sequencer from the start.
+When the `in` prop of your Transition becomes `true`, it begins playing the `inSteps` until the sequencer completes. At that point it stays idle in the final step of that sequencer. When `in` becomes false, it plays the `outSteps` sequencer and behaves the same way. If `in` becomes true while the `out` sequencer is playing, or vice versa, it interupts the current sequencer and starts playing the new sequencer from the start.
 
 
 The child passed to a Transition must be a function which receives the `current` argument - this holds the stepName of the current step. This example uses React's `style` attribute to render out the animation, but you could implement your animation how ever you like - using styled components, classNames, or other graphics libraries. 
@@ -135,7 +135,7 @@ Toggles the component in and out.
 
 Sequence to perform when `in` becomes `true`.
 
-#### `outSteps: Array` [required]
+#### `outSteps: Array`
 
 Sequence to perform when `in` becomes `false`.
 
