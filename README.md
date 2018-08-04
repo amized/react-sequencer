@@ -35,13 +35,13 @@ To explain how the sequencer behaves, consider the example above.
 
 <img src="https://user-images.githubusercontent.com/13376866/42727760-04eade32-877a-11e8-9d2c-22850977b486.png" alt="drawing" width="600px" style="margin: 40px 0px;"/>
 
-### Why use react-sequencer?
+### Why use React Sequencer?
 
 The idea here is that you get a simple, easily configurable, non-ambiguous and reliable state machine to control your animations. The state is passed to your components for you to render how you like. This gives a bunch of advantages:
 
 1. You have full control over the steps and durations of your sequence
 2. You can render out your animations in any implementation you choose - css classes, styled components, 3rd party animation libraries etc.
-3. It's easy to change durations, insert steps, swap steps etc. from one place, so you can test and perfect your sequences
+3. The configuration structure makes it easy to change durations, insert/delete steps and perfect your sequences without needing to update other parts of your app
 4. Every step in your sequence runs in it's own animationFrame. This means every step is guaranteed to be rendered in the browser before proceeding to the next state - no timeout or repaint hacks needed
 5. You can synchronize two sequencers just by starting them in the same block of code, and this allows you to do some pretty cool stuff (see examples)
 
@@ -60,9 +60,9 @@ npm install react-sequencer
 
 ### Usage
 
-```javascript
-import {Transition} from 'react-sequencer';
+To use the Transition component you must define a sequence for the `in` phase, and optionally for the `out` phase. For this we use the structure mentioned in the overview:
 
+```javascript
 /* Define the sequence for when the component enters */
 const inSteps = [
   ['enter-start', 0]
@@ -76,6 +76,11 @@ const outSteps = [
   ['leave-active', 500],
   ['out', 100]
 ]
+```
+We then pass those arrays to our Transition component.
+
+```javascript
+import {Transition} from 'react-sequencer';
 
 const Fade = props => (
   <Transition
@@ -92,19 +97,8 @@ const Fade = props => (
     }
   </Transition>
 );
-
-/* Usage in higher level component */
-...
-<Fade in={this.state.in}>
-  My content
-</Fade>
-...
 ```
-
-When the `in` prop of your Transition becomes `true`, it begins playing the `inSteps` until the sequencer completes. At that point it stays idle in the final step of that sequencer. When `in` becomes false, it plays the `outSteps` sequencer and behaves the same way. If `in` becomes true while the `out` sequencer is playing, or vice versa, it interupts the current sequencer and starts playing the new sequencer from the start.
-
-
-The child passed to a Transition must be a function which receives the `current` argument - this holds the stepName of the current step. This example uses React's `style` attribute to render out the animation, but you could implement your animation how ever you like - using styled components, classNames, or other graphics libraries. 
+The child passed to a Transition must be a function which receives the `current` argument - this holds the stepName of the current step. This example uses React's `style` attribute to render out the animation, but you could implement the animation how ever you like - using styled components, classNames, or other graphics libraries. 
 
 ```javascript
 const getStyle = current => {
@@ -123,6 +117,22 @@ const getStyle = current => {
 }
 
 ```
+We can now use `Fade` in our app to fade its children in and out.
+
+```javascript
+/* Usage in higher level component */
+...
+<Fade in={this.state.in}>
+  My content
+</Fade>
+...
+```
+
+#### Notes
+
+
+When the `in` prop of your Transition becomes `true`, it begins playing the `inSteps` until the sequencer completes. At that point it stays idle in the final step of that sequencer. When `in` becomes false, it plays the `outSteps` sequencer and behaves the same way. If in becomes true while the out sequencer is playing, or vice versa, it interrupts the current sequencer and starts playing the new sequencer from the start.
+
 
 We recommend to name the final steps for each transition as `in` and `out` to make it clear that those are the states that the component remains in after the transition finishes.
 
