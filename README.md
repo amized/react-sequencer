@@ -35,12 +35,15 @@ To explain how the sequencer behaves, consider the example above.
 
 <img src="https://user-images.githubusercontent.com/13376866/42727760-04eade32-877a-11e8-9d2c-22850977b486.png" alt="drawing" width="600px" style="margin: 40px 0px;"/>
 
-### Advantages
+### Why use react-sequencer?
+
+The idea here is that you get a simple, easily configurable, non-ambiguous and reliable state machine to control your animations. The state is passed to your components for you to render how you like. This gives a bunch of advantages:
+
 1. You have full control over the steps and durations of your sequence
-2. The sequencer is essentially just a state machine, allowing you to render out your animations in any implementation you choose
+2. You can render out your animations in any implementation you choose - css classes, styled components, 3rd party animation libraries etc.
 3. It's easy to change durations, insert steps, swap steps etc. from one place, so you can test and perfect your sequences
-4. Every step in your sequence runs in it's own animationFrame, so every step is guaranteed to be rendered in the browser before proceeding to the next state - no timeout or repaint hacks needed!
-5. You can syncronise two sequencers just by starting them in the same block of code, and this allows you to do some pretty cool stuff (see examples)
+4. Every step in your sequence runs in it's own animationFrame. This means every step is guaranteed to be rendered in the browser before proceeding to the next state - no timeout or repaint hacks needed
+5. You can synchronize two sequencers just by starting them in the same block of code, and this allows you to do some pretty cool stuff (see examples)
 
 <a name="getting-started"></a>
 ## Getting started
