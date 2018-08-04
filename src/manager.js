@@ -1,8 +1,4 @@
 import Sequencer from './sequencer';
-import {
-  STATUS_PLAYING
-} from './constants';
-import debounce from 'lodash/debounce';
 
 let onNextTick, cancelNextTick;
 
@@ -32,9 +28,9 @@ class Manager {
     this.sequencers[key] = seq;
     const api = {
       play: () => { this.play(seq); },
-      complete: () => { seq.complete(this.now); },
-      stop: () => { seq.stop(this.now); },
-      pause: () => { seq.pause(this.now); },
+      complete: seq.complete,
+      stop: seq.stop,
+      pause: seq.pause,
       onChange: seq.onChange,
       getState: seq.getState
     };
@@ -70,7 +66,7 @@ class Manager {
     let continueLoop = false;
     for (let key in this.sequencers) {
       const seq = this.sequencers[key];
-      if (seq.status === STATUS_PLAYING) {
+      if (seq.isPlaying()) {
         seq._onLoop(this.now);
         continueLoop = true;
       }

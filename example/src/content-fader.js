@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import {withSequencer, Transition} from 'react-sequencer';
 import styled from 'styled-components';
 
-
-
 const inSteps = [
   ['initial', 0],
   ['fade-in-start', 400],
@@ -83,7 +81,6 @@ const Fade = props => (
   </Transition>
 );
 
-
 const Wrapper = styled.div`
   position: relative;
 `;
@@ -103,7 +100,6 @@ const Tab2 = styled(Tab)`
 const Tab3 = styled(Tab)`
   height: 400px;
 `;
-
 
 class ContentFader extends React.Component {
   constructor(props) {

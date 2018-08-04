@@ -15,7 +15,6 @@ class Sequencer {
     this.steps = this._generateSteps(options.steps);
     this.currentStep = 0;
     this.currentTimeIn = 0;
-    this.timeIntoStep = 0;
     this.loop = options.loop;
     this.status = STATUS_IDLE;
     this.requestID = null;
@@ -63,7 +62,6 @@ class Sequencer {
     const currentStep = this._getStep(this.currentStep);
     const currentTimeIn = this.currentTimeIn = now - this.startedAt;
     const completesAt = currentStep.endPos;
-    this.timeIntoStep = currentTimeIn - currentStep.startPos;
 
     if (currentTimeIn >= completesAt) {
       if (this.currentStep === this.steps.length - 1) {
