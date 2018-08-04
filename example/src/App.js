@@ -47,7 +47,7 @@ class App extends Component {
     return (
       <div>
         <Header>
-          {/*<SequencedTitle/>*/}
+          <SequencedTitle/>
           <Intro>The smarter way to perform complex animations and transitions in React.</Intro>
           <HeaderButtons>
             <a className="github-button" href="https://github.com/amized/react-sequencer" data-icon="octicon-star" data-size="large" aria-label="Star ntkme/github-buttons on GitHub">Star</a>

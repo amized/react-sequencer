@@ -78,26 +78,20 @@ describe('<Transition>', () => {
     });
 
     it('should render the correct number of times', (done) => {
+      wrapper.setProps({ in: true });
       setTimeout(() => {
-        // Expect render count to be 4, becasue 1 render occurs when
-        // the in prop changes, then the sequencer starts and goes through
-        // 3 states
-        expect(renderSpy.callCount).to.equal(4);
+        expect(renderSpy.callCount).to.equal(3);
         done();
       }, 1000);
-
-      wrapper.setProps({ in: true });
-
     });
 
     it('should render the correct number of times', (done) => {
 
       wrapper.setProps({ in: false });
       setTimeout(() => {
-        expect(renderSpy.callCount).to.equal(9);
+        expect(renderSpy.callCount).to.equal(7);
         done();
       }, 1000);
     });
-
   });
 });

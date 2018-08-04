@@ -47,8 +47,7 @@ class SequencedTitle extends React.Component {
   }
 }
 
-const steps = Array(15).fill(null).map((item, index) => ([index, 200]));
-
+const steps = Array.apply(null, {length: 15}).map((item, index) => ([index, 200]));
 export default withSequencer({
   steps: steps,
   loop: true,

@@ -48,7 +48,7 @@ describe('Given an instance of my Sequencer library', () => {
 
   describe('if i initalise it with a badly formatted steps property', () => {
     it('should error', () => {
-      expect(function() {
+      expect(function () {
         s = new Sequencer({
           steps: [
             5,
@@ -61,7 +61,7 @@ describe('Given an instance of my Sequencer library', () => {
     });
 
     it('should error', () => {
-      expect(function() {
+      expect(function () {
         s = new Sequencer({
           steps: 'hello'
         });
@@ -69,7 +69,7 @@ describe('Given an instance of my Sequencer library', () => {
     });
 
     it('should error', () => {
-      expect(function() {
+      expect(function () {
         s = new Sequencer({
           steps: [
             ['threww', 5, 600]
@@ -79,7 +79,7 @@ describe('Given an instance of my Sequencer library', () => {
     });
 
     it('should error', () => {
-      expect(function() {
+      expect(function () {
         s = new Sequencer({
           steps: [
             [6, 'hello']
@@ -89,218 +89,18 @@ describe('Given an instance of my Sequencer library', () => {
     });
   });
 
-  /*
-  describe('when I initialise with an initial step', () => {
-    it('should be in the correct step initially', () => {
+  describe('when I initialise in complete state', () => {
+    it('should be in complete state initially', () => {
       const s = new Sequencer({
         steps: [
           ['one', 100],
           ['two', 2000]
         ],
-        initialStep: 'two'
+        complete: true
       });
-
       expect(s.currentStep).to.equal(1);
-      expect(s.currentTimeIn).to.equal(100);
+      expect(s.status).to.equal('sequencer/STATUS_COMPLETE');
     });
-
-    it('should set to step 0 if the initial step is not found', () => {
-      const s = new Sequencer({
-        steps: [
-          ['two', 10],
-          ['three', 5],
-          ['four', 23]
-        ],
-        initialStep: 'one'
-      });
-
-      expect(s.currentStep).to.equal(0);
-      expect(s.currentTimeIn).to.equal(0);
-    });
-  });
-  */
- describe('when I initialise in complete state', () => {
-  it('should be in complete state initially', () => {
-    const s = new Sequencer({
-      steps: [
-        ['one', 100],
-        ['two', 2000]
-      ],
-      complete: true
-    });
-
-    expect(s.currentStep).to.equal(1);
-    expect(s.status).to.equal('sequencer/STATUS_COMPLETE');
-  });
-});
-
-
-
-  describe('when I start the sequencer', () => {
-    before(() => {
-      s = new Sequencer({
-        steps: [
-          ['one', 0],
-          ['two', 2000]
-        ]
-      });
-      s.play();
-    });
-
-    it('should be in the correct state while playing', (done) => {
-      setTimeout(() => {
-        expect(s.status).to.equal('sequencer/STATUS_PLAYING');
-        expect(s.currentStep).to.equal(1);
-        done();
-      }, 1000);
-    }).timeout(5000);
-
-    it('should be in the correct state when finished', (done) => {
-      setTimeout(() => {
-        expect(s.status).to.equal('sequencer/STATUS_COMPLETE');
-        expect(s.currentStep).to.equal(1);
-        done();
-      }, 2100);
-    }).timeout(5000);
-  });
-
-  describe('when I pause the sequencer', () => {
-    before(() => {
-      s = new Sequencer({
-        steps: [
-          ['one', 0],
-          ['two', 2000]
-        ]
-      });
-      s.play();
-      s.pause();
-    });
-
-    it('should be in the correct state', (done) => {
-      setTimeout(() => {
-        expect(s.status).to.equal('sequencer/STATUS_IDLE');
-        expect(s.currentStep).to.equal(0);
-        done();
-      }, 500);
-    }).timeout(5000);
-  });
-
-  describe('a complex sequence', () => {
-    before(() => {
-      s = new Sequencer({
-        steps: [
-          ['one', 400],
-          ['two', 500],
-          ['three', 200],
-          ['four', 600],
-          ['five', 500]
-        ]
-      });
-      s.play();
-    });
-
-    it('should sequence through the correct states', (done) => {
-      setTimeout(() => {
-        expect(s.currentStep).to.equal(0);
-      }, 300);
-
-      setTimeout(() => {
-        expect(s.currentStep).to.equal(1);
-      }, 500);
-
-      setTimeout(() => {
-        expect(s.currentStep).to.equal(2);
-      }, 1000);
-
-      setTimeout(() => {
-        expect(s.currentStep).to.equal(3);
-      }, 1200);
-
-      setTimeout(() => {
-        expect(s.currentStep).to.equal(4);
-        done();
-      }, 1800);
-
-    }).timeout(5000);
-  });
-
-  describe('when I run a sequence on loop mode', () => {
-    before(() => {
-      s = new Sequencer({
-        steps: [
-          ['one', 500],
-          ['two', 500]
-        ],
-        loop: true
-      });
-      s.play();
-    });
-
-    it('should start the sequence over once it finishes', (done) => {
-      setTimeout(() => {
-        expect(s.currentStep).to.equal(0);
-      }, 250);
-      setTimeout(() => {
-        expect(s.currentStep).to.equal(1);
-      }, 750);
-      setTimeout(() => {
-        expect(s.currentStep).to.equal(0);
-      }, 1250);
-      setTimeout(() => {
-        expect(s.currentStep).to.equal(1);
-        s.stop();
-        done();
-      }, 1750);
-    }).timeout(5000);
-  });
-
-  describe('when I subscribe to a sequencer', () => {
-    before(() => {
-      s = new Sequencer({
-        steps: [
-          ['one', 400],
-          ['two', 500],
-          ['three', 200],
-          ['four', 600],
-          ['five', 500]
-        ]
-      });
-    });
-
-    it('should notify me when the sequencer state changes', (done) => {
-      let updateCount = 0;
-
-      s.onChange(seq => {
-        switch (updateCount) {
-          case 0:
-            expect(seq.current).to.equal('one');
-            break;
-          case 1:
-            expect(seq.current).to.equal('two');
-            break;
-          case 2:
-            expect(seq.current).to.equal('three');
-            break;
-          case 3:
-            expect(seq.current).to.equal('four');
-            break;
-          case 4:
-            expect(seq.current).to.equal('five');
-            break;
-          case 5:
-            expect(seq.current).to.equal('five');
-            expect(seq.isComplete).to.equal(true);
-            done();
-            break;
-          default:
-            break;
-        }
-        updateCount++;
-      });
-
-      s.play();
-
-    }).timeout(5000);
   });
 
 });

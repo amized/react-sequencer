@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Sequencer from './sequencer';
+import manager from './manager';
 
 class Transition extends React.PureComponent {
   static propTypes = {
@@ -27,10 +28,11 @@ class Transition extends React.PureComponent {
 
   constructor(props) {
     super(props);
-    this.inSeq = new Sequencer({
+
+    this.inSeq = manager.createSequencer({
       steps: props.inSteps
     });
-    this.outSeq = new Sequencer({
+    this.outSeq = manager.createSequencer({
       steps: props.outSteps
     });
 
@@ -77,18 +79,6 @@ class Transition extends React.PureComponent {
       this.inSeq.play();
     }
   }
-
-  /*
-  componentDidUpdate(prevProps) {
-    if (!prevProps.in && this.props.in) {
-      this.outSeq.stop();
-      this.inSeq.play();
-    } else if (prevProps.in && !this.props.in) {
-      this.inSeq.stop();
-      this.outSeq.play();
-    }
-  }
-  */
 
   handleInSeqChange = seq => {
     this.setState({

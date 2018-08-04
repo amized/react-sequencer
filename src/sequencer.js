@@ -4,20 +4,6 @@ import {
   STATUS_COMPLETE
 } from './constants';
 
-let onNextTick, cancelNextTick;
-
-if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
-  onNextTick = window.requestAnimationFrame;
-  cancelNextTick = window.cancelAnimationFrame;
-} else if (typeof setTimeout === 'function') {
-  onNextTick = func => setTimeout(func, 1);
-  cancelNextTick = clearTimeout;
-} else {
-  throw new Error(
-    'React sequencer depends on requestAnimationFrame, please use a polyfill if not available in the browser.'
-  );
-}
-
 class Sequencer {
   constructor(props) {
     const defaults = {
@@ -73,23 +59,18 @@ class Sequencer {
     return this.steps[stepId];
   }
 
-  _onLoop = () => {
-    if (this.status !== STATUS_PLAYING) {
-      return;
-    }
+  _onLoop = (now) => {
     const currentStep = this._getStep(this.currentStep);
-    const now = Date.now();
     const currentTimeIn = this.currentTimeIn = now - this.startedAt;
     const completesAt = currentStep.endPos;
     this.timeIntoStep = currentTimeIn - currentStep.startPos;
 
     if (currentTimeIn >= completesAt) {
-      console.log('updating', this.currentStep, this.startedAt);
       if (this.currentStep === this.steps.length - 1) {
         if (this.loop) {
           this.currentStep = 0;
           this.currentTimeIn = 0;
-          this.startedAt = Date.now();
+          this.startedAt = now;
         } else {
           this.status = STATUS_COMPLETE;
         }
@@ -98,7 +79,6 @@ class Sequencer {
       }
       this._notifyChange();
     }
-    this.requestID = onNextTick(this._onLoop);
   }
 
   _notifyChange() {
@@ -107,11 +87,11 @@ class Sequencer {
     this.subscriptions.forEach(fn => { fn(state); });
   }
 
-  onChange(fn) {
+  onChange = (fn) => {
     this.subscriptions.push(fn);
   }
 
-  play = () => {
+  play = (now) => {
     if (this.status === STATUS_PLAYING) {
       return;
     }
@@ -119,17 +99,14 @@ class Sequencer {
       this.currentStep = 0;
       this.currentTimeIn = 0;
     }
-    this.startedAt = Date.now() - this.currentTimeIn;
+    this.startedAt = now - this.currentTimeIn;
     this.status = STATUS_PLAYING;
     this._notifyChange();
-
-    this.requestID = onNextTick(this._onLoop);
   }
 
   pause = () => {
     if (this.status !== STATUS_IDLE) {
       this.status = STATUS_IDLE;
-      cancelNextTick(this.requestID);
       this._notifyChange();
     }
   }
@@ -139,7 +116,6 @@ class Sequencer {
       this.currentStep = 0;
       this.currentTimeIn = 0;
       this.status = STATUS_IDLE;
-      cancelNextTick(this.requestID);
       this._notifyChange();
     }
   }
@@ -148,7 +124,6 @@ class Sequencer {
     if (this.status !== STATUS_COMPLETE) {
       this.currentStep = this.steps.length - 1;
       this.status = STATUS_COMPLETE;
-      cancelNextTick(this.requestID);
       this._notifyChange();
     }
   }
@@ -161,16 +136,12 @@ class Sequencer {
     return this.status === STATUS_PLAYING;
   }
 
-  getState() {
+  getState = () => {
     const state = {
       current: this.steps[this.currentStep].name,
       index: this.currentStep,
       isPlaying: this.isPlaying(),
-      isComplete: this.isComplete(),
-      play: this.play,
-      stop: this.stop,
-      pause: this.pause,
-      complete: this.complete
+      isComplete: this.isComplete()
     };
 
     return state;

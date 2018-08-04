@@ -1,13 +1,12 @@
 import React from 'react';
-import Sequencer from './sequencer';
+import manager from './manager';
 
 const withSequencer = function (options) {
 
   const {
     steps,
     loop,
-    complete,
-    shouldTriggerPlay
+    complete
   } = options;
 
   if (!options.steps) {
@@ -18,15 +17,15 @@ const withSequencer = function (options) {
     return class SequencerWrapper extends React.PureComponent {
       constructor(props) {
         super(props);
-        this.sequencer = props.sequencer ? props.sequencer : new Sequencer({steps, loop, complete});
+        this.sequencer = props.sequencer ? props.sequencer : manager.createSequencer({steps, loop, complete});
+        this.api = {
+          play: this.sequencer.play,
+          stop: this.sequencer.stop,
+          pause: this.sequencer.pause,
+          complete: this.sequencer.complete
+        };
         this.state = this.sequencer.getState();
         this.sequencer.onChange(this.handleChange);
-      }
-
-      componentWillReceiveProps(nextProps) {
-        if (shouldTriggerPlay && shouldTriggerPlay(this.props, nextProps)) {
-          this.sequencer.play();
-        }
       }
 
       handleChange = props => {
@@ -34,10 +33,10 @@ const withSequencer = function (options) {
       }
 
       render() {
+        const sequencer = Object.assign(this.api, this.state);
         const props = Object.assign({}, this.props, {
-          sequencer: this.state
+          sequencer: sequencer
         });
-
         return (
           <Component {...props}/>
         );
