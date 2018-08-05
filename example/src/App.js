@@ -76,6 +76,22 @@ class App extends Component {
               src="https://codesandbox.io/embed/zww9jxp4pm?fontsize=12"
               sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"/>
           </Section>
+          <Section>
+            <h2>Synchronizing sequencers</h2>
+            <p>All sequencers in React Sequencer get synchronized to a common clock. What this means
+              is that if two independent sequencers start in the same block of code (e.g. an in and out sequence), you can guarantee that
+              steps of equal duration get updated on the same animation frame and React render cycle.</p>
+            <p>
+              A good example of this is say you want to fade smoothly between blocks of content, that may have differing heights.
+              You don't want a situation where neither element is mounted at the same time,
+              nor when both are since it would result in a weird 'jump' of the content below either down-up or up-down.
+              So you need to set the entering element to absolute the moment you set the leaving element to position relative.
+              This is achieved simply by setting the same durations on the in-out steps so they sync up:</p>
+              <h3>Example</h3>
+            <CodeEmbed
+              src="https://codesandbox.io/embed/940zl86r2w?fontsize=12"
+              sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"/>
+          </Section>
         </Main>
       </div>
     );
