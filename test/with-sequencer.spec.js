@@ -50,16 +50,14 @@ describe('when I wrap my component in withSequence', () => {
     expect(sequencer).to.include({index: 0});
   });
 
-
-  it('should pass the correct props to the wrapped component', () => {
+  it('should play the sequencer when you call play', (done) => {
     const child = wrapper.find(MyComponent);
     const sequencer = child.props().sequencer;
-
-    expect(sequencer).to.not.be.null;
-    expect(sequencer).to.not.be.undefined;
-    expect(sequencer).to.include({isComplete: false});
-    expect(sequencer).to.include({isPlaying: false});
-    expect(sequencer).to.include({current: 'one'});
-    expect(sequencer).to.include({index: 0});
+    sequencer.play();
+    setTimeout(() => {
+      let seq = child.props().sequencer;
+      expect(seq).to.include({isComplete: true});
+      done();
+    }, 1000);
   });
 });

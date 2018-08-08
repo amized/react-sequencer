@@ -82,7 +82,8 @@ class App extends Component {
               is that if two independent sequencers start in the same block of code (e.g. an in and out sequence), you can guarantee that
               steps of equal duration get updated on the same animation frame and React render cycle.</p>
             <p>
-              A good example of this is say you want to fade smoothly between blocks of content, that may have differing heights.
+              A good example of this is say you want to fade smoothly between blocks of content, that may have differing heights,
+              by fading one out, then fading the next one in.
               You don't want a situation where neither element is mounted at the same time,
               nor when both are since it would result in a weird 'jump' of the content below either down-up or up-down.
               So you need to set the entering element to absolute the moment you set the leaving element to position relative.
