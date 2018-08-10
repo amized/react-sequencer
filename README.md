@@ -238,6 +238,20 @@ Put the sequencer in loop mode. In loop mode, the sequencer jumps to the first s
 #### `complete: Boolean`
 
 If set to `true`, the state of the sequencer will be set to the end of the final step and idle when the component is initialised. Default is `false`.
+
+#### `shouldPlayOnUpdate(currentProps, nextProps): Boolean`
+
+A function you provide that allows you to start playing the sequencer in response to a change in props. The benefit of responding to props here rather than in your wrapped component is that the state change of the sequencer happens in the same render cycle as the props change. The return value should be `true` to begin playing, `false` otherwise.
+
+#### `shouldStopOnUpdate(currentProps, nextProps): Boolean`
+
+A function you provide that allows you to stop playing the sequencer in response to a change in props. The return value should be `true` to stop playing, `false` otherwise.
+
+#### `shouldCompleteOnUpdate(currentProps, nextProps): Boolean`
+
+A function you provide that allows you to complete the sequencer in response to a change in props, meaning putting the sequencer in it's completed state. The return value should be `true` to complete, `false` otherwise.
+
+
 ### Props
 
 The `sequencer` prop passed to your wrapped component has the following properties:

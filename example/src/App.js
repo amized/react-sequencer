@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import SequencedTitle from './title';
 import styled from 'styled-components';
-import ContentFader from './content-fader';
 
 const Header = styled.div`
   height: 400px;

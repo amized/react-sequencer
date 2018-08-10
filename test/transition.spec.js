@@ -109,6 +109,7 @@ describe('<Transition>', () => {
       wrapper.setProps({ in: false });
       setTimeout(() => {
         expect(renderSpy.callCount).to.equal(7);
+        wrapper.unmount();
         done();
       }, 1000);
     });

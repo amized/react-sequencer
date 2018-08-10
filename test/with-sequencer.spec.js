@@ -1,7 +1,7 @@
 import React from 'react';
 import chai from 'chai';
 import withSequencer from '../src/with-sequencer';
-import enzyme, { shallow } from 'enzyme';
+import enzyme, { shallow, mount } from 'enzyme';
 import ReactSixteenAdapter from 'enzyme-adapter-react-16';
 
 import {JSDOM} from 'jsdom';
@@ -14,7 +14,7 @@ const expect = chai.expect;
 
 class MyComponent extends React.Component {
   render() {
-    return (<div>Hello</div>);
+    return (<div>{this.props.sequencer.current}</div>);
   }
 }
 
@@ -36,6 +36,7 @@ describe('when I wrap my component in withSequence', () => {
     expect(wrapper.html()).to.not.be.null;
     const child = wrapper.find(MyComponent);
     expect(child.length).to.equal(1);
+    expect(child.html()).to.equal('<div>one</div>');
   });
 
   it('should pass the correct props to the wrapped component', () => {
@@ -51,11 +52,21 @@ describe('when I wrap my component in withSequence', () => {
   });
 
   it('should play the sequencer when you call play', (done) => {
-    const child = wrapper.find(MyComponent);
+    const WrapperComponent = withSequencer({
+      steps: [
+        ['one', 100],
+        ['two', 200]
+      ]
+    })(MyComponent);
+    const myWrapper = mount(<WrapperComponent/>);
+    const child = myWrapper.find(MyComponent);
+    expect(child.html()).to.equal('<div>one</div>');
     const sequencer = child.props().sequencer;
     sequencer.play();
     setTimeout(() => {
-      let seq = child.props().sequencer;
+      const child = myWrapper.find(MyComponent);
+      expect(child.html()).to.equal('<div>two</div>');
+      let seq = myWrapper.state().sequencer; child.props().sequencer;
       expect(seq).to.include({isComplete: true});
       done();
     }, 1000);
