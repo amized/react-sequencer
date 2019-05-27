@@ -12,18 +12,22 @@
     "sequencer",
     "sequence"
   ],
+  "author": "Amiel Zwier <hi@amielzwier.com> (http://amielzwier.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/amized/react-sequencer/issues"
+  },
+  "homepage": "https://amized.github.io/react-sequencer/",
   "main": "dist/react-sequencer.umd.js",
   "module": "dist/react-sequencer.es5.js",
   "typings": "dist/types/react-sequencer.d.ts",
   "files": [
     "dist"
   ],
-  "author": "Amiel Zwier <amiel@amielzwier.com>",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/amized/react-sequencer.git"
   },
-  "license": "MIT",
   "engines": {
     "node": ">=6.0.0"
   },
