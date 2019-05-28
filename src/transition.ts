@@ -1,24 +1,32 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Sequencer from './sequencer'
+import { StepsInput, SequencerState } from './types'
 
-class Transition extends React.PureComponent {
-  static propTypes = {
-    /** Toggles the component in and out. */
-    in: PropTypes.bool,
-    /** Sequence to perform when in becomes true. */
-    inSteps: PropTypes.array.isRequired,
-    /** Sequence to perform when in becomes false. */
-    outSteps: PropTypes.array,
-    /** Whether or not to run the 'in' sequence when the component mounts. */
-    unmountOnExit: PropTypes.bool,
-    /** If set to true, the child element is removed from the dom when
-     * the out sequence gets to a completed state. Note that your
-     * component will remain mounted for the duration of the last
-     * step before unmounting. */
-    runOnMount: PropTypes.bool
-  }
+interface Props {
+  /** Toggles the component in and out. */
+  in: boolean
+  /** Sequence to perform when in becomes true. */
+  inSteps: StepsInput
+  /** Sequence to perform when in becomes false. */
+  outSteps: StepsInput
+  /** Whether or not to run the 'in' sequence when the component mounts. */
+  unmountOnExit: boolean
+  /** If set to true, the child element is removed from the dom when
+   * the out sequence gets to a completed state. Note that your
+   * component will remain mounted for the duration of the last
+   * step before unmounting. */
+  runOnMount: boolean
+}
 
+interface State {
+  current: string
+  exitComplete: boolean
+}
+
+class Transition extends React.PureComponent<Props, State> {
+  inSeq: Sequencer
+  outSeq: Sequencer | null
   static defaultProps = {
     in: false,
     unmountOnExit: false,
@@ -26,9 +34,10 @@ class Transition extends React.PureComponent {
     outSteps: null
   }
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props)
     let current = null
+    this.outSeq = null
     this.inSeq = new Sequencer({
       steps: props.inSteps
     })
@@ -80,14 +89,13 @@ class Transition extends React.PureComponent {
 
   componentWillUnmount() {
     this.inSeq.stop()
-    this.inSeq = null
     if (this.outSeq) {
       this.outSeq.stop()
       this.outSeq = null
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     if (this.props.in && !nextProps.in) {
       this.inSeq.stop()
       if (this.outSeq) {
@@ -101,14 +109,14 @@ class Transition extends React.PureComponent {
     }
   }
 
-  handleInSeqChange = seq => {
+  handleInSeqChange = (seq: SequencerState) => {
     this.setState({
       current: seq.current,
       exitComplete: false
     })
   }
 
-  handleOutSeqChange = seq => {
+  handleOutSeqChange = (seq: SequencerState) => {
     this.setState({
       current: seq.current,
       exitComplete: seq.isComplete
