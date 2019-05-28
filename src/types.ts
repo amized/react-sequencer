@@ -4,6 +4,8 @@ export enum PlayStatus {
   COMPLETE = 'STATUS_COMPLETE'
 }
 
+export type PlayMode = 'loop' | 'end' | 'start'
+
 /**** Ticker */
 
 export type TickerNotifyFunction = (timestamp: number) => void
@@ -18,6 +20,14 @@ export interface OptionsInput {
   steps: StepsInput
   loop?: boolean
   complete?: boolean
+  playMode?: PlayMode
+}
+
+export interface Options {
+  steps: StepsInput
+  loop: boolean
+  complete: boolean
+  playMode: PlayMode
 }
 
 export interface Step {

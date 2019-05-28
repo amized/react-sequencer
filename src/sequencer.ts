@@ -5,7 +5,9 @@ import {
   OptionsInput,
   Subscriptions,
   SequencerState,
-  NotifyFunction
+  NotifyFunction,
+  PlayMode,
+  Options
 } from './types'
 
 import Ticker from './ticker'
@@ -16,23 +18,24 @@ class Sequencer {
   steps: Steps
   currentStep: number
   currentTimeIn: number
-  loop: boolean
+  playMode: PlayMode
   status: PlayStatus
   requestID: string | null
   subscriptions: Subscriptions
   startedAt: number
   constructor(props: OptionsInput) {
-    const defaults: OptionsInput = {
+    const defaults: Options = {
       steps: [],
       loop: false,
-      complete: false
+      complete: false,
+      playMode: 'end'
     }
     const options = Object.assign(defaults, props)
     this.steps = this._generateSteps(options.steps)
     this.currentStep = 0
     this.currentTimeIn = 0
     this.startedAt = 0
-    this.loop = options.loop ? options.loop : false
+    this.playMode = options.loop ? 'loop' : options.playMode
     this.status = PlayStatus.IDLE
     this.requestID = null
     this.subscriptions = []
@@ -81,11 +84,18 @@ class Sequencer {
 
     if (currentTimeIn >= completesAt) {
       if (this.currentStep === this.steps.length - 1) {
-        if (this.loop) {
+        if (this.playMode === 'start') {
+          this.stop()
+          return
+        }
+
+        if (this.playMode === 'loop') {
           this.currentStep = 0
           this.currentTimeIn = 0
           this.startedAt = now
-        } else {
+        }
+
+        if (this.playMode === 'end') {
           this.status = PlayStatus.COMPLETE
         }
       } else {
