@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import manager from './manager';
+import React from 'react'
+import PropTypes from 'prop-types'
+import Sequencer from './sequencer'
 
 class Transition extends React.PureComponent {
   static propTypes = {
@@ -27,77 +27,77 @@ class Transition extends React.PureComponent {
   }
 
   constructor(props) {
-    super(props);
-    let current = null;
-    this.inSeq = manager.createSequencer({
+    super(props)
+    let current = null
+    this.inSeq = new Sequencer({
       steps: props.inSteps
-    });
+    })
 
     if (props.outSteps) {
-      this.outSeq = manager.createSequencer({
+      this.outSeq = new Sequencer({
         steps: props.outSteps
-      });
+      })
     }
 
     switch (true) {
       case props.in && props.runOnMount: {
-        this.inSeq.stop();
-        current = this.inSeq.getState().current;
-        break;
+        this.inSeq.stop()
+        current = this.inSeq.getState().current
+        break
       }
       case !props.in: {
         if (this.outSeq) {
-          this.outSeq.complete();
-          current = this.outSeq.getState().current;
+          this.outSeq.complete()
+          current = this.outSeq.getState().current
         } else {
-          this.inSeq.stop();
-          current = this.inSeq.getState().current;
+          this.inSeq.stop()
+          current = this.inSeq.getState().current
         }
-        break;
+        break
       }
       default: {
-        this.inSeq.complete();
-        current = this.inSeq.getState().current;
+        this.inSeq.complete()
+        current = this.inSeq.getState().current
       }
     }
 
     this.state = {
       current,
       exitComplete: !props.in
-    };
+    }
 
-    this.inSeq.onChange(this.handleInSeqChange);
+    this.inSeq.onChange(this.handleInSeqChange)
     if (this.outSeq) {
-      this.outSeq.onChange(this.handleOutSeqChange);
+      this.outSeq.onChange(this.handleOutSeqChange)
     }
   }
 
   componentDidMount() {
     if (this.props.in && this.props.runOnMount) {
-      this.inSeq.play();
+      this.inSeq.play()
     }
   }
 
   componentWillUnmount() {
-    this.inSeq.stop();
-    this.inSeq = null;
+    this.inSeq.stop()
+    this.inSeq = null
     if (this.outSeq) {
-      this.outSeq.stop();
-      this.outSeq = null;
+      this.outSeq.stop()
+      this.outSeq = null
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.in && !nextProps.in) {
-      this.inSeq.stop();
+      this.inSeq.stop()
       if (this.outSeq) {
-        this.outSeq.play();
+        this.outSeq.play()
       }
     } else if (!this.props.in && nextProps.in) {
       if (this.outSeq) {
-        this.outSeq.stop();
+        this.outSeq.stop()
       }
-      this.inSeq.play();
+      this.inSeq.play()
     }
   }
 
@@ -105,35 +105,35 @@ class Transition extends React.PureComponent {
     this.setState({
       current: seq.current,
       exitComplete: false
-    });
+    })
   }
 
   handleOutSeqChange = seq => {
     this.setState({
       current: seq.current,
       exitComplete: seq.isComplete
-    });
+    })
   }
 
   render() {
-    const {children, unmountOnExit} = this.props;
-    const show = this.props.in;
-    const {current, exitComplete} = this.state;
+    const { children, unmountOnExit } = this.props
+    const show = this.props.in
+    const { current, exitComplete } = this.state
 
     if (unmountOnExit && show === false && exitComplete === true) {
-      return null;
+      return null
     }
 
     if (!children) {
-      return null;
+      return null
     }
 
     if (typeof children !== 'function') {
-      throw new Error('Child passed into Transition must be a function');
+      throw new Error('Child passed into Transition must be a function')
     }
 
-    return children(current);
+    return children(current)
   }
 }
 
-export default Transition;
+export default Transition

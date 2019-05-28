@@ -1,8 +1,0 @@
-{
-  "presets": ["@babel/preset-react", "env"],
-  "plugins": [
-    "transform-class-properties",
-    "babel-plugin-add-module-exports",
-    "@babel/plugin-proposal-object-rest-spread"
-  ]
-}

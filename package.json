@@ -1,24 +1,16 @@
 {
   "name": "react-sequencer",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "Step based sequencer to give your components reliable states for transitions and animations.",
-  "main": "lib/react-sequencer.js",
-  "scripts": {
-    "build": "webpack --env dev && webpack --env build && npm run test",
-    "dev": "webpack --progress --colors --watch --env dev",
-    "test": "mocha --require @babel/register --colors ./test/*.spec.js",
-    "test:watch": "mocha --require @babel/register --colors -w ./test/*.spec.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/amized/react-sequencer.git"
-  },
   "keywords": [
     "react",
     "transition",
     "transition-group",
     "animation",
-    "sequencer"
+    "sequencer",
+    "timeout",
+    "sequencer",
+    "sequence"
   ],
   "author": "Amiel Zwier <hi@amielzwier.com> (http://amielzwier.com)",
   "license": "MIT",
@@ -26,39 +18,131 @@
     "url": "https://github.com/amized/react-sequencer/issues"
   },
   "homepage": "https://amized.github.io/react-sequencer/",
+  "main": "dist/react-sequencer.umd.js",
+  "module": "dist/react-sequencer.es5.js",
+  "typings": "dist/types/react-sequencer.d.ts",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/amized/react-sequencer.git"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "scripts": {
+    "lint": "tslint  --project tsconfig.json -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
+    "prebuild": "rimraf dist",
+    "build": "tsc --module commonjs && rollup -c rollup.config.ts && typedoc --out docs --target es6 --theme minimal --mode file src",
+    "start": "rollup -c rollup.config.ts -w",
+    "test": "jest --coverage",
+    "test:watch": "jest --coverage --watch",
+    "test:prod": "npm run lint && npm run test -- --no-cache",
+    "deploy-docs": "ts-node tools/gh-pages-publish",
+    "report-coverage": "cat ./coverage/lcov.info | coveralls",
+    "commit": "git-cz",
+    "semantic-release": "semantic-release",
+    "semantic-release-prepare": "ts-node tools/semantic-release-prepare",
+    "precommit": "lint-staged",
+    "travis-deploy-once": "travis-deploy-once"
+  },
+  "lint-staged": {
+    "{src,test}/**/*.ts": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
+  },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "<rootDir>src/setupTests.ts"
+    ],
+    "transform": {
+      ".(ts|tsx)": "ts-jest"
+    },
+    "testEnvironment": "jsdom",
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/test/"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 90,
+        "functions": 95,
+        "lines": 95,
+        "statements": 95
+      }
+    },
+    "collectCoverageFrom": [
+      "src/*.{js,ts}"
+    ]
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
   "devDependencies": {
-    "@babel/cli": "^7.0.0-beta.51",
-    "@babel/core": "^7.0.0-beta.53",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.55",
-    "@babel/preset-env": "^7.0.0-beta.51",
-    "@babel/preset-react": "^7.0.0-beta.53",
-    "@babel/register": "^7.0.0-beta.53",
-    "babel-eslint": "^8.0.3",
-    "babel-loader": "^8.0.0-beta.4",
-    "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-preset-env": "^7.0.0-beta.3",
-    "babel-register": "^7.0.0-beta.3",
-    "chai": "^4.1.2",
-    "enzyme": "^3.3.0",
-    "enzyme-adapter-react-16": "^1.1.1",
-    "eslint": "^5.0.1",
-    "eslint-loader": "^2.0.0",
-    "jsdom": "^11.11.0",
-    "jsdom-global": "3.0.2",
-    "mocha": "^4.0.1",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
-    "sinon": "^6.1.4",
-    "uglifyjs-webpack-plugin": "^1.2.7",
-    "webpack": "^4.12.2",
-    "webpack-cli": "^3.0.8",
-    "yargs": "^10.0.3"
+    "@commitlint/cli": "^7.1.2",
+    "@commitlint/config-conventional": "^7.1.2",
+    "@types/chai": "^4.1.7",
+    "@types/enzyme": "^3.9.3",
+    "@types/enzyme-adapter-react-16": "^1.0.5",
+    "@types/jest": "^23.3.2",
+    "@types/node": "^10.14.7",
+    "colors": "^1.3.2",
+    "commitizen": "^3.0.0",
+    "coveralls": "^3.0.2",
+    "cross-env": "^5.2.0",
+    "cz-conventional-changelog": "^2.1.0",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.13.2",
+    "husky": "^1.0.1",
+    "jest": "^24.8.0",
+    "jest-config": "^23.6.0",
+    "jsdom": "^15.1.0",
+    "lint-staged": "^8.1.7",
+    "lodash.camelcase": "^4.3.0",
+    "prettier": "^1.17.1",
+    "prompt": "^1.0.0",
+    "replace-in-file": "^3.4.2",
+    "rimraf": "^2.6.2",
+    "rollup": "^0.67.0",
+    "rollup-plugin-commonjs": "^9.1.8",
+    "rollup-plugin-json": "^3.1.0",
+    "rollup-plugin-node-resolve": "^3.4.0",
+    "rollup-plugin-sourcemaps": "^0.4.2",
+    "rollup-plugin-typescript2": "^0.21.1",
+    "semantic-release": "^15.13.14",
+    "shelljs": "^0.8.3",
+    "travis-deploy-once": "^5.0.9",
+    "ts-jest": "^24.0.2",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.15.0",
+    "tslint-config-standard": "^8.0.1",
+    "typedoc": "^0.14.2",
+    "typescript": "^3.0.3"
   },
   "dependencies": {
-    "prop-types": "^15.2.0"
-  },
-  "peerDependencies": {
-    "react": "^15.0.0-0 || ^16.0.0-0"
+    "@types/react": "^16.8.18",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "utility-types": "^3.7.0"
   }
 }

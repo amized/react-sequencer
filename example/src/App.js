@@ -41,6 +41,11 @@ const CodeEmbed = styled.iframe`
   border-radius: 4px;
 `;
 
+const NavLink = styled.a`
+  font-size: 20px;
+  text-decoration: none;
+`;
+
 class App extends Component {
   render() {
     return (
@@ -51,6 +56,7 @@ class App extends Component {
           <HeaderButtons>
             <a className="github-button" href="https://github.com/amized/react-sequencer" data-icon="octicon-star" data-size="large" aria-label="Star ntkme/github-buttons on GitHub">Star</a>
             <a className="github-button" href="https://github.com/amized/react-sequencer/fork" data-icon="octicon-repo-forked" data-size="large" aria-label="Fork ntkme/github-buttons on GitHub">Fork</a>
+            <NavLink href="https://github.com/amized/react-sequencer/blob/master/README.md">Docs</NavLink>
           </HeaderButtons>
         </Header>
         <Main>
@@ -63,6 +69,17 @@ class App extends Component {
             <CodeEmbed
               src="https://codesandbox.io/embed/00lrywkjnn?fontsize=12"
               sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"/>
+          </Section>
+          <Section>
+            <p>
+              With use of a few simple configuration properties you can create powerful animation components with withSequencer.
+              Below shows a content fader component that runs a sequencer every time it's children props change. The sequencer
+              controls a css based animation that fades the previous out, animates the height of the container, then fades the current in, giving a super slick transition.
+            </p>
+            <h3>Example</h3>
+            <CodeEmbed
+                src="https://codesandbox.io/embed/n5311w4l70?fontsize=12"
+                sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"/>
           </Section>
           <Section>
             <h2>{`<Transition>`}</h2>
@@ -85,13 +102,14 @@ class App extends Component {
               by fading one out, then fading the next one in.
               You don't want a situation where neither element is mounted at the same time,
               nor when both are since it would result in a weird 'jump' of the content below either down-up or up-down.
-              So you need to set the entering element to absolute the moment you set the leaving element to position relative.
+              So you need to set the entering element to position: absolute the moment you set the leaving element to position: relative.
               This is achieved simply by setting the same durations on the in-out steps so they sync up:</p>
               <h3>Example</h3>
             <CodeEmbed
               src="https://codesandbox.io/embed/940zl86r2w?fontsize=12"
               sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"/>
           </Section>
+
         </Main>
       </div>
     );
