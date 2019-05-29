@@ -6,7 +6,7 @@ import {
   Subscriptions,
   SequencerState,
   NotifyFunction,
-  PlayMode,
+  EndMode,
   Options
 } from './types'
 
@@ -18,7 +18,7 @@ class Sequencer {
   steps: Steps
   currentStep: number
   currentTimeIn: number
-  playMode: PlayMode
+  endMode: EndMode
   status: PlayStatus
   requestID: string | null
   subscriptions: Subscriptions
@@ -28,14 +28,14 @@ class Sequencer {
       steps: [],
       loop: false,
       complete: false,
-      playMode: 'end'
+      endMode: 'end'
     }
     const options = Object.assign(defaults, props)
     this.steps = this._generateSteps(options.steps)
     this.currentStep = 0
     this.currentTimeIn = 0
     this.startedAt = 0
-    this.playMode = options.loop ? 'loop' : options.playMode
+    this.endMode = options.loop ? 'loop' : options.endMode
     this.status = PlayStatus.IDLE
     this.requestID = null
     this.subscriptions = []
@@ -84,18 +84,18 @@ class Sequencer {
 
     if (currentTimeIn >= completesAt) {
       if (this.currentStep === this.steps.length - 1) {
-        if (this.playMode === 'start') {
+        if (this.endMode === 'start') {
           this.stop()
           return
         }
 
-        if (this.playMode === 'loop') {
+        if (this.endMode === 'loop') {
           this.currentStep = 0
           this.currentTimeIn = 0
           this.startedAt = now
         }
 
-        if (this.playMode === 'end') {
+        if (this.endMode === 'end') {
           this.status = PlayStatus.COMPLETE
         }
       } else {

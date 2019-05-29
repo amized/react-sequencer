@@ -168,7 +168,7 @@ describe('Given an instance of my Sequencer library', () => {
     test('start, the sequencer should reset to start upon completion', done => {
       s = new Sequencer({
         steps: playModeSequence,
-        playMode: 'start'
+        endMode: 'start'
       })
       s.play()
       setTimeout(() => {
@@ -180,7 +180,7 @@ describe('Given an instance of my Sequencer library', () => {
     test('end, the sequencer should hold at end upon completion', done => {
       s = new Sequencer({
         steps: playModeSequence,
-        playMode: 'end'
+        endMode: 'end'
       })
       s.play()
       setTimeout(() => {
@@ -192,7 +192,7 @@ describe('Given an instance of my Sequencer library', () => {
     test('loop, the sequencer should continue looping', done => {
       s = new Sequencer({
         steps: playModeSequence,
-        playMode: 'loop'
+        endMode: 'loop'
       })
       s.play()
       setTimeout(() => {

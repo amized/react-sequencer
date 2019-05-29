@@ -23,9 +23,9 @@ const withSequencer = function(options: WithSequencerProps) {
       sequencer: Sequencer
       constructor(props: HocProps) {
         super(props)
-        const { steps, loop, complete, playMode } = props
+        const { steps, loop, complete, endMode } = props
 
-        this.sequencer = new Sequencer({ steps, loop, complete, playMode })
+        this.sequencer = new Sequencer({ steps, loop, complete, endMode })
 
         const sequencerState = this.sequencer.getState()
         const sequencerApi = this.getApi()
@@ -40,7 +40,7 @@ const withSequencer = function(options: WithSequencerProps) {
       static defaultProps: WithSequencerProps = {
         steps: options.steps,
         loop: options.loop,
-        playMode: options.playMode,
+        endMode: options.endMode,
         complete: options.complete,
         shouldPlayOnUpdate: options.shouldPlayOnUpdate,
         shouldStopOnUpdate: options.shouldStopOnUpdate,

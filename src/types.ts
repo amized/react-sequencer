@@ -4,7 +4,7 @@ export enum PlayStatus {
   COMPLETE = 'STATUS_COMPLETE'
 }
 
-export type PlayMode = 'loop' | 'end' | 'start'
+export type EndMode = 'loop' | 'end' | 'start'
 
 /**** Ticker */
 
@@ -20,14 +20,14 @@ export interface OptionsInput {
   steps: StepsInput
   loop?: boolean
   complete?: boolean
-  playMode?: PlayMode
+  endMode?: EndMode
 }
 
 export interface Options {
   steps: StepsInput
   loop: boolean
   complete: boolean
-  playMode: PlayMode
+  endMode: EndMode
 }
 
 export interface Step {

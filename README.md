@@ -22,7 +22,7 @@ You first define a set of steps for your sequence as tuples of names and duratio
   ['final', 0]
 ]
 ```
-Then pass this as configuration to withSequncer and wrap your component:
+Then pass this as configuration to withSequencer and wrap your component:
 
 ```javascript
 withSequencer({
@@ -47,12 +47,12 @@ const MyComponent = () => {
 }
 ```
 
-This seems pretty basic but there are it has man great benefits:
+Allowing you to control your time sequenced events in this way has many benefits:
 
 * Easily add / remove or edit your steps from one place in your code
-* Render your animations how ever you like (style, css classes, etc)
+* Have your sequencer trigger css animations, text changes, or whatever you like
 * Every step runs in it's own animation frame so no repaint or timeout hacks needed to render your state
-* Add sequencers to multiple components and guarantee they update in sync
+* Add sequencers to multiple components and guarantee that they update in sync
 
 See [examples](https://amized.github.io/react-sequencer/) for ways you can use react sequencer.
 
@@ -103,13 +103,17 @@ This is a useful animation tool, since let's say you'd like a different initial 
 
 And then `pre` becomes the default state when your component mounts, until the sequencer is started. By defining all the states explicitly in this fashion, it becomes easy to insert steps, change durations, swap steps and generally understand how your animation behaves.
 
-#### `loop: Boolean`
+#### `endMode: 'end' | 'start' | 'loop'`
 
-Put the sequencer in loop mode. In loop mode, the sequencer jumps to the first step when it finishes the final step. Default is `false`.
+The end mode determines the behavior of the sequencer once it reaches the end of the last step.
+
+* **`'end'` (default)**: The sequencer remains in the last step and a special flag `isComplete` becomes true.
+* **`'start'`**: The sequencer resets to the first step and becomes idle.
+* **`'loop'`**: The sequencer resets to the first step and continues looping until `stop()` or `pause()` is called.
 
 #### `complete: Boolean`
 
-If set to `true`, the state of the sequencer will be set to the end of the final step and idle when the component is initialised. Default is `false`.
+If set to `true`, the state of the sequencer will be set to the end of the final step and idle when the component is initialized. Default is `false`.
 
 #### `shouldPlayOnUpdate(currentProps, nextProps): Boolean`
 
@@ -123,15 +127,15 @@ A function you provide that allows you to stop playing the sequencer in response
 
 A function you provide that allows you to complete the sequencer in response to a change in props, meaning putting the sequencer in it's completed state. The return value should be `true` to complete, `false` otherwise.
 
-### Props
+## Props
 
-`withSequencer` will inject a single prop into your wrapped component, `sequencer`. This props is an object with the following properties:
+`withSequencer` will inject a single prop into your wrapped component, `sequencer`. This object has the following properties:
 
 ### State Props
 
 #### `sequencer.current: String`
 
-The current step of the sequencer, as specified by the step names provided to the sequencer.
+The current step of the sequencer, as specified by the step names provided in the config.
 
 #### `sequencer.index: Number`
 
@@ -143,7 +147,7 @@ The index of the current step.
 
 #### `sequencer.isComplete: Boolean`
 
-`true` if the sequencer has finished sequencing through the steps and is idle. If the sequencer is in `loop` mode this will never be true.
+`true` if the sequencer has finished sequencing through the steps and is idle. `playMode` must be set to `'end'` in order to reach this state.
 
 ### API Props
 
@@ -153,30 +157,17 @@ Starts the sequencer, or continues playing if the sequencer was paused. If this 
 
 #### `sequencer.pause(): Function`
 
-Pauses the sequencer. The sequencer remembers how far through the current step you are so that playback continues from that point rather than replaying the current step from the beggining.
+Pauses the sequencer. The sequencer remembers how far through the current step you are so that playback continues from that point rather than replaying the current step from the beginning.
 
 #### `sequencer.stop(): Function`
 
 Stops playback and resets the sequencer back to the first step.
 
-
-### Why use React Sequencer?
-
-The idea here is that you get a simple, easily configurable, non-ambiguous and reliable state machine to control your animations. The state is passed to your components for you to render how you like. This gives a bunch of advantages:
-
-1. You have full control over the steps and durations of your sequence
-2. You can render out your animations in any implementation you choose - css classes, styled components, 3rd party animation libraries etc.
-3. The configuration structure makes it easy to change durations, insert/delete steps and perfect your sequences without needing to update other parts of your app
-4. Every step in your sequence runs in it's own animationFrame. This means every step is guaranteed to be rendered in the browser before proceeding to the next state - no timeout or repaint hacks needed
-5. You can synchronize two sequencers just by starting them in the same block of code, and this allows you to do some pretty cool stuff (see examples)
-
-
-
 <a name="transition"></a>
 
 ## `<Transition>`
 
-`Transition` is a wrapper component to help make in/out transitions easy to manage. The concept is losely based off the React Transition Group `<Transition>`, but uses Sequencers as the machinery and remains unopinionated about how you render the state.
+`Transition` is a wrapper component to help make in/out transitions easy to manage. The concept is loosely based off the React Transition Group `<Transition>`, but uses Sequencers as the machinery and remains un-opinionated about how you render the state.
 
 ### Usage
 
