@@ -1,6 +1,6 @@
 /* global describe, it, before */
 import Sequencer from '../src/sequencer'
-import { PlayStatus } from '../src/types'
+import { PlayStatus, StepsInput } from '../src/types'
 
 let s: Sequencer
 
@@ -96,7 +96,13 @@ describe('Given an instance of my Sequencer library', () => {
   describe('a complex sequence', () => {
     beforeEach(() => {
       s = new Sequencer({
-        steps: [['one', 400], ['two', 500], ['three', 200], ['four', 600], ['five', 500]]
+        steps: [
+          ['one', 400],
+          ['two', 500],
+          ['three', 200],
+          ['four', 600],
+          ['five', 500]
+        ]
       })
       s.play()
     })
@@ -152,10 +158,60 @@ describe('Given an instance of my Sequencer library', () => {
     }, 5000)
   })
 
+  const playModeSequence: StepsInput = [
+    ['one', 200],
+    ['two', 300],
+    ['three', 400]
+  ]
+
+  describe('when I set the play mode to', () => {
+    test('start, the sequencer should reset to start upon completion', done => {
+      s = new Sequencer({
+        steps: playModeSequence,
+        playMode: 'start'
+      })
+      s.play()
+      setTimeout(() => {
+        expect(s.getState().index).toEqual(0)
+        done()
+      }, 1000)
+    })
+
+    test('end, the sequencer should hold at end upon completion', done => {
+      s = new Sequencer({
+        steps: playModeSequence,
+        playMode: 'end'
+      })
+      s.play()
+      setTimeout(() => {
+        expect(s.getState().index).toEqual(2)
+        done()
+      }, 1000)
+    })
+
+    test('loop, the sequencer should continue looping', done => {
+      s = new Sequencer({
+        steps: playModeSequence,
+        playMode: 'loop'
+      })
+      s.play()
+      setTimeout(() => {
+        expect(s.getState().index).toEqual(1)
+        done()
+      }, 1300)
+    })
+  })
+
   describe('when I subscribe to a sequencer', () => {
     beforeEach(() => {
       s = new Sequencer({
-        steps: [['one', 400], ['two', 500], ['three', 200], ['four', 600], ['five', 500]]
+        steps: [
+          ['one', 400],
+          ['two', 500],
+          ['three', 200],
+          ['four', 600],
+          ['five', 500]
+        ]
       })
     })
 

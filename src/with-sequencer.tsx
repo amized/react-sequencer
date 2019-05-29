@@ -1,21 +1,31 @@
 import React from 'react'
 import Sequencer from './sequencer'
-import { WithSequencerProps, SequencerState, InjectedAPI, InjectedProps } from './types'
+import {
+  WithSequencerProps,
+  SequencerState,
+  InjectedAPI,
+  InjectedProps
+} from './types'
 import { Subtract } from 'utility-types'
 
 const withSequencer = function(options: WithSequencerProps) {
   if (!options.steps) {
     throw new Error('Missing steps configuration in withSequencer')
   }
-  return function<BaseProps extends InjectedProps>(Component: React.ComponentType<BaseProps>) {
+  return function<BaseProps extends InjectedProps>(
+    Component: React.ComponentType<BaseProps>
+  ) {
     type HocProps = Subtract<BaseProps, InjectedProps> & WithSequencerProps
-    return class SequencerWrapper extends React.Component<HocProps, InjectedProps> {
+    return class SequencerWrapper extends React.Component<
+      HocProps,
+      InjectedProps
+    > {
       sequencer: Sequencer
       constructor(props: HocProps) {
         super(props)
-        const { steps, loop, complete } = props
+        const { steps, loop, complete, playMode } = props
 
-        this.sequencer = new Sequencer({ steps, loop, complete })
+        this.sequencer = new Sequencer({ steps, loop, complete, playMode })
 
         const sequencerState = this.sequencer.getState()
         const sequencerApi = this.getApi()
@@ -30,6 +40,7 @@ const withSequencer = function(options: WithSequencerProps) {
       static defaultProps: WithSequencerProps = {
         steps: options.steps,
         loop: options.loop,
+        playMode: options.playMode,
         complete: options.complete,
         shouldPlayOnUpdate: options.shouldPlayOnUpdate,
         shouldStopOnUpdate: options.shouldStopOnUpdate,
@@ -37,9 +48,16 @@ const withSequencer = function(options: WithSequencerProps) {
       }
 
       componentWillReceiveProps(nextProps: HocProps) {
-        const { shouldPlayOnUpdate, shouldStopOnUpdate, shouldCompleteOnUpdate } = this.props
+        const {
+          shouldPlayOnUpdate,
+          shouldStopOnUpdate,
+          shouldCompleteOnUpdate
+        } = this.props
 
-        if (shouldCompleteOnUpdate && shouldCompleteOnUpdate(this.props, nextProps)) {
+        if (
+          shouldCompleteOnUpdate &&
+          shouldCompleteOnUpdate(this.props, nextProps)
+        ) {
           this.sequencer.complete()
         }
         if (shouldStopOnUpdate && shouldStopOnUpdate(this.props, nextProps)) {

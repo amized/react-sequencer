@@ -7,10 +7,10 @@
     "transition",
     "transition-group",
     "animation",
-    "sequencer",
     "timeout",
     "sequencer",
-    "sequence"
+    "sequence",
+    "step sequencer"
   ],
   "author": "Amiel Zwier <hi@amielzwier.com> (http://amielzwier.com)",
   "license": "MIT",
@@ -143,7 +143,6 @@
     "utility-types": "^3.7.0"
   },
   "peerDependencies": {
-    "@types/react": ">= 16.x.x",
     "react": ">= 16.x.x",
     "react-dom": ">= 16.x.x",
     "utility-types": "^3.7.0"
