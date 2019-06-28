@@ -11,7 +11,7 @@ A better way to do animations in React.
 
 ## Overview
 
-React sequencer lets you perform complex animations easily by tying them to a time-sequenced set of steps. The simplest usage is to wrap your component with the `withSequencer` HOC, which will inject the sequencer state into your component.
+React sequencer lets you perform complex animations easily by tying them to a time-sequenced set of states. The simplest usage is to wrap your component with the `withSequencer` HOC, which will inject the sequencer state into your component.
 
 You first define a set of steps for your sequence as tuples of names and durations:
 
@@ -51,10 +51,10 @@ Allowing you to control your time sequenced events in this way has many benefits
 
 * Easily add / remove or edit your steps from one place in your code
 * Have your sequencer trigger css animations, text changes, or whatever you like
-* Every step runs in it's own animation frame so no repaint or timeout hacks needed to render your state
+* Every step runs in its own animation frame so no repaint or timeout hacks are needed to get your animations behaving exactly as you like
 * Add sequencers to multiple components and guarantee that they update in sync
 
-See [examples](https://amized.github.io/react-sequencer/) for ways you can use react sequencer.
+See [examples](https://amized.github.io/react-sequencer/).
 
 <a name="getting-started"></a>
 
@@ -101,19 +101,19 @@ This is a useful animation tool, since let's say you'd like a different initial 
 ]
 ```
 
-And then `pre` becomes the default state when your component mounts, until the sequencer is started. By defining all the states explicitly in this fashion, it becomes easy to insert steps, change durations, swap steps and generally understand how your animation behaves.
+And then `pre` becomes the default state when your component mounts, until the sequencer is started. By defining all the states explicitly in this fashion, it becomes easy to insert steps, change durations, swap steps and understand how your animation behaves.
 
 #### `endMode: 'end' | 'start' | 'loop'`
 
 The end mode determines the behavior of the sequencer once it reaches the end of the last step.
 
-* **`'end'` (default)**: The sequencer remains in the last step and a special flag `isComplete` becomes true.
+* **`'end'` (default)**: The sequencer remains in the last step and becomes idle.
 * **`'start'`**: The sequencer resets to the first step and becomes idle.
 * **`'loop'`**: The sequencer resets to the first step and continues looping until `stop()` or `pause()` is called.
 
 #### `complete: Boolean`
 
-If set to `true`, the state of the sequencer will be set to the end of the final step and idle when the component is initialized. Default is `false`.
+If set to `true`, the sequencer is initialized in the 'completed' state, meaning it is in the final step and idle. It will remain in this state until either `play()` or `stop()` is called.
 
 #### `shouldPlayOnUpdate(currentProps, nextProps): Boolean`
 
@@ -147,7 +147,7 @@ The index of the current step.
 
 #### `sequencer.isComplete: Boolean`
 
-`true` if the sequencer has finished sequencing through the steps and is idle. `playMode` must be set to `'end'` in order to reach this state.
+`true` if the sequencer has finished sequencing through the steps and is idle. `endMode` must be set to `'end'` in order to reach this state.
 
 ### API Props
 
