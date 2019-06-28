@@ -104,6 +104,7 @@
     "@types/enzyme": "^3.9.3",
     "@types/enzyme-adapter-react-16": "^1.0.5",
     "@types/jest": "^23.3.2",
+    "@types/lodash.merge": "^4.6.6",
     "@types/node": "^10.14.7",
     "@types/react": "^16.8.6",
     "colors": "^1.3.2",
@@ -119,8 +120,11 @@
     "jsdom": "^15.1.0",
     "lint-staged": "^8.1.7",
     "lodash.camelcase": "^4.3.0",
+    "lodash.merge": "^4.6.1",
     "prettier": "^1.17.1",
     "prompt": "^1.0.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
     "replace-in-file": "^3.4.2",
     "rimraf": "^2.6.2",
     "rollup": "^0.67.0",
@@ -138,13 +142,12 @@
     "tslint-config-standard": "^8.0.1",
     "typedoc": "^0.14.2",
     "typescript": "^3.0.3",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
     "utility-types": "^3.7.0"
   },
   "peerDependencies": {
     "react": ">= 16.x.x",
     "react-dom": ">= 16.x.x",
     "utility-types": "^3.7.0"
-  }
+  },
+  "dependencies": {}
 }

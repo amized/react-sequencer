@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import Sequencer from './sequencer'
 import {
   WithSequencerProps,

@@ -6,6 +6,13 @@ let s: Sequencer
 
 describe('Given an instance of my Sequencer library', () => {
   describe('when I initialise the sequence', () => {
+    it('the should have a default end mode of "end"', () => {
+      s = new Sequencer({
+        steps: [['one', 0], ['two', 10], ['three', 5], ['four', 23]]
+      })
+      expect(s.endMode).toEqual('end')
+    })
+
     it('should generate a sequence array', () => {
       s = new Sequencer({
         steps: [['one', 0], ['two', 10], ['three', 5], ['four', 23]]

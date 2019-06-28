@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import { withSequencer } from 'react-sequencer'
 import styled from 'styled-components'
 
-console.log('what is withSequencer?', withSequencer)
-
 const Wrapper = styled.h1`
   display: flex;
 `
@@ -16,7 +14,8 @@ const CharWrapper = styled.span`
       : props.active
       ? 'translate3d(0,0,0) scale(2)'
       : 'translate3d(0,0,0) scale(1)'};
-  color: ${props => (props.isPrev ? '#6fcef5' : props.active ? '#7ae87a' : '#000')};
+  color: ${props =>
+    props.isPrev ? '#6fcef5' : props.active ? '#7ae87a' : '#000'};
   transform-origin: 50% 50%;
   transition: transform 0.4s linear, color 0.3s linear;
   margin: 0 10px;
@@ -42,7 +41,11 @@ class SequencedTitle extends React.Component {
       <div>
         <Wrapper>
           {this.chars.map((char, index) => (
-            <CharWrapper key={index} active={index === seq.index} isPrev={index === seq.index - 1}>
+            <CharWrapper
+              key={index}
+              active={index === seq.index}
+              isPrev={index === seq.index - 1}
+            >
               {char}
             </CharWrapper>
           ))}
@@ -52,7 +55,10 @@ class SequencedTitle extends React.Component {
   }
 }
 
-const steps = Array.apply(null, { length: 15 }).map((item, index) => [index, 200])
+const steps = Array.apply(null, { length: 15 }).map((item, index) => [
+  index,
+  200
+])
 export default withSequencer({
   steps: steps,
   loop: true,

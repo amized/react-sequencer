@@ -9,6 +9,7 @@ import {
   EndMode,
   Options
 } from './types'
+import merge from 'lodash.merge'
 
 import Ticker from './ticker'
 
@@ -30,7 +31,7 @@ class Sequencer {
       complete: false,
       endMode: 'end'
     }
-    const options = Object.assign(defaults, props)
+    const options = merge(defaults, props)
     this.steps = this._generateSteps(options.steps)
     this.currentStep = 0
     this.currentTimeIn = 0

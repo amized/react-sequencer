@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { shallow, mount } from 'enzyme'
 import { InjectedProps } from '../src/types'
 import withSequencer from '../src/with-sequencer'
@@ -10,12 +10,12 @@ class MyComponent extends React.Component<InjectedProps> {
   }
 }
 
+const WrappedComponent = withSequencer({
+  steps: [['one', 100], ['two', 200]]
+})(MyComponent)
+
 describe('when I wrap my component in withSequencer', () => {
   beforeEach(() => {
-    const WrappedComponent = withSequencer({
-      steps: [['one', 100], ['two', 200]]
-    })(MyComponent)
-
     wrapper = shallow(<WrappedComponent />)
   })
 
