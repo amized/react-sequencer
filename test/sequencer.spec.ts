@@ -1,6 +1,7 @@
 /* global describe, it, before */
 import Sequencer from '../src/sequencer'
 import { PlayStatus, StepsInput } from '../src/types'
+import sinon from 'sinon'
 
 let s: Sequencer
 
@@ -79,6 +80,22 @@ describe('Given an instance of my Sequencer library', () => {
         done()
       }, 2100)
     }, 5000)
+  })
+
+  describe('when I subscribe to the sequencer', () => {
+    test('I should be notified the correct number of times', done => {
+      s = new Sequencer({
+        steps: [['one', 0], ['two', 500]],
+        endMode: 'end'
+      })
+      const spy = sinon.spy(s, '_notifyChange')
+      s.play()
+      setTimeout(() => {
+        console.log('The sequecner adter', s)
+        expect(spy.callCount).toEqual(3)
+        done()
+      }, 1000)
+    }, 1200)
   })
 
   describe('when I pause the sequencer', () => {

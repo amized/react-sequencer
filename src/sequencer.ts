@@ -89,15 +89,14 @@ class Sequencer {
           this.stop()
           return
         }
-
+        if (this.endMode === 'end') {
+          this.complete()
+          return
+        }
         if (this.endMode === 'loop') {
           this.currentStep = 0
           this.currentTimeIn = 0
           this.startedAt = now
-        }
-
-        if (this.endMode === 'end') {
-          this.status = PlayStatus.COMPLETE
         }
       } else {
         this.currentStep++
@@ -155,6 +154,7 @@ class Sequencer {
     if (this.status !== PlayStatus.COMPLETE) {
       this.currentStep = this.steps.length - 1
       this.status = PlayStatus.COMPLETE
+      ticker.offTick(this._onLoop)
       this._notifyChange()
     }
   }
