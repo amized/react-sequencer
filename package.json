@@ -120,7 +120,6 @@
     "jsdom": "^15.1.0",
     "lint-staged": "^8.1.7",
     "lodash.camelcase": "^4.3.0",
-    "lodash.merge": "^4.6.1",
     "prettier": "^1.17.1",
     "prompt": "^1.0.0",
     "react": "^16.8.6",
@@ -149,5 +148,7 @@
     "react-dom": ">= 16.x.x",
     "utility-types": "^3.7.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "lodash.merge": "^4.6.1"
+  }
 }
