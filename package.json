@@ -60,7 +60,7 @@
   },
   "jest": {
     "setupFilesAfterEnv": [
-      "<rootDir>src/setupTests.ts"
+      "<rootDir>setupTests.ts"
     ],
     "transform": {
       ".(ts|tsx)": "ts-jest"

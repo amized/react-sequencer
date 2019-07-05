@@ -15,6 +15,6 @@
     "jsx": "react",
     "typeRoots": ["node_modules/@types"]
   },
-  "include": ["src"],
+  "include": ["src", "setupTests.ts"],
   "exclude": ["node_modules"]
 }

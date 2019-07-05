@@ -29,7 +29,8 @@ withSequencer({
   steps: [
     ['initial', 100], 
     ['middle', 100], 
-    ['final', 0]]
+    ['final', 0]
+  ]
 })(MyComponent)
 ```
 
@@ -39,7 +40,7 @@ Your wrapped component receives a `sequencer` object as a prop that contains the
 const MyComponent = () => {
   const { current, play } = this.props.sequencer
   return (
-    <div className={`show-${current}`}>
+    <div>
       <div>The sequencer state: {current}</div>
       <button onClick={play}>Start</button>
     </div>
@@ -90,7 +91,7 @@ withSequencer({
 
 If you specify a duration of `0` for a step, it means that the following step will fire on the next animation frame. This guarantees that every state must be visited and rendered before transitioning to the next state.
 
-This is a useful animation tool, since let's say you'd like a different initial state for an animation before it starts without needing to re configure all the steps, you can simply do this:
+This makes for a useful animation tool, since let's say you'd like a different initial state for an animation before it starts without needing to re configure all the steps, you can simply do this:
 
 ```javascript
 [
@@ -107,7 +108,7 @@ And then `pre` becomes the default state when your component mounts, until the s
 
 The end mode determines the behavior of the sequencer once it reaches the end of the last step.
 
-* **`'end'` (default)**: The sequencer remains in the last step and becomes idle.
+* **`'end'` (default)**: The sequencer remains in the last step.
 * **`'start'`**: The sequencer resets to the first step and becomes idle.
 * **`'loop'`**: The sequencer resets to the first step and continues looping until `stop()` or `pause()` is called.
 

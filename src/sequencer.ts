@@ -17,8 +17,9 @@ const ticker = new Ticker()
 
 class Sequencer {
   steps: Steps
-  currentStep: number
+  currentStepIndex: number
   currentTimeIn: number
+  totalDuration: number
   endMode: EndMode
   status: PlayStatus
   requestID: string | null
@@ -33,7 +34,8 @@ class Sequencer {
     }
     const options = merge(defaults, props)
     this.steps = this._generateSteps(options.steps)
-    this.currentStep = 0
+    this.totalDuration = this.steps[this.steps.length - 1].endPos
+    this.currentStepIndex = 0
     this.currentTimeIn = 0
     this.startedAt = 0
     this.endMode = options.loop ? 'loop' : options.endMode
@@ -79,12 +81,12 @@ class Sequencer {
     if (this.status !== PlayStatus.PLAYING) {
       return
     }
-    const currentStep = this._getStep(this.currentStep)
-    const currentTimeIn = (this.currentTimeIn = now - this.startedAt)
+    this.currentTimeIn = now - this.startedAt
+    const currentStep = this._getStep(this.currentStepIndex)
     const completesAt = currentStep.endPos
 
-    if (currentTimeIn >= completesAt) {
-      if (this.currentStep === this.steps.length - 1) {
+    if (this.currentTimeIn >= completesAt) {
+      if (this.isComplete()) {
         if (this.endMode === 'start') {
           this.stop()
           return
@@ -94,15 +96,19 @@ class Sequencer {
           return
         }
         if (this.endMode === 'loop') {
-          this.currentStep = 0
+          this.currentStepIndex = 0
           this.currentTimeIn = 0
           this.startedAt = now
         }
       } else {
-        this.currentStep++
+        this.currentStepIndex++
+        this._notifyChange()
       }
-      this._notifyChange()
     }
+  }
+
+  getCurrentStep() {
+    return this.steps[this.currentStepIndex]
   }
 
   _notifyChange(): void {
@@ -123,7 +129,7 @@ class Sequencer {
     }
 
     if (this.isComplete()) {
-      this.currentStep = 0
+      this.currentStepIndex = 0
       this.currentTimeIn = 0
     }
     this.startedAt = ticker.currentTimeStamp - this.currentTimeIn
@@ -133,7 +139,7 @@ class Sequencer {
   }
 
   pause = () => {
-    if (this.status !== PlayStatus.IDLE) {
+    if (this.status === PlayStatus.PLAYING) {
       this.status = PlayStatus.IDLE
       ticker.offTick(this._onLoop)
       this._notifyChange()
@@ -141,26 +147,23 @@ class Sequencer {
   }
 
   stop = () => {
-    if (this.status !== PlayStatus.IDLE) {
-      this.currentStep = 0
-      this.currentTimeIn = 0
-      this.status = PlayStatus.IDLE
-      ticker.offTick(this._onLoop)
-      this._notifyChange()
-    }
+    this.currentStepIndex = 0
+    this.currentTimeIn = 0
+    this.status = PlayStatus.IDLE
+    ticker.offTick(this._onLoop)
+    this._notifyChange()
   }
 
   complete = () => {
-    if (this.status !== PlayStatus.COMPLETE) {
-      this.currentStep = this.steps.length - 1
-      this.status = PlayStatus.COMPLETE
-      ticker.offTick(this._onLoop)
-      this._notifyChange()
-    }
+    this.currentStepIndex = this.steps.length - 1
+    this.currentTimeIn = this.totalDuration
+    this.status = PlayStatus.IDLE
+    ticker.offTick(this._onLoop)
+    this._notifyChange()
   }
 
   isComplete = () => {
-    return this.status === PlayStatus.COMPLETE
+    return this.currentTimeIn >= this.totalDuration
   }
 
   isPlaying = () => {
@@ -169,8 +172,8 @@ class Sequencer {
 
   getState = () => {
     const state: SequencerState = {
-      current: this.steps[this.currentStep].name,
-      index: this.currentStep,
+      current: this.steps[this.currentStepIndex].name,
+      index: this.currentStepIndex,
       isPlaying: this.isPlaying(),
       isComplete: this.isComplete()
     }

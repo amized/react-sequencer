@@ -1,7 +1,6 @@
 export enum PlayStatus {
   IDLE = 'STATUS_IDLE',
-  PLAYING = 'STATUS_PLAYING',
-  COMPLETE = 'STATUS_COMPLETE'
+  PLAYING = 'STATUS_PLAYING'
 }
 
 export type EndMode = 'loop' | 'end' | 'start'

@@ -50,8 +50,8 @@ describe('Given an instance of my Sequencer library', () => {
         steps: [['one', 100], ['two', 2000]],
         complete: true
       })
-      expect(s.currentStep).toEqual(1)
-      expect(s.status).toEqual(PlayStatus.COMPLETE)
+      expect(s.currentStepIndex).toEqual(1)
+      expect(s.status).toEqual(PlayStatus.IDLE)
     })
   })
 
@@ -91,7 +91,6 @@ describe('Given an instance of my Sequencer library', () => {
       const spy = sinon.spy(s, '_notifyChange')
       s.play()
       setTimeout(() => {
-        console.log('The sequecner adter', s)
         expect(spy.callCount).toEqual(3)
         done()
       }, 1000)
