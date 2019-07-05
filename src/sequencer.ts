@@ -73,16 +73,12 @@ class Sequencer {
     return steps
   }
 
-  _getStep(stepId: number) {
-    return this.steps[stepId]
-  }
-
   _onLoop = (now: number) => {
     if (this.status !== PlayStatus.PLAYING) {
       return
     }
     this.currentTimeIn = now - this.startedAt
-    const currentStep = this._getStep(this.currentStepIndex)
+    const currentStep = this.getCurrentStep()
     const completesAt = currentStep.endPos
 
     if (this.currentTimeIn >= completesAt) {
