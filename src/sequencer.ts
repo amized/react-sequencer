@@ -92,8 +92,7 @@ class Sequencer {
           return
         }
         if (this.endMode === 'loop') {
-          this.currentStepIndex = 0
-          this.currentTimeIn = 0
+          this.goToStepByIndex(0)
           this.startedAt = now
         }
       } else {
@@ -101,6 +100,16 @@ class Sequencer {
         this._notifyChange()
       }
     }
+  }
+
+  goToStepByIndex(index: number) {
+    this.currentStepIndex = index
+    this.currentTimeIn = this.steps[index].startPos
+  }
+
+  goToStepByTime(timeMs: number) {
+    this.currentTimeIn = timeMs
+    this.currentStepIndex = this.steps.findIndex(step => step.endPos >= timeMs)
   }
 
   getCurrentStep() {
@@ -125,8 +134,7 @@ class Sequencer {
     }
 
     if (this.isComplete()) {
-      this.currentStepIndex = 0
-      this.currentTimeIn = 0
+      this.goToStepByIndex(0)
     }
     this.startedAt = ticker.currentTimeStamp - this.currentTimeIn
     this.status = PlayStatus.PLAYING
@@ -143,16 +151,14 @@ class Sequencer {
   }
 
   stop = () => {
-    this.currentStepIndex = 0
-    this.currentTimeIn = 0
+    this.goToStepByIndex(0)
     this.status = PlayStatus.IDLE
     ticker.offTick(this._onLoop)
     this._notifyChange()
   }
 
   complete = () => {
-    this.currentStepIndex = this.steps.length - 1
-    this.currentTimeIn = this.totalDuration
+    this.goToStepByTime(this.totalDuration)
     this.status = PlayStatus.IDLE
     ticker.offTick(this._onLoop)
     this._notifyChange()
@@ -164,6 +170,22 @@ class Sequencer {
 
   isPlaying = () => {
     return this.status === PlayStatus.PLAYING
+  }
+
+  isBefore = (stepName: string): boolean => {
+    const stepIndex = this.steps.findIndex(step => step.name === stepName)
+    if (stepIndex === -1) {
+      throw new Error(`Sequencer step ${stepName} not found.`)
+    }
+    return this.currentStepIndex < stepIndex
+  }
+
+  isAfter = (stepName: string): boolean => {
+    const stepIndex = this.steps.findIndex(step => step.name === stepName)
+    if (stepIndex === -1) {
+      throw new Error(`Sequencer step ${stepName} not found.`)
+    }
+    return this.currentStepIndex > stepIndex
   }
 
   getState = () => {

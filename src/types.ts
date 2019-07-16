@@ -61,6 +61,8 @@ export interface InjectedAPI {
   complete(): void
   stop(): void
   pause(): void
+  isBefore(name: string): boolean
+  isAfter(name: string): boolean
 }
 
 export interface InjectedProps {

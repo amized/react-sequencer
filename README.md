@@ -91,7 +91,7 @@ withSequencer({
 
 If you specify a duration of `0` for a step, it means that the following step will fire on the next animation frame. This guarantees that every state must be visited and rendered before transitioning to the next state.
 
-This makes for a useful animation tool, since let's say you'd like a different initial state for an animation before it starts without needing to re configure all the steps, you can simply do this:
+This is useful for creating an animation 'set up' state where you may want to prepare some css before an animation begins. You can simply do this without needing to change anything else in your sequence:
 
 ```javascript
 [
@@ -102,7 +102,7 @@ This makes for a useful animation tool, since let's say you'd like a different i
 ]
 ```
 
-And then `pre` becomes the default state when your component mounts, until the sequencer is started. By defining all the states explicitly in this fashion, it becomes easy to insert steps, change durations, swap steps and understand how your animation behaves.
+`pre` becomes the default state when your component mounts, until the sequencer is started, which moves on to `initial` on the next frame. By defining all the states explicitly in this fashion, it becomes easy to insert steps, change durations, swap steps and understand how your animation behaves.
 
 #### `endMode: 'end' | 'start' | 'loop'`
 
@@ -150,19 +150,32 @@ The index of the current step.
 
 `true` if the sequencer has finished sequencing through the steps and is idle. `endMode` must be set to `'end'` in order to reach this state.
 
+#### `sequencer.isBefore(name): Boolean`
+
+`true` if the sequencer has not yet reached the step with the provided name.
+
+#### `sequencer.isAfter(name): Boolean`
+
+`true` if the sequencer has passed the step with the provided name.
+
+
 ### API Props
 
 #### `sequencer.play(): Function`
 
-Starts the sequencer, or continues playing if the sequencer was paused. If this is called when the sequencer is in a `complete` state, it will jump back to the start and begin playing.
+Starts the sequencer, or continues playing if the sequencer was paused.
 
 #### `sequencer.pause(): Function`
 
-Pauses the sequencer. The sequencer remembers how far through the current step you are so that playback continues from that point rather than replaying the current step from the beginning.
+Pauses the sequencer. The sequencer tracks how far it is through the current step by the millisecond so that playback continues from the same moment.
 
 #### `sequencer.stop(): Function`
 
 Stops playback and resets the sequencer back to the first step.
+
+#### `sequencer.complete(): Function`
+
+Stops playback and puts the sequencer to the end of the final step.
 
 <a name="transition"></a>
 

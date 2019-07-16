@@ -73,7 +73,9 @@ const withSequencer = function(options: WithSequencerProps) {
           play: this.sequencer.play,
           stop: this.sequencer.stop,
           pause: this.sequencer.pause,
-          complete: this.sequencer.complete
+          complete: this.sequencer.complete,
+          isBefore: this.sequencer.isBefore,
+          isAfter: this.sequencer.isAfter
         }
       }
 

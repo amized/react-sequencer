@@ -97,6 +97,38 @@ describe('Given an instance of my Sequencer library', () => {
     }, 1200)
   })
 
+  describe('isBefore / isAfter', () => {
+    test('isBefore() should be true when the sequencer`s current step proceeds the step referenced by the name provided', () => {
+      s = new Sequencer({
+        steps: [['one', 0], ['two', 10], ['three', 20]]
+      })
+      expect(s.isBefore('two')).toBe(true)
+      expect(s.isBefore('one')).toBe(false)
+      s.goToStepByIndex(2)
+      expect(s.isBefore('two')).toBe(false)
+      expect(s.isBefore('one')).toBe(false)
+    })
+
+    test('isAfter() should be true when the step referenced by the name provided proceeds the the sequencer`s current step', () => {
+      s = new Sequencer({
+        steps: [['one', 0], ['two', 10], ['three', 20]]
+      })
+      expect(s.isAfter('two')).toBe(false)
+      expect(s.isAfter('one')).toBe(false)
+      s.goToStepByIndex(2)
+      expect(s.isAfter('two')).toBe(true)
+      expect(s.isAfter('one')).toBe(true)
+    })
+
+    test('a complete sequencer cannot be isAfter() its last step', () => {
+      s = new Sequencer({
+        steps: [['one', 0], ['two', 10], ['three', 20]]
+      })
+      s.complete()
+      expect(s.isAfter('three')).toBe(false)
+    })
+  })
+
   describe('when I pause the sequencer', () => {
     beforeEach(() => {
       s = new Sequencer({
