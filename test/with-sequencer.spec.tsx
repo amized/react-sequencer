@@ -35,6 +35,12 @@ describe('when I wrap my component in withSequencer', () => {
     expect(sequencer).toHaveProperty('isPlaying', false)
     expect(sequencer).toHaveProperty('current', 'one')
     expect(sequencer).toHaveProperty('index', 0)
+    expect(sequencer).toHaveProperty('play')
+    expect(sequencer).toHaveProperty('pause')
+    expect(sequencer).toHaveProperty('stop')
+    expect(sequencer).toHaveProperty('complete')
+    expect(sequencer).toHaveProperty('isBefore')
+    expect(sequencer).toHaveProperty('isAfter')
   })
 })
 

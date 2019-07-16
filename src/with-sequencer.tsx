@@ -80,11 +80,7 @@ const withSequencer = function(options: WithSequencerProps) {
       }
 
       handleChange = (sequencerState: SequencerState) => {
-        const sequencer = sequencerState as SequencerState & InjectedAPI
-        sequencer.play = this.sequencer.play
-        sequencer.stop = this.sequencer.stop
-        sequencer.pause = this.sequencer.pause
-        sequencer.complete = this.sequencer.complete
+        const sequencer = Object.assign(sequencerState, this.getApi())
         this.setState({
           sequencer
         })
