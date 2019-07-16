@@ -98,7 +98,7 @@
     ]
   },
   "devDependencies": {
-    "@commitlint/cli": "^7.1.2",
+    "@commitlint/cli": "^8.1.0",
     "@commitlint/config-conventional": "^7.1.2",
     "@types/chai": "^4.1.7",
     "@types/enzyme": "^3.9.3",
@@ -149,6 +149,6 @@
     "react": ">= 16.x.x"
   },
   "dependencies": {
-    "lodash.merge": "^4.6.1"
+    "lodash.merge": "^4.6.2"
   }
 }
