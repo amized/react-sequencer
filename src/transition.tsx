@@ -36,37 +36,29 @@ class Transition extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props)
     let current = null
-    this.outSeq = null
+    this.outSeq = props.outSteps
+      ? new Sequencer({
+          steps: props.outSteps
+        })
+      : null
     this.inSeq = new Sequencer({
       steps: props.inSteps
     })
 
-    if (props.outSteps) {
-      this.outSeq = new Sequencer({
-        steps: props.outSteps
-      })
-    }
-
-    switch (true) {
-      case props.in && props.runOnMount: {
+    if (props.in && props.runOnMount) {
+      this.inSeq.stop()
+      current = this.inSeq.getState().current
+    } else if (!props.in) {
+      if (this.outSeq) {
+        this.outSeq.complete()
+        current = this.outSeq.getState().current
+      } else {
         this.inSeq.stop()
         current = this.inSeq.getState().current
-        break
       }
-      case !props.in: {
-        if (this.outSeq) {
-          this.outSeq.complete()
-          current = this.outSeq.getState().current
-        } else {
-          this.inSeq.stop()
-          current = this.inSeq.getState().current
-        }
-        break
-      }
-      default: {
-        this.inSeq.complete()
-        current = this.inSeq.getState().current
-      }
+    } else {
+      this.inSeq.complete()
+      current = this.inSeq.getState().current
     }
 
     this.state = {

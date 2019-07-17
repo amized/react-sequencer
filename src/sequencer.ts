@@ -82,7 +82,7 @@ class Sequencer {
     const completesAt = currentStep.endPos
 
     if (this.currentTimeIn >= completesAt) {
-      if (this.isComplete()) {
+      if (this.currentStepIndex === this.steps.length - 1) {
         if (this.endMode === 'start') {
           this.stop()
           return
@@ -105,11 +105,6 @@ class Sequencer {
   goToStepByIndex(index: number) {
     this.currentStepIndex = index
     this.currentTimeIn = this.steps[index].startPos
-  }
-
-  goToStepByTime(timeMs: number) {
-    this.currentTimeIn = timeMs
-    this.currentStepIndex = this.steps.findIndex(step => step.endPos >= timeMs)
   }
 
   getCurrentStep() {
@@ -136,9 +131,9 @@ class Sequencer {
     if (this.isComplete()) {
       this.goToStepByIndex(0)
     }
-    this.startedAt = ticker.currentTimeStamp - this.currentTimeIn
     this.status = PlayStatus.PLAYING
     ticker.onTick(this._onLoop)
+    this.startedAt = ticker.currentTimeStamp - this.currentTimeIn
     this._notifyChange()
   }
 
@@ -158,7 +153,8 @@ class Sequencer {
   }
 
   complete = () => {
-    this.goToStepByTime(this.totalDuration)
+    this.currentStepIndex = this.steps.length - 1
+    this.currentTimeIn = this.totalDuration
     this.status = PlayStatus.IDLE
     ticker.offTick(this._onLoop)
     this._notifyChange()

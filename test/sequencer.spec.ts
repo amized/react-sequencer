@@ -304,4 +304,15 @@ describe('Given an instance of my Sequencer library', () => {
       s.play()
     }, 5000)
   })
+  describe('when I call complete() on a sequencer', () => {
+    test('it should put the sequencer to the final step', done => {
+      s = new Sequencer({
+        steps: [['one', 500], ['two', 500], ['three', 0]]
+      })
+      s.complete()
+      expect(s.getState().index).toEqual(2)
+      expect(s.getState().current).toEqual('three')
+      done()
+    })
+  })
 })

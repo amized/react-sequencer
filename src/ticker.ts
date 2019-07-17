@@ -3,7 +3,10 @@ import { TickerNotifyFunction } from './types'
 let onNextTick: Function
 let cancelNextTick: Function
 
-if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
+if (
+  typeof window !== 'undefined' &&
+  typeof window.requestAnimationFrame === 'function'
+) {
   onNextTick = window.requestAnimationFrame
   cancelNextTick = window.cancelAnimationFrame
 } else if (typeof setTimeout === 'function') {
@@ -65,7 +68,9 @@ class Ticker {
       const fn = this.subscriptions[i]
       fn(this.currentTimeStamp)
     }
-    onNextTick(this._onLoop)
+    if (this.isActive) {
+      this.requestID = onNextTick(this._onLoop)
+    }
   }
 }
 
