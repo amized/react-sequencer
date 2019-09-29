@@ -98,9 +98,9 @@ Pass an array of tuples that defines the steps of the sequence. The first value 
 ```javascript
 withSequencer({
   steps: [
-  	['initial', 100], 
-  	['middle', 100], 
-  	['final', 0]
+   ['initial', 100], 
+   ['middle', 100], 
+   ['final', 0]
   ]
 })(MyComponent)
 ```
