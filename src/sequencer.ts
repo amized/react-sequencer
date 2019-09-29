@@ -33,7 +33,7 @@ class Sequencer {
       endMode: 'end'
     }
     const options = merge(defaults, props)
-    this.steps = this._generateSteps(options.steps)
+    this.steps = this.generateSteps(options.steps)
     this.totalDuration = this.steps[this.steps.length - 1].endPos
     this.currentStepIndex = 0
     this.currentTimeIn = 0
@@ -48,7 +48,7 @@ class Sequencer {
     }
   }
 
-  _generateSteps(stepsInput: StepsInput): Steps {
+  private generateSteps(stepsInput: StepsInput): Steps {
     if (!stepsInput) {
       throw new Error('Invalid format.')
     }
@@ -73,7 +73,7 @@ class Sequencer {
     return steps
   }
 
-  _onLoop = (now: number) => {
+  private onLoop = (now: number) => {
     if (this.status !== PlayStatus.PLAYING) {
       return
     }
@@ -92,14 +92,22 @@ class Sequencer {
           return
         }
         if (this.endMode === 'loop') {
-          this.goToStepByIndex(0)
           this.startedAt = now
+          this.goToStepByIndex(0)
         }
       } else {
         this.currentStepIndex++
-        this._notifyChange()
+        this.notifyChange()
       }
     }
+  }
+
+  private notifyChange(): void {
+    const state = this.getState()
+
+    this.subscriptions.forEach(fn => {
+      fn(state)
+    })
   }
 
   goToStepByIndex(index: number) {
@@ -109,14 +117,6 @@ class Sequencer {
 
   getCurrentStep() {
     return this.steps[this.currentStepIndex]
-  }
-
-  _notifyChange(): void {
-    const state = this.getState()
-
-    this.subscriptions.forEach(fn => {
-      fn(state)
-    })
   }
 
   onChange = (fn: NotifyFunction) => {
@@ -132,32 +132,32 @@ class Sequencer {
       this.goToStepByIndex(0)
     }
     this.status = PlayStatus.PLAYING
-    ticker.onTick(this._onLoop)
+    ticker.onTick(this.onLoop)
     this.startedAt = ticker.currentTimeStamp - this.currentTimeIn
-    this._notifyChange()
+    this.notifyChange()
   }
 
   pause = () => {
     if (this.status === PlayStatus.PLAYING) {
       this.status = PlayStatus.IDLE
-      ticker.offTick(this._onLoop)
-      this._notifyChange()
+      ticker.offTick(this.onLoop)
+      this.notifyChange()
     }
   }
 
   stop = () => {
     this.goToStepByIndex(0)
     this.status = PlayStatus.IDLE
-    ticker.offTick(this._onLoop)
-    this._notifyChange()
+    ticker.offTick(this.onLoop)
+    this.notifyChange()
   }
 
   complete = () => {
     this.currentStepIndex = this.steps.length - 1
     this.currentTimeIn = this.totalDuration
     this.status = PlayStatus.IDLE
-    ticker.offTick(this._onLoop)
-    this._notifyChange()
+    ticker.offTick(this.onLoop)
+    this.notifyChange()
   }
 
   isComplete = () => {

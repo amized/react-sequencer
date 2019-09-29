@@ -8,10 +8,7 @@ import {
 } from './types'
 import { Subtract } from 'utility-types'
 
-const withSequencer = function(options: WithSequencerProps) {
-  if (!options.steps) {
-    throw new Error('Missing steps configuration in withSequencer')
-  }
+const withSequencer = function(options?: WithSequencerProps) {
   return function<BaseProps extends InjectedProps>(
     Component: React.ComponentType<BaseProps>
   ) {
@@ -38,13 +35,15 @@ const withSequencer = function(options: WithSequencerProps) {
       }
 
       static defaultProps: WithSequencerProps = {
-        steps: options.steps,
-        loop: options.loop,
-        endMode: options.endMode,
-        complete: options.complete,
-        shouldPlayOnUpdate: options.shouldPlayOnUpdate,
-        shouldStopOnUpdate: options.shouldStopOnUpdate,
-        shouldCompleteOnUpdate: options.shouldCompleteOnUpdate
+        steps: options ? options.steps : [],
+        loop: options ? options.loop : false,
+        endMode: options ? options.endMode : 'end',
+        complete: options ? options.complete : false,
+        shouldPlayOnUpdate: options ? options.shouldPlayOnUpdate : undefined,
+        shouldStopOnUpdate: options ? options.shouldStopOnUpdate : undefined,
+        shouldCompleteOnUpdate: options
+          ? options.shouldCompleteOnUpdate
+          : undefined
       }
 
       componentWillReceiveProps(nextProps: HocProps) {

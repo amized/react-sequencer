@@ -88,7 +88,7 @@ describe('Given an instance of my Sequencer library', () => {
         steps: [['one', 0], ['two', 500]],
         endMode: 'end'
       })
-      const spy = sinon.spy(s, '_notifyChange')
+      const spy = sinon.spy(s, 'notifyChange' as any)
       s.play()
       setTimeout(() => {
         expect(spy.callCount).toEqual(3)

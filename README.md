@@ -11,7 +11,7 @@ A better way to do animations in React.
 
 ## Overview
 
-React sequencer lets you perform complex animations easily by tying them to a time-sequenced set of states. The simplest usage is to wrap your component with the `withSequencer` HOC, which will inject the sequencer state into your component.
+React sequencer lets you perform complex animations easily by tying them to a time-sequenced set of states. The simplest usage is to implement the `SequencerWrapper` component, which will pass the sequencer state into a render function.
 
 You first define a set of steps for your sequence as tuples of names and durations:
 
@@ -22,19 +22,30 @@ You first define a set of steps for your sequence as tuples of names and duratio
   ['final', 0]
 ]
 ```
-Then pass this as configuration to withSequencer and wrap your component:
+Then pass this as configuration to SequencerWrapper:
 
 ```javascript
-withSequencer({
-  steps: [
-    ['initial', 100], 
-    ['middle', 100], 
-    ['final', 0]
-  ]
-})(MyComponent)
-```
+import { SequencerWrapper } from 'react-sequencer'
 
-Your wrapped component receives a `sequencer` object as a prop that contains the sequencer state and some methods to control the sequencer. When your sequencer stats playing, it runs through the steps and updates the state on every step, passing the current `name` into `sequencer.current`:
+const steps = [
+  ['initial', 100], 
+  ['middle', 100], 
+  ['final', 0]
+]
+
+const MyComponent = props => (
+  <SequencerWrapper steps={steps}>
+    {sequencer => (
+      <div>
+        <div>The sequencer state: {sequencer.current}</div>
+        <button onClick={sequencer.play}>Start</button>
+      </div>
+    )}
+  </SequencerWrapper>
+)
+
+```
+The `sequencer` object contains the sequencer state and some methods to control the sequencer. When your sequencer starts playing, it runs through the steps and updates the state on every step, passing the current `name` into `sequencer.current`. You can also implement this as a Higher Order Component using `withSequencer`:
 
 ```javascript
 const MyComponent = () => {
@@ -46,6 +57,11 @@ const MyComponent = () => {
     </div>
   )
 }
+
+export default withSequencer({
+  steps
+})(MyComponent);
+
 ```
 
 Allowing you to control your time sequenced events in this way has many benefits:
@@ -69,11 +85,11 @@ npm install react-sequencer
 
 <a name="with-sequencer"></a>
 
-## `withSequencer(config: Object)`
+## API
 
 ### Configuration properties
 
-Pass an options object to `withSequencer` to configure your sequencer. Note that all of these configuration properties can also be passed as props into your component from its parent.
+Pass options as props to `<SequencerWrapper>` or as an argument to `withSequencer()`.
 
 #### `steps: Array` [required]
 
@@ -128,11 +144,12 @@ A function you provide that allows you to stop playing the sequencer in response
 
 A function you provide that allows you to complete the sequencer in response to a change in props, meaning putting the sequencer in it's completed state. The return value should be `true` to complete, `false` otherwise.
 
-## Props
+## Sequencer
 
-`withSequencer` will inject a single prop into your wrapped component, `sequencer`. This object has the following properties:
+A `Sequencer` object will be injected into your wrapped component as a prop, or as the first argument to the render function you pass to `<SequencerWrapper>`. Below are properties and methods for the object:
 
-### State Props
+
+### State
 
 #### `sequencer.current: String`
 
@@ -159,7 +176,7 @@ The index of the current step.
 `true` if the sequencer has passed the step with the provided name.
 
 
-### API Props
+### API methods
 
 #### `sequencer.play(): Function`
 
