@@ -147,8 +147,5 @@
   },
   "peerDependencies": {
     "react": ">= 16.x.x"
-  },
-  "dependencies": {
-    "lodash.merge": "^4.6.2"
   }
 }

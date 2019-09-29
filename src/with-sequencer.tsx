@@ -8,6 +8,13 @@ import {
 } from './types'
 import { Subtract } from 'utility-types'
 
+const defaultOptions: WithSequencerProps = {
+  steps: [],
+  loop: false,
+  endMode: 'end',
+  complete: false
+}
+
 const withSequencer = function(options?: WithSequencerProps) {
   return function<BaseProps extends InjectedProps>(
     Component: React.ComponentType<BaseProps>
@@ -18,32 +25,21 @@ const withSequencer = function(options?: WithSequencerProps) {
       InjectedProps
     > {
       sequencer: Sequencer
+
+      static defaultProps = options
+        ? Object.assign({}, defaultOptions, options)
+        : defaultOptions
+
       constructor(props: HocProps) {
         super(props)
         const { steps, loop, complete, endMode } = props
-
         this.sequencer = new Sequencer({ steps, loop, complete, endMode })
-
         const sequencerState = this.sequencer.getState()
         const sequencerApi = this.getApi()
-
         this.state = {
           sequencer: Object.assign(sequencerState, sequencerApi)
         }
-
         this.sequencer.onChange(this.handleChange)
-      }
-
-      static defaultProps: WithSequencerProps = {
-        steps: options ? options.steps : [],
-        loop: options ? options.loop : false,
-        endMode: options ? options.endMode : 'end',
-        complete: options ? options.complete : false,
-        shouldPlayOnUpdate: options ? options.shouldPlayOnUpdate : undefined,
-        shouldStopOnUpdate: options ? options.shouldStopOnUpdate : undefined,
-        shouldCompleteOnUpdate: options
-          ? options.shouldCompleteOnUpdate
-          : undefined
       }
 
       componentWillReceiveProps(nextProps: HocProps) {
