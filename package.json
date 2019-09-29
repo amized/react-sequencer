@@ -1,6 +1,6 @@
 {
   "name": "react-sequencer",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Step based sequencer to give your components reliable states for transitions and animations.",
   "keywords": [
     "react",
