@@ -32,7 +32,6 @@ class Sequencer {
       endMode: 'end'
     }
     const options = Object.assign({}, defaults, props)
-    console.log('The options in sequencer', options)
     this.steps = this.generateSteps(options.steps)
     this.totalDuration = this.steps[this.steps.length - 1].endPos
     this.currentStepIndex = 0
