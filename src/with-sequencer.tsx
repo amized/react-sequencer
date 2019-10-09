@@ -8,23 +8,26 @@ import {
 } from './types'
 import { Subtract } from 'utility-types'
 
-const defaultOptions: WithSequencerProps = {
+const defaultOptions: WithSequencerProps<any> = {
   steps: [],
   loop: false,
   endMode: 'end',
   complete: false
 }
 
-const withSequencer = function(options?: WithSequencerProps) {
+const withSequencer = function<TStepName extends string>(
+  options?: WithSequencerProps<TStepName>
+) {
   return function<BaseProps extends InjectedProps>(
     Component: React.ComponentType<BaseProps>
   ) {
-    type HocProps = Subtract<BaseProps, InjectedProps> & WithSequencerProps
+    type HocProps = Subtract<BaseProps, InjectedProps> &
+      WithSequencerProps<TStepName>
     return class SequencerWrapper extends React.Component<
       HocProps,
       InjectedProps
     > {
-      sequencer: Sequencer
+      sequencer: Sequencer<TStepName>
 
       static defaultProps = options
         ? Object.assign({}, defaultOptions, options)
@@ -42,7 +45,7 @@ const withSequencer = function(options?: WithSequencerProps) {
         this.sequencer.onChange(this.handleChange)
       }
 
-      componentWillReceiveProps(nextProps: HocProps) {
+      UNSAFE_componentWillReceiveProps(nextProps: HocProps) {
         const {
           shouldPlayOnUpdate,
           shouldStopOnUpdate,

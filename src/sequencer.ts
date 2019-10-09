@@ -14,18 +14,17 @@ import Ticker from './ticker'
 
 const ticker = new Ticker()
 
-class Sequencer {
-  steps: Steps
-  currentStepIndex: number
-  currentTimeIn: number
-  totalDuration: number
-  endMode: EndMode
-  status: PlayStatus
-  requestID: string | null
-  subscriptions: Subscriptions
-  startedAt: number
-  constructor(props: OptionsInput) {
-    const defaults: Options = {
+class Sequencer<TStepName extends string> {
+  private steps: Steps<TStepName>
+  private currentStepIndex: number
+  private currentTimeIn: number
+  private totalDuration: number
+  private endMode: EndMode
+  private status: PlayStatus
+  private subscriptions: Subscriptions<TStepName>
+  private startedAt: number
+  constructor(props: OptionsInput<TStepName>) {
+    const defaults: Options<TStepName> = {
       steps: [],
       loop: false,
       complete: false,
@@ -39,7 +38,6 @@ class Sequencer {
     this.startedAt = 0
     this.endMode = options.loop ? 'loop' : options.endMode
     this.status = PlayStatus.IDLE
-    this.requestID = null
     this.subscriptions = []
 
     if (options.complete === true) {
@@ -47,7 +45,7 @@ class Sequencer {
     }
   }
 
-  private generateSteps(stepsInput: StepsInput): Steps {
+  private generateSteps(stepsInput: StepsInput<TStepName>): Steps<TStepName> {
     if (!stepsInput) {
       throw new Error('Invalid format.')
     }
@@ -93,6 +91,7 @@ class Sequencer {
         if (this.endMode === 'loop') {
           this.startedAt = now
           this.goToStepByIndex(0)
+          this.notifyChange()
         }
       } else {
         this.currentStepIndex++
@@ -118,8 +117,14 @@ class Sequencer {
     return this.steps[this.currentStepIndex]
   }
 
-  onChange = (fn: NotifyFunction) => {
+  onChange = (fn: NotifyFunction<TStepName>) => {
     this.subscriptions.push(fn)
+    return () => {
+      const index = this.subscriptions.findIndex(f => f === fn)
+      if (index !== -1) {
+        this.subscriptions.splice(index, 1)
+      }
+    }
   }
 
   play = () => {
@@ -167,7 +172,7 @@ class Sequencer {
     return this.status === PlayStatus.PLAYING
   }
 
-  isBefore = (stepName: string): boolean => {
+  isBefore = (stepName: TStepName): boolean => {
     const stepIndex = this.steps.findIndex(step => step.name === stepName)
     if (stepIndex === -1) {
       throw new Error(`Sequencer step ${stepName} not found.`)
@@ -175,7 +180,7 @@ class Sequencer {
     return this.currentStepIndex < stepIndex
   }
 
-  isAfter = (stepName: string): boolean => {
+  isAfter = (stepName: TStepName): boolean => {
     const stepIndex = this.steps.findIndex(step => step.name === stepName)
     if (stepIndex === -1) {
       throw new Error(`Sequencer step ${stepName} not found.`)
@@ -184,7 +189,7 @@ class Sequencer {
   }
 
   getState = () => {
-    const state: SequencerState = {
+    const state: SequencerState<TStepName> = {
       current: this.steps[this.currentStepIndex].name,
       index: this.currentStepIndex,
       isPlaying: this.isPlaying(),

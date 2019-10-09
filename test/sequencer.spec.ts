@@ -3,7 +3,7 @@ import Sequencer from '../src/sequencer'
 import { PlayStatus, StepsInput } from '../src/types'
 import sinon from 'sinon'
 
-let s: Sequencer
+let s: Sequencer<any>
 
 describe('Given an instance of my Sequencer library', () => {
   describe('when I initialise the sequence', () => {
@@ -11,7 +11,7 @@ describe('Given an instance of my Sequencer library', () => {
       s = new Sequencer({
         steps: [['one', 0], ['two', 10], ['three', 5], ['four', 23]]
       })
-      expect(s.endMode).toEqual('end')
+      expect(s['endMode']).toEqual('end')
     })
 
     it('should generate a sequence array', () => {
@@ -19,7 +19,7 @@ describe('Given an instance of my Sequencer library', () => {
         steps: [['one', 0], ['two', 10], ['three', 5], ['four', 23]]
       })
 
-      expect(s.steps).toEqual([
+      expect(s['steps']).toEqual([
         {
           name: 'one',
           startPos: 0,
@@ -50,8 +50,8 @@ describe('Given an instance of my Sequencer library', () => {
         steps: [['one', 100], ['two', 2000]],
         complete: true
       })
-      expect(s.currentStepIndex).toEqual(1)
-      expect(s.status).toEqual(PlayStatus.IDLE)
+      expect(s['currentStepIndex']).toEqual(1)
+      expect(s['status']).toEqual(PlayStatus.IDLE)
     })
   })
 
@@ -183,7 +183,7 @@ describe('Given an instance of my Sequencer library', () => {
         expect(s.getState().index).toEqual(4)
         done()
       }, 1800)
-    }, 5000)
+    }, 1900)
   })
 
   describe('when I run a sequence on loop mode', () => {
@@ -193,6 +193,10 @@ describe('Given an instance of my Sequencer library', () => {
         loop: true
       })
       s.play()
+    })
+
+    const a = new Sequencer({
+      steps: [['one', 500], ['two', 500]]
     })
 
     test('should start the sequence over once test finishes', done => {
@@ -210,10 +214,38 @@ describe('Given an instance of my Sequencer library', () => {
         s.stop()
         done()
       }, 1750)
-    }, 5000)
+    }, 2000)
+
+    test('should notify correct when looping', done => {
+      s = new Sequencer({
+        steps: [['one', 500], ['two', 500], ['three', 500]],
+        endMode: 'loop'
+      })
+      const spy = sinon.spy(s, 'notifyChange' as any)
+      s.play()
+      setTimeout(() => {
+        expect(s.getState().index).toEqual(0)
+        expect(spy.callCount).toEqual(1)
+      }, 250)
+      setTimeout(() => {
+        expect(s.getState().index).toEqual(1)
+        expect(spy.callCount).toEqual(2)
+      }, 750)
+      setTimeout(() => {
+        expect(s.getState().index).toEqual(2)
+        expect(spy.callCount).toEqual(3)
+      }, 1250)
+      setTimeout(() => {
+        expect(s.getState().index).toEqual(0)
+        expect(spy.callCount).toEqual(4)
+        s.stop()
+        done()
+      }, 1750)
+      s.play()
+    }, 2000)
   })
 
-  const playModeSequence: StepsInput = [
+  const playModeSequence: StepsInput<any> = [
     ['one', 200],
     ['two', 300],
     ['three', 400]

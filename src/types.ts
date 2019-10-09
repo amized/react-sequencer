@@ -11,38 +11,40 @@ export type TickerNotifyFunction = (timestamp: number) => void
 
 /**** Sequencer */
 
-export type StepInput = [string, number]
+export type StepInput<TStepName> = [TStepName, number]
 
-export type StepsInput = Array<StepInput>
+export type StepsInput<TStepName> = Array<StepInput<TStepName>>
 
-export interface OptionsInput {
-  steps: StepsInput
+export interface OptionsInput<TStepName> {
+  steps: StepsInput<TStepName>
   loop?: boolean
   complete?: boolean
   endMode?: EndMode
 }
 
-export interface Options {
-  steps: StepsInput
+export interface Options<TStepName> {
+  steps: StepsInput<TStepName>
   loop: boolean
   complete: boolean
   endMode: EndMode
 }
 
-export interface Step {
+export interface Step<TStepName> {
   startPos: number
   endPos: number
-  name: string
+  name: TStepName
 }
 
-export type Steps = Array<Step>
+export type Steps<TStepName> = Array<Step<TStepName>>
 
-export type NotifyFunction = (state: SequencerState) => void
+export type NotifyFunction<TStepName> = (
+  state: SequencerState<TStepName>
+) => void
 
-export type Subscriptions = Array<NotifyFunction>
+export type Subscriptions<TStepName> = Array<NotifyFunction<TStepName>>
 
-export interface SequencerState {
-  current: string
+export interface SequencerState<TStepName = string> {
+  current: TStepName
   index: number
   isPlaying: boolean
   isComplete: boolean
@@ -50,7 +52,7 @@ export interface SequencerState {
 
 /*** WithSequencer */
 
-export interface WithSequencerProps extends OptionsInput {
+export interface WithSequencerProps<TStepName> extends OptionsInput<TStepName> {
   shouldPlayOnUpdate?: { (currProps: any, nextProps: any): boolean }
   shouldStopOnUpdate?: { (currProps: any, nextProps: any): boolean }
   shouldCompleteOnUpdate?: { (currProps: any, nextProps: any): boolean }

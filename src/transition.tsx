@@ -2,13 +2,13 @@ import React from 'react'
 import Sequencer from './sequencer'
 import { StepsInput, SequencerState } from './types'
 
-interface Props {
+interface Props<TStepName> {
   /** Toggles the component in and out. */
   in: boolean
   /** Sequence to perform when in becomes true. */
-  inSteps: StepsInput
+  inSteps: StepsInput<TStepName>
   /** Sequence to perform when in becomes false. */
-  outSteps: StepsInput
+  outSteps: StepsInput<TStepName>
   /** Whether or not to run the 'in' sequence when the component mounts. */
   unmountOnExit: boolean
   /** If set to true, the child element is removed from the dom when
@@ -23,9 +23,12 @@ interface State {
   exitComplete: boolean
 }
 
-class Transition extends React.PureComponent<Props, State> {
-  inSeq: Sequencer
-  outSeq: Sequencer | null
+class Transition<TStepName extends string> extends React.PureComponent<
+  Props<TStepName>,
+  State
+> {
+  inSeq: Sequencer<TStepName>
+  outSeq: Sequencer<TStepName> | null
   static defaultProps = {
     in: false,
     unmountOnExit: false,
@@ -33,7 +36,7 @@ class Transition extends React.PureComponent<Props, State> {
     outSteps: null
   }
 
-  constructor(props: Props) {
+  constructor(props: Props<TStepName>) {
     super(props)
     let current = null
     this.outSeq = props.outSteps
@@ -86,7 +89,7 @@ class Transition extends React.PureComponent<Props, State> {
     }
   }
 
-  componentWillReceiveProps(nextProps: Props) {
+  componentWillReceiveProps(nextProps: Props<TStepName>) {
     if (this.props.in && !nextProps.in) {
       this.inSeq.stop()
       if (this.outSeq) {
