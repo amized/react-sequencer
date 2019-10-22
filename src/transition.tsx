@@ -38,7 +38,7 @@ class Transition<TStepName extends string> extends React.PureComponent<
 
   constructor(props: Props<TStepName>) {
     super(props)
-    let current = null
+    let current: TStepName | null = null
     this.outSeq = props.outSteps
       ? new Sequencer({
           steps: props.outSteps

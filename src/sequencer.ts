@@ -5,6 +5,7 @@ import {
   OptionsInput,
   Subscriptions,
   SequencerState,
+  SequencerApi,
   NotifyFunction,
   EndMode,
   Options
@@ -15,6 +16,7 @@ import Ticker from './ticker'
 const ticker = new Ticker()
 
 class Sequencer<TStepName extends string> {
+  private prevState: SequencerState
   private steps: Steps<TStepName>
   private currentStepIndex: number
   private currentTimeIn: number
@@ -30,7 +32,10 @@ class Sequencer<TStepName extends string> {
       complete: false,
       endMode: 'end'
     }
-    const options = Object.assign({}, defaults, props)
+    const options = { ...defaults, ...props }
+    if (options.steps.length === 0) {
+      throw new Error('React Sequencer: At least one step required in options')
+    }
     this.steps = this.generateSteps(options.steps)
     this.totalDuration = this.steps[this.steps.length - 1].endPos
     this.currentStepIndex = 0
@@ -41,8 +46,10 @@ class Sequencer<TStepName extends string> {
     this.subscriptions = []
 
     if (options.complete === true) {
-      this.complete()
+      this.goToStepByIndex(this.steps.length - 1)
     }
+
+    this.prevState = this.getState()
   }
 
   private generateSteps(stepsInput: StepsInput<TStepName>): Steps<TStepName> {
@@ -77,7 +84,6 @@ class Sequencer<TStepName extends string> {
     this.currentTimeIn = now - this.startedAt
     const currentStep = this.getCurrentStep()
     const completesAt = currentStep.endPos
-
     if (this.currentTimeIn >= completesAt) {
       if (this.currentStepIndex === this.steps.length - 1) {
         if (this.endMode === 'start') {
@@ -102,13 +108,19 @@ class Sequencer<TStepName extends string> {
 
   private notifyChange(): void {
     const state = this.getState()
-
-    this.subscriptions.forEach(fn => {
-      fn(state)
-    })
+    if (
+      !this.prevState ||
+      state.index !== this.prevState.index ||
+      state.isPlaying !== this.prevState.isPlaying
+    ) {
+      this.subscriptions.forEach(fn => {
+        fn(state)
+      })
+    }
+    this.prevState = state
   }
 
-  goToStepByIndex(index: number) {
+  private goToStepByIndex(index: number) {
     this.currentStepIndex = index
     this.currentTimeIn = this.steps[index].startPos
   }
@@ -164,6 +176,10 @@ class Sequencer<TStepName extends string> {
     this.notifyChange()
   }
 
+  isStopped = () => {
+    return this.currentTimeIn === 0 && this.status === PlayStatus.IDLE
+  }
+
   isComplete = () => {
     return this.currentTimeIn >= this.totalDuration
   }
@@ -193,10 +209,24 @@ class Sequencer<TStepName extends string> {
       current: this.steps[this.currentStepIndex].name,
       index: this.currentStepIndex,
       isPlaying: this.isPlaying(),
-      isComplete: this.isComplete()
+      isComplete: this.isComplete(),
+      isStopped: this.isStopped()
     }
 
     return state
+  }
+
+  getApi = () => {
+    const { play, pause, stop, complete, isBefore, isAfter } = this
+    const api: SequencerApi<TStepName> = {
+      play,
+      pause,
+      stop,
+      complete,
+      isBefore,
+      isAfter
+    }
+    return api
   }
 }
 

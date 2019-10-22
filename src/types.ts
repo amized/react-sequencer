@@ -48,6 +48,16 @@ export interface SequencerState<TStepName = string> {
   index: number
   isPlaying: boolean
   isComplete: boolean
+  isStopped: boolean
+}
+
+export interface SequencerApi<TStepName = string> {
+  play(): void
+  complete(): void
+  stop(): void
+  pause(): void
+  isBefore(name: TStepName): boolean
+  isAfter(name: TStepName): boolean
 }
 
 /*** WithSequencer */
@@ -58,15 +68,6 @@ export interface WithSequencerProps<TStepName> extends OptionsInput<TStepName> {
   shouldCompleteOnUpdate?: { (currProps: any, nextProps: any): boolean }
 }
 
-export interface InjectedAPI {
-  play(): void
-  complete(): void
-  stop(): void
-  pause(): void
-  isBefore(name: string): boolean
-  isAfter(name: string): boolean
-}
-
 export interface InjectedProps {
-  sequencer: InjectedAPI & SequencerState
+  sequencer: SequencerApi & SequencerState
 }

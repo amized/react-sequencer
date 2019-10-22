@@ -13,8 +13,9 @@
     "declarationDir": "dist/types",
     "outDir": "dist/lib",
     "jsx": "react",
-    "typeRoots": ["node_modules/@types"]
+    "typeRoots": ["node_modules/@types"],
+    "noImplicitAny": true
   },
-  "include": ["src", "setupTests.ts"],
+  "include": ["src"],
   "exclude": ["node_modules"]
 }

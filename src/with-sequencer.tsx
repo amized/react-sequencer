@@ -1,11 +1,6 @@
 import * as React from 'react'
 import Sequencer from './sequencer'
-import {
-  WithSequencerProps,
-  SequencerState,
-  InjectedAPI,
-  InjectedProps
-} from './types'
+import { WithSequencerProps, SequencerState, InjectedProps } from './types'
 import { Subtract } from 'utility-types'
 
 const defaultOptions: WithSequencerProps<any> = {
@@ -38,7 +33,7 @@ const withSequencer = function<TStepName extends string>(
         const { steps, loop, complete, endMode } = props
         this.sequencer = new Sequencer({ steps, loop, complete, endMode })
         const sequencerState = this.sequencer.getState()
-        const sequencerApi = this.getApi()
+        const sequencerApi = this.sequencer.getApi()
         this.state = {
           sequencer: Object.assign(sequencerState, sequencerApi)
         }
@@ -66,19 +61,8 @@ const withSequencer = function<TStepName extends string>(
         }
       }
 
-      getApi(): InjectedAPI {
-        return {
-          play: this.sequencer.play,
-          stop: this.sequencer.stop,
-          pause: this.sequencer.pause,
-          complete: this.sequencer.complete,
-          isBefore: this.sequencer.isBefore,
-          isAfter: this.sequencer.isAfter
-        }
-      }
-
       handleChange = (sequencerState: SequencerState) => {
-        const sequencer = Object.assign(sequencerState, this.getApi())
+        const sequencer = Object.assign(sequencerState, this.sequencer.getApi())
         this.setState({
           sequencer
         })

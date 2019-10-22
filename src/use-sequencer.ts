@@ -1,18 +1,19 @@
 import { useState, useEffect, useRef } from 'react'
 import Sequencer from './sequencer'
-import { WithSequencerProps, SequencerState, OptionsInput } from './types'
+import { SequencerState, OptionsInput, SequencerApi } from './types'
 
-/**
- * @param options  OptionsInput
- * @typeparam OptionsInput  Comment for type `OptionsInput`.
- */
 function useSequencer<TStepName extends string>(
-  options: OptionsInput<TStepName>
+  options: OptionsInput<TStepName>,
+  beforeUpdate?: {
+    (api: SequencerApi): void
+  }
 ) {
-  const { steps, loop, complete, endMode } = options
-  const sequencerRef = useRef(
-    new Sequencer<TStepName>({ steps, loop, complete, endMode })
-  )
+  const sequencerRef = useRef(new Sequencer<TStepName>(options))
+
+  if (beforeUpdate) {
+    beforeUpdate(sequencerRef.current.getApi())
+  }
+
   const [, setSequencer] = useState<SequencerState>(
     sequencerRef.current.getState()
   )
@@ -22,26 +23,10 @@ function useSequencer<TStepName extends string>(
     }
     return sequencerRef.current.onChange(handleStateChange)
   }, [])
-  const {
-    current,
-    index,
-    isComplete,
-    isPlaying
-  } = sequencerRef.current.getState()
-  const { play, pause, stop, isBefore, isAfter } = sequencerRef.current
+  const sequencerState = sequencerRef.current.getState()
+  const sequencerApi = sequencerRef.current.getApi()
 
-  return {
-    current,
-    index,
-    isComplete,
-    isPlaying,
-    play,
-    pause,
-    stop,
-    complete: sequencerRef.current.complete,
-    isBefore,
-    isAfter
-  }
+  return [sequencerState, sequencerApi]
 }
 
 export default useSequencer

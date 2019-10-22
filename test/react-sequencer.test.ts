@@ -1,4 +1,4 @@
-import { withSequencer } from '../src/react-sequencer'
+import { withSequencer } from '../src'
 
 describe('React sequencer', () => {
   it('should export the withSequencer HOC', () => {

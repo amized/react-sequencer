@@ -18,9 +18,9 @@
     "url": "https://github.com/amized/react-sequencer/issues"
   },
   "homepage": "https://amized.github.io/react-sequencer/",
-  "main": "dist/react-sequencer.umd.js",
-  "module": "dist/react-sequencer.es5.js",
-  "typings": "dist/types/react-sequencer.d.ts",
+  "main": "dist/index.umd.js",
+  "module": "dist/index.es5.js",
+  "typings": "dist/types/src/index.d.ts",
   "files": [
     "dist"
   ],
@@ -34,7 +34,7 @@
   "scripts": {
     "lint": "tslint  --project tsconfig.json -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
     "prebuild": "rimraf dist",
-    "build": "tsc --module commonjs && rollup -c rollup.config.ts && typedoc --out docs --target es6 --theme minimal --mode file src",
+    "build": "tsc --module commonjs && rollup -c rollup.config.ts && typedoc --out typedocs --target es6 --theme minimal --mode file src",
     "start": "rollup -c rollup.config.ts -w",
     "test": "jest --coverage",
     "test:watch": "jest --coverage --watch",
@@ -61,7 +61,7 @@
   },
   "jest": {
     "setupFilesAfterEnv": [
-      "<rootDir>setupTests.ts"
+      "<rootDir>setup-tests.ts"
     ],
     "transform": {
       ".(ts|tsx)": "ts-jest"
