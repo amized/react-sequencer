@@ -1,13 +1,18 @@
 import { useState, useEffect, useRef } from 'react'
 import Sequencer from './sequencer'
-import { SequencerState, OptionsInput, SequencerApi } from './types'
+import {
+  SequencerState,
+  OptionsInput,
+  SequencerApi,
+  TUseSequencer
+} from './types'
 
 function useSequencer<TStepName extends string>(
   options: OptionsInput<TStepName>,
   beforeUpdate?: {
     (api: SequencerApi): void
   }
-) {
+): TUseSequencer<TStepName> {
   const sequencerRef = useRef(new Sequencer<TStepName>(options))
 
   if (beforeUpdate) {

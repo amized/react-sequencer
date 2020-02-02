@@ -60,6 +60,13 @@ export interface SequencerApi<TStepName = string> {
   isAfter(name: TStepName): boolean
 }
 
+/*** Use Sequencer */
+
+export type TUseSequencer<TStepName> = [
+  SequencerState<TStepName>,
+  SequencerApi<TStepName>
+]
+
 /*** WithSequencer */
 
 export interface WithSequencerProps<TStepName> extends OptionsInput<TStepName> {
