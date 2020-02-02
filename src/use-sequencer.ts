@@ -14,22 +14,21 @@ function useSequencer<TStepName extends string>(
   }
 ): TUseSequencer<TStepName> {
   const sequencerRef = useRef(new Sequencer<TStepName>(options))
+  const sequencerApi = sequencerRef.current.getApi()
 
   if (beforeUpdate) {
-    beforeUpdate(sequencerRef.current.getApi())
+    beforeUpdate(sequencerApi)
   }
 
-  const [_, setSequencer] = useState<SequencerState>(
-    sequencerRef.current.getState()
-  )
+  const sequencerState = sequencerRef.current.getState()
+  const [_, setSequencer] = useState<SequencerState>(sequencerState)
+
   useEffect(() => {
     function handleStateChange(sequencerState: SequencerState) {
       setSequencer(sequencerState)
     }
     return sequencerRef.current.onChange(handleStateChange)
   }, [sequencerRef])
-  const sequencerState = sequencerRef.current.getState()
-  const sequencerApi = sequencerRef.current.getApi()
 
   return [sequencerState, sequencerApi]
 }
