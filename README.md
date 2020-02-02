@@ -25,20 +25,23 @@ Then pass this as configuration to useSequencer:
 ```javascript
 import { useSequencer } from 'react-sequencer'
 
-const steps = [
-  ['initial', 100],
-  ['middle', 100],
-  ['final', 0]
-]
+const steps = [['initial', 100], ['middle', 100], ['final', 0]]
 
 const MyComponent = props => {
-  let [state, api] = useSequencer({steps});
+  let [state, api] = useSequencer({ steps })
   return (
-	<div>
-	  <div>The current step: { state.current }</div>
-	  <button onClick={() => { api.play(); }}>Start</button>
-	</div>
-  );
+    <div>
+      <div>The current step: {state.current}</div>
+      <button
+        onClick={() => {
+          api.play()
+        }}
+      >
+        Start
+      </button>
+    </div>
+  )
+}
 ```
 
 Here `state` contains the sequencer state and `api` provides some methods to control the sequencer. When your sequencer starts playing, it runs through the steps and updates the state on every step, passing the current `name` into `state.current`.
@@ -72,13 +75,13 @@ The `useSequencer()` hook takes two parameters:
 
 ### options
 
-```options: Options```
+`options: Options`
 
 A configuration object to initialize the sequencer.
 
 ### onBeforeRender()
 
-```onBeforeRender: (api: SequencerApi) => void```
+`onBeforeRender: (api: SequencerApi) => void`
 
 A function you pass to update the sequencer in response to a change in props or state. Your function is passed the sequencer api as an argument, allowing you to call `play`, `pause`, `stop` or `complete`. The advantage of updating the state here is that your state/props and the sequencer state are rendered perfectly in sync, allowing to design animations with precision.
 
@@ -91,7 +94,10 @@ The hook returns a tuple of a [SequencerState](#sequencer-state) and [SequencerA
 Pass options to `useSequencer`.
 
 ### Steps
-`steps: Array` [required]
+
+```javascript
+steps: Array
+```
 
 Pass an array of tuples that defines the steps of the sequence. The first value should be the name of the step, the second the duration in milliseconds.
 
@@ -112,6 +118,7 @@ const steps = [['pre', 0], ['initial', 100], ['middle', 100], ['final', 0]]
 `pre` becomes the default state when your component mounts, until the sequencer is started, which moves on to `initial` on the next frame. By defining all the states explicitly in this fashion, it becomes easy to insert steps, change durations, swap steps and understand how your animation behaves.
 
 ### endMode
+
 `endMode: 'end' | 'start' | 'loop'`
 
 The end mode determines the behavior of the sequencer once it reaches the end of the last step.
@@ -127,6 +134,7 @@ The end mode determines the behavior of the sequencer once it reaches the end of
 If set to `true`, the sequencer is initialized in the 'completed' state, meaning it is in the final step and idle. It will remain in this state until either `play()` or `stop()` is called.
 
 <a name="sequencer-state"></a>
+
 ## Sequencer State
 
 The sequencer state offers the following properties.
@@ -143,7 +151,7 @@ The current step of the sequencer, as specified by the step names provided in th
 
 The index of the current step.
 
-### isPlaying 
+### isPlaying
 
 `isPlaying: Boolean`
 
@@ -162,6 +170,7 @@ The index of the current step.
 `true` if the sequencer is in its first step and not playing.
 
 <a name="sequencer-api"></a>
+
 ## Sequencer Api
 
 ### isBefore()
