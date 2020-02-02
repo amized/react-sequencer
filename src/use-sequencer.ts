@@ -14,7 +14,7 @@ function useSequencer<TStepName extends string>(
     beforeUpdate(sequencerRef.current.getApi())
   }
 
-  const [, setSequencer] = useState<SequencerState>(
+  const [_, setSequencer] = useState<SequencerState>(
     sequencerRef.current.getState()
   )
   useEffect(() => {
@@ -22,7 +22,7 @@ function useSequencer<TStepName extends string>(
       setSequencer(sequencerState)
     }
     return sequencerRef.current.onChange(handleStateChange)
-  }, [])
+  }, [sequencerRef])
   const sequencerState = sequencerRef.current.getState()
   const sequencerApi = sequencerRef.current.getApi()
 

@@ -70,10 +70,18 @@ npm install react-sequencer
 
 ## useSequencer
 
-#### `useSequencer(options: Options, onBeforeRender: Function): [state, api]`
+#### `(options: Options, onBeforeRender: Function) => [state, api]`
+
+### Arguments
+
+#### `options: Options`
+A configuration object to initialize the sequencer.
+
+#### `onBeforeRender: (api: SequencerApi) => void` 
+A function you pass to update the sequencer in response to a change in props or state. Your function is passed the sequencer api as an argument, allowing you to call `play`, `pause`, `stop` or `complete`. The advantage of updating the state here is that your state/props and the sequencer state are rendered perfectly in sync, allowing to design animations with precision.
 
 
-### `options`
+### Options
 
 Pass options to `useSequencer`.
 
@@ -114,14 +122,10 @@ The end mode determines the behavior of the sequencer once it reaches the end of
 * **`'start'`**: The sequencer resets to the first step and becomes idle.
 * **`'loop'`**: The sequencer resets to the first step and continues looping until `stop()` or `pause()` is called.
 
-### `onBeforeRender(Function): void`
-
-Pass a function to 
-
-
 #### `complete: Boolean`
 
 If set to `true`, the sequencer is initialized in the 'completed' state, meaning it is in the final step and idle. It will remain in this state until either `play()` or `stop()` is called.
+
 
 ### Sequencer State
 
@@ -141,13 +145,13 @@ The index of the current step.
 
 #### `isComplete: Boolean`
 
-`true` if the sequencer has finished sequencing through the steps and is idle. `endMode` must be set to `'end'` in order to reach this state.
+`true` if the sequencer has finished sequencing through the steps and is idle. `endMode` must be set to `end` in order to reach this state.
 
 #### `isStopped: Boolean`
 
 `true` if the sequencer is in its first step and not playing.
 
-### Api
+### Sequencer Api
 
 #### `isBefore(name): Boolean`
 
