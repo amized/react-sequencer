@@ -8,8 +8,7 @@ A better way to do animations in React.
 
 - [Examples](https://amized.github.io/react-sequencer/)
 - [Getting Started](#getting-started)
-- [Transition](#transition)
-- [withSequencer](#with-sequencer)
+- [withSequencer](#use-sequencer)
 
 ## Overview
 
@@ -18,20 +17,17 @@ React sequencer lets you perform complex animations easily by tying them to a ti
 You first define a set of steps for your sequence as tuples of names and durations:
 
 ```javascript
-[
-  ['initial', 100], 
-  ['middle', 100], 
-  ['final', 0]
-]
+;[['initial', 100], ['middle', 100], ['final', 0]]
 ```
+
 Then pass this as configuration to useSequencer:
 
 ```javascript
 import { useSequencer } from 'react-sequencer'
 
 const steps = [
-  ['initial', 100], 
-  ['middle', 100], 
+  ['initial', 100],
+  ['middle', 100],
   ['final', 0]
 ]
 
@@ -44,15 +40,15 @@ const MyComponent = props => {
 	</div>
   );
 ```
-Here `state` contains the sequencer state and `api` provides some methods to control the sequencer. When your sequencer starts playing, it runs through the steps and updates the state on every step, passing the current `name` into `state.current`. 
 
+Here `state` contains the sequencer state and `api` provides some methods to control the sequencer. When your sequencer starts playing, it runs through the steps and updates the state on every step, passing the current `name` into `state.current`.
 
 Allowing you to control your time sequenced events in this way has many benefits:
 
-* Easily add / remove or edit your steps from one place in your code
-* Have your sequencer trigger css animations, text changes, or whatever you like
-* Every step runs in its own animation frame so no repaint or timeout hacks are needed to get your animations behaving exactly as you like
-* Add sequencers to multiple components and guarantee that they update in sync
+- Easily add / remove or edit your steps from one place in your code
+- Have your sequencer trigger css animations, text changes, or whatever you like
+- Every step runs in its own animation frame so no repaint or timeout hacks are needed to get your animations behaving exactly as you like
+- Add sequencers to multiple components and guarantee that they update in sync
 
 See [examples](https://amized.github.io/react-sequencer/).
 
@@ -66,7 +62,7 @@ Install from NPM:
 npm install react-sequencer
 ```
 
-<a name="with-sequencer"></a>
+<a name="use-sequencer"></a>
 
 ## useSequencer
 
@@ -75,11 +71,12 @@ npm install react-sequencer
 ### Arguments
 
 #### `options: Options`
+
 A configuration object to initialize the sequencer.
 
-#### `onBeforeRender: (api: SequencerApi) => void` 
-A function you pass to update the sequencer in response to a change in props or state. Your function is passed the sequencer api as an argument, allowing you to call `play`, `pause`, `stop` or `complete`. The advantage of updating the state here is that your state/props and the sequencer state are rendered perfectly in sync, allowing to design animations with precision.
+#### `onBeforeRender: (api: SequencerApi) => void`
 
+A function you pass to update the sequencer in response to a change in props or state. Your function is passed the sequencer api as an argument, allowing you to call `play`, `pause`, `stop` or `complete`. The advantage of updating the state here is that your state/props and the sequencer state are rendered perfectly in sync, allowing to design animations with precision.
 
 ### Options
 
@@ -91,11 +88,7 @@ Pass an array of tuples that defines the steps of the sequence. The first value 
 
 ```javascript
 useSequencer({
-  steps: [
-   ['initial', 100], 
-   ['middle', 100], 
-   ['final', 0]
-  ]
+  steps: [['initial', 100], ['middle', 100], ['final', 0]]
 })
 ```
 
@@ -104,12 +97,7 @@ If you specify a duration of `0` for a step, it means that the following step wi
 This is useful for creating an animation 'set up' state where you may want to prepare some css before an animation begins. You can simply do this without needing to change anything else in your sequence:
 
 ```javascript
-[
-  ['pre', 0], 
-  ['initial', 100], 
-  ['middle', 100], 
-  ['final', 0]
-]
+;[['pre', 0], ['initial', 100], ['middle', 100], ['final', 0]]
 ```
 
 `pre` becomes the default state when your component mounts, until the sequencer is started, which moves on to `initial` on the next frame. By defining all the states explicitly in this fashion, it becomes easy to insert steps, change durations, swap steps and understand how your animation behaves.
@@ -118,14 +106,13 @@ This is useful for creating an animation 'set up' state where you may want to pr
 
 The end mode determines the behavior of the sequencer once it reaches the end of the last step.
 
-* **`'end'` (default)**: The sequencer remains in the last step.
-* **`'start'`**: The sequencer resets to the first step and becomes idle.
-* **`'loop'`**: The sequencer resets to the first step and continues looping until `stop()` or `pause()` is called.
+- **`'end'` (default)**: The sequencer remains in the last step.
+- **`'start'`**: The sequencer resets to the first step and becomes idle.
+- **`'loop'`**: The sequencer resets to the first step and continues looping until `stop()` or `pause()` is called.
 
 #### `complete: Boolean`
 
 If set to `true`, the sequencer is initialized in the 'completed' state, meaning it is in the final step and idle. It will remain in this state until either `play()` or `stop()` is called.
-
 
 ### Sequencer State
 
