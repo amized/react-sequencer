@@ -8,7 +8,7 @@ A better way to do animations in React.
 
 - [Examples](https://amized.github.io/react-sequencer/)
 - [Getting Started](#getting-started)
-- [withSequencer](#use-sequencer)
+- [useSequencer](#use-sequencer)
 
 ## Overview
 
