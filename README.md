@@ -17,7 +17,7 @@ React sequencer lets you perform complex animations easily by tying them to a ti
 You first define a set of steps for your sequence as tuples of names and durations:
 
 ```javascript
-;[['initial', 100], ['middle', 100], ['final', 0]]
+const steps = [['initial', 100], ['middle', 100], ['final', 0]]
 ```
 
 Then pass this as configuration to useSequencer:
@@ -64,25 +64,34 @@ npm install react-sequencer
 
 <a name="use-sequencer"></a>
 
-## useSequencer
+## useSequencer()
 
-#### `(options: Options, onBeforeRender: Function) => [state, api]`
+`(options: Options, onBeforeRender: Function) => [state, api]`
 
-### Arguments
+The `useSequencer()` hook takes two parameters:
 
-#### `options: Options`
+### options
+
+```options: Options```
 
 A configuration object to initialize the sequencer.
 
-#### `onBeforeRender: (api: SequencerApi) => void`
+### onBeforeRender()
+
+```onBeforeRender: (api: SequencerApi) => void```
 
 A function you pass to update the sequencer in response to a change in props or state. Your function is passed the sequencer api as an argument, allowing you to call `play`, `pause`, `stop` or `complete`. The advantage of updating the state here is that your state/props and the sequencer state are rendered perfectly in sync, allowing to design animations with precision.
 
-### Options
+### Returns
+
+The hook returns a tuple of a [SequencerState](#sequencer-state) and [SequencerApi](#sequencer-api).
+
+## Options
 
 Pass options to `useSequencer`.
 
-#### `steps: Array` [required]
+### Steps
+`steps: Array` [required]
 
 Pass an array of tuples that defines the steps of the sequence. The first value should be the name of the step, the second the duration in milliseconds.
 
@@ -97,12 +106,13 @@ If you specify a duration of `0` for a step, it means that the following step wi
 This is useful for creating an animation 'set up' state where you may want to prepare some css before an animation begins. You can simply do this without needing to change anything else in your sequence:
 
 ```javascript
-;[['pre', 0], ['initial', 100], ['middle', 100], ['final', 0]]
+const steps = [['pre', 0], ['initial', 100], ['middle', 100], ['final', 0]]
 ```
 
 `pre` becomes the default state when your component mounts, until the sequencer is started, which moves on to `initial` on the next frame. By defining all the states explicitly in this fashion, it becomes easy to insert steps, change durations, swap steps and understand how your animation behaves.
 
-#### `endMode: 'end' | 'start' | 'loop'`
+### endMode
+`endMode: 'end' | 'start' | 'loop'`
 
 The end mode determines the behavior of the sequencer once it reaches the end of the last step.
 
@@ -110,56 +120,82 @@ The end mode determines the behavior of the sequencer once it reaches the end of
 - **`'start'`**: The sequencer resets to the first step and becomes idle.
 - **`'loop'`**: The sequencer resets to the first step and continues looping until `stop()` or `pause()` is called.
 
-#### `complete: Boolean`
+### complete
+
+`complete: Boolean`
 
 If set to `true`, the sequencer is initialized in the 'completed' state, meaning it is in the final step and idle. It will remain in this state until either `play()` or `stop()` is called.
 
-### Sequencer State
+<a name="sequencer-state"></a>
+## Sequencer State
 
-The sequencer state offer the following properties.
+The sequencer state offers the following properties.
 
-#### `current: String`
+### current
+
+`current: String`
 
 The current step of the sequencer, as specified by the step names provided in the config.
 
-#### `index: Number`
+### index
+
+`index: Number`
 
 The index of the current step.
 
-#### `isPlaying: Boolean`
+### isPlaying 
+
+`isPlaying: Boolean`
 
 `true` if the sequencer is playing.
 
-#### `isComplete: Boolean`
+### isComplete
+
+`isComplete: Boolean`
 
 `true` if the sequencer has finished sequencing through the steps and is idle. `endMode` must be set to `end` in order to reach this state.
 
-#### `isStopped: Boolean`
+### isStopped
+
+`isStopped: Boolean`
 
 `true` if the sequencer is in its first step and not playing.
 
-### Sequencer Api
+<a name="sequencer-api"></a>
+## Sequencer Api
 
-#### `isBefore(name): Boolean`
+### isBefore()
+
+`isBefore(name): Boolean`
 
 `true` if the sequencer has not yet reached the step with the provided name.
 
-#### `isAfter(name): Boolean`
+### isAfter()
+
+`isAfter(name): Boolean`
 
 `true` if the sequencer has passed the step with the provided name.
 
-#### `play(): Function`
+### play()
+
+`play(): Function`
 
 Starts the sequencer, or continues playing if the sequencer was paused.
 
-#### `pause(): Function`
+### pause()
+
+`pause(): Function`
 
 Pauses the sequencer. The sequencer tracks how far it is through the current step by the millisecond so that playback continues from the same moment.
 
-#### `stop(): Function`
+### stop()
+
+`stop(): Function`
 
 Stops playback and resets the sequencer back to the first step.
 
-#### `complete(): Function`
+### complete()
+
+`complete(): Function`
 
 Stops playback and puts the sequencer to the end of the final step.
