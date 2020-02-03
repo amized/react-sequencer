@@ -68,7 +68,7 @@ npm install react-sequencer
 ## useSequencer()
 
 ```typescript
-;(options: Options, onBeforeRender: Function) => [SequencerState, SequencerApi]
+(options: Options, onBeforeRender: Function) => [SequencerState, SequencerApi]
 ```
 
 The `useSequencer()` hook takes two parameters:
@@ -190,7 +190,7 @@ isStopped: boolean
 ### isBefore()
 
 ```typescript
-isBefore(name): boolean
+isBefore(name: string): boolean
 ```
 
 `true` if the sequencer has not yet reached the step with the provided name.
@@ -198,7 +198,7 @@ isBefore(name): boolean
 ### isAfter()
 
 ```typescript
-isAfter(name): boolean
+isAfter(name: string): boolean
 ```
 
 `true` if the sequencer has passed the step with the provided name.
