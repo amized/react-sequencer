@@ -6,7 +6,7 @@ A better way to do animations in React.
 
 ## Docs
 
-- [Examples](https://amized.github.io/react-sequencer/)
+- [Examples (V1)](https://amized.github.io/react-sequencer/)
 - [Getting Started](#getting-started)
 - [useSequencer](#use-sequencer)
 
@@ -53,8 +53,6 @@ Allowing you to control your time sequenced events in this way has many benefits
 - Every step runs in its own animation frame so no repaint or timeout hacks are needed to get your animations behaving exactly as you like
 - Add sequencers to multiple components and guarantee that they update in sync
 
-See [examples](https://amized.github.io/react-sequencer/).
-
 <a name="getting-started"></a>
 
 ## Getting started
@@ -69,7 +67,9 @@ npm install react-sequencer
 
 ## useSequencer()
 
-`(options: Options, onBeforeRender: Function) => [state, api]`
+```typescript
+;(options: Options, onBeforeRender: Function) => [SequencerState, SequencerApi]
+```
 
 The `useSequencer()` hook takes two parameters:
 
@@ -95,8 +95,8 @@ Pass options to `useSequencer`.
 
 ### Steps
 
-```javascript
-steps: Array
+```typescript
+steps: Array<[string, number]>
 ```
 
 Pass an array of tuples that defines the steps of the sequence. The first value should be the name of the step, the second the duration in milliseconds.
@@ -119,7 +119,9 @@ const steps = [['pre', 0], ['initial', 100], ['middle', 100], ['final', 0]]
 
 ### endMode
 
-`endMode: 'end' | 'start' | 'loop'`
+```typescript
+endMode: 'end' | 'start' | 'loop'
+```
 
 The end mode determines the behavior of the sequencer once it reaches the end of the last step.
 
@@ -129,7 +131,9 @@ The end mode determines the behavior of the sequencer once it reaches the end of
 
 ### complete
 
-`complete: Boolean`
+```typescript
+complete: boolean
+```
 
 If set to `true`, the sequencer is initialized in the 'completed' state, meaning it is in the final step and idle. It will remain in this state until either `play()` or `stop()` is called.
 
@@ -141,31 +145,41 @@ The sequencer state offers the following properties.
 
 ### current
 
-`current: String`
+```typescript
+current: string
+```
 
 The current step of the sequencer, as specified by the step names provided in the config.
 
 ### index
 
-`index: Number`
+```typescript
+index: number
+```
 
 The index of the current step.
 
 ### isPlaying
 
-`isPlaying: Boolean`
+```typescript
+isPlaying: boolean
+```
 
 `true` if the sequencer is playing.
 
 ### isComplete
 
-`isComplete: Boolean`
+```typescript
+isComplete: boolean
+```
 
 `true` if the sequencer has finished sequencing through the steps and is idle. `endMode` must be set to `end` in order to reach this state.
 
 ### isStopped
 
-`isStopped: Boolean`
+```typescript
+isStopped: boolean
+```
 
 `true` if the sequencer is in its first step and not playing.
 
@@ -175,36 +189,48 @@ The index of the current step.
 
 ### isBefore()
 
-`isBefore(name): Boolean`
+```typescript
+isBefore(name): boolean
+```
 
 `true` if the sequencer has not yet reached the step with the provided name.
 
 ### isAfter()
 
-`isAfter(name): Boolean`
+```typescript
+isAfter(name): boolean
+```
 
 `true` if the sequencer has passed the step with the provided name.
 
 ### play()
 
-`play(): Function`
+```typescript
+play(): void
+```
 
 Starts the sequencer, or continues playing if the sequencer was paused.
 
 ### pause()
 
-`pause(): Function`
+```typescript
+pause(): void
+```
 
 Pauses the sequencer. The sequencer tracks how far it is through the current step by the millisecond so that playback continues from the same moment.
 
 ### stop()
 
-`stop(): Function`
+```typescript
+stop(): void
+```
 
 Stops playback and resets the sequencer back to the first step.
 
 ### complete()
 
-`complete(): Function`
+```typescript
+complete(): void
+```
 
 Stops playback and puts the sequencer to the end of the final step.
