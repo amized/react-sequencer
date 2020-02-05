@@ -25,7 +25,7 @@ const withSequencer = function<TStepName extends string>(
       sequencer: Sequencer<TStepName>
 
       static defaultProps = options
-        ? Object.assign({}, defaultOptions, options)
+        ? { ...defaultOptions, ...options }
         : defaultOptions
 
       constructor(props: HocProps) {
@@ -35,7 +35,7 @@ const withSequencer = function<TStepName extends string>(
         const sequencerState = this.sequencer.getState()
         const sequencerApi = this.sequencer.getApi()
         this.state = {
-          sequencer: Object.assign(sequencerState, sequencerApi)
+          sequencer: { ...sequencerState, ...sequencerApi }
         }
         this.sequencer.onChange(this.handleChange)
       }
@@ -62,7 +62,7 @@ const withSequencer = function<TStepName extends string>(
       }
 
       handleChange = (sequencerState: SequencerState) => {
-        const sequencer = Object.assign(sequencerState, this.sequencer.getApi())
+        const sequencer = { ...sequencerState, ...this.sequencer.getApi() }
         this.setState({
           sequencer
         })
