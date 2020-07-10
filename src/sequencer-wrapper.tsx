@@ -1,14 +1,18 @@
 import React, { ReactElement } from 'react'
-import withSequencer from './with-sequencer'
-import { SequencerState, SequencerApi, InjectedProps } from './types'
+import useSequencer from './use-sequencer'
+import { SequencerState, SequencerApi, OptionsInput } from './types'
 
-interface Props extends InjectedProps {
-  children(sequencer: SequencerApi & SequencerState): ReactElement
+interface Props<TStepName> extends OptionsInput<TStepName> {
+  children(
+    state: SequencerState<TStepName>,
+    api: SequencerApi<TStepName>
+  ): ReactElement
 }
 
-const SequencerWrapper: React.FunctionComponent<Props> = ({
-  children,
-  sequencer
-}) => children(sequencer)
+const SequencerWrapper = function<TStepName>(props: Props<TStepName>) {
+  const { children, ...options } = props
+  const [state, api] = useSequencer(options)
+  return children(state, api)
+}
 
-export default withSequencer()(SequencerWrapper)
+export default SequencerWrapper

@@ -9,6 +9,8 @@ A better way to do animations in React.
 - [Examples (V1)](https://amized.github.io/react-sequencer/)
 - [Getting Started](#getting-started)
 - [useSequencer](#use-sequencer)
+- [API](#options)
+- [\<Sequencer\>](#sequencer)
 
 ## Overview
 
@@ -17,7 +19,11 @@ React sequencer lets you perform complex animations easily by tying them to a ti
 You first define a set of steps for your sequence as tuples of names and durations:
 
 ```javascript
-const steps = [['initial', 100], ['middle', 100], ['final', 0]]
+const steps = [
+  ['initial', 100], 
+  ['middle', 100], 
+  ['final', 0]
+]
 ```
 
 Then pass this as configuration to useSequencer:
@@ -25,7 +31,11 @@ Then pass this as configuration to useSequencer:
 ```javascript
 import { useSequencer } from 'react-sequencer'
 
-const steps = [['initial', 100], ['middle', 100], ['final', 0]]
+const steps = [
+  ['initial', 100], 
+  ['middle', 100], 
+  ['final', 0]
+]
 
 const MyComponent = props => {
   let [state, api] = useSequencer({ steps })
@@ -68,7 +78,7 @@ npm install react-sequencer
 ## useSequencer()
 
 ```typescript
-(options: Options, onBeforeRender: Function) => [SequencerState, SequencerApi]
+(options: Options) => [SequencerState, SequencerApi]
 ```
 
 The `useSequencer()` hook takes two parameters:
@@ -79,31 +89,30 @@ The `useSequencer()` hook takes two parameters:
 
 A configuration object to initialize the sequencer.
 
-### onBeforeRender()
-
-`onBeforeRender: (api: SequencerApi) => void`
-
-A function you pass to update the sequencer in response to a change in props or state. Your function is passed the sequencer api as an argument, allowing you to call `play`, `pause`, `stop` or `complete`. The advantage of updating the state here is that your state/props and the sequencer state are rendered perfectly in sync, allowing to design animations with precision.
-
 ### Returns
 
 The hook returns a tuple of a [SequencerState](#sequencer-state) and [SequencerApi](#sequencer-api).
 
+<a name="options"></a>
 ## Options
 
 Pass options to `useSequencer`.
 
-### Steps
+### steps
 
 ```typescript
-steps: Array<[string, number]>
+steps: Array<[any, number]>
 ```
 
 Pass an array of tuples that defines the steps of the sequence. The first value should be the name of the step, the second the duration in milliseconds.
 
 ```javascript
 useSequencer({
-  steps: [['initial', 100], ['middle', 100], ['final', 0]]
+  steps: [
+  	['initial', 100], 
+  	['middle', 100], 
+  	['final', 0]
+  ]
 })
 ```
 
@@ -112,7 +121,12 @@ If you specify a duration of `0` for a step, it means that the following step wi
 This is useful for creating an animation 'set up' state where you may want to prepare some css before an animation begins. You can simply do this without needing to change anything else in your sequence:
 
 ```javascript
-const steps = [['pre', 0], ['initial', 100], ['middle', 100], ['final', 0]]
+const steps = [
+  ['pre', 0], 
+  ['initial', 100], 
+  ['middle', 100], 
+  ['final', 0]
+]
 ```
 
 `pre` becomes the default state when your component mounts, until the sequencer is started, which moves on to `initial` on the next frame. By defining all the states explicitly in this fashion, it becomes easy to insert steps, change durations, swap steps and understand how your animation behaves.
@@ -138,7 +152,6 @@ complete: boolean
 If set to `true`, the sequencer is initialized in the 'completed' state, meaning it is in the final step and idle. It will remain in this state until either `play()` or `stop()` is called.
 
 <a name="sequencer-state"></a>
-
 ## Sequencer State
 
 The sequencer state offers the following properties.
@@ -146,10 +159,10 @@ The sequencer state offers the following properties.
 ### current
 
 ```typescript
-current: string
+current: any
 ```
 
-The current step of the sequencer, as specified by the step names provided in the config.
+The current step of the sequencer, as specified by the step names provided in the config. While these examples use a string, you can actually use any type for your names.
 
 ### index
 
@@ -234,3 +247,24 @@ complete(): void
 ```
 
 Stops playback and puts the sequencer to the end of the final step.
+
+<a name="getting-started"></a>
+## Sequencer component
+
+If you prefer you may also use a wrapper component `<Sequencer>` to create a sequencer. Here you pass all the `options` above as props, and you should pass a function as the child component with `state` and `api` as arguments:
+
+```javascript
+import { Sequencer } from 'react-sequencer'
+
+const MyComponent = props => {
+  return (
+  	<Sequencer steps={...} endMode={...} complete={...}>
+  	 {
+  	   (state, api) => (
+  	     <div>The current state is {state.current}</div>
+  	   )
+  	 }
+  	</Sequencer>
+  )
+}
+```

@@ -15,8 +15,8 @@ import Ticker from './ticker'
 
 const ticker = new Ticker()
 
-class Sequencer<TStepName extends string> {
-  private prevState: SequencerState
+class Sequencer<TStepName> {
+  private prevState: SequencerState<TStepName>
   private steps: Steps<TStepName>
   private currentStepIndex: number
   private currentTimeIn: number

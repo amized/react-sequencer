@@ -1,6 +1,6 @@
 export enum PlayStatus {
   IDLE = 'STATUS_IDLE',
-  PLAYING = 'STATUS_PLAYING'
+  PLAYING = 'STATUS_PLAYING',
 }
 
 export type EndMode = 'loop' | 'end' | 'start'
@@ -43,7 +43,7 @@ export type NotifyFunction<TStepName> = (
 
 export type Subscriptions<TStepName> = Array<NotifyFunction<TStepName>>
 
-export interface SequencerState<TStepName = string> {
+export interface SequencerState<TStepName> {
   current: TStepName
   index: number
   isPlaying: boolean
@@ -51,7 +51,7 @@ export interface SequencerState<TStepName = string> {
   isStopped: boolean
 }
 
-export interface SequencerApi<TStepName = string> {
+export interface SequencerApi<TStepName> {
   play(): void
   complete(): void
   stop(): void
@@ -66,15 +66,3 @@ export type TUseSequencer<TStepName> = [
   SequencerState<TStepName>,
   SequencerApi<TStepName>
 ]
-
-/*** WithSequencer */
-
-export interface WithSequencerProps<TStepName> extends OptionsInput<TStepName> {
-  shouldPlayOnUpdate?: { (currProps: any, nextProps: any): boolean }
-  shouldStopOnUpdate?: { (currProps: any, nextProps: any): boolean }
-  shouldCompleteOnUpdate?: { (currProps: any, nextProps: any): boolean }
-}
-
-export interface InjectedProps {
-  sequencer: SequencerApi & SequencerState
-}

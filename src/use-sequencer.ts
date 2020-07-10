@@ -1,36 +1,22 @@
 import { useState, useEffect, useRef } from 'react'
 import Sequencer from './sequencer'
-import {
-  SequencerState,
-  OptionsInput,
-  SequencerApi,
-  TUseSequencer
-} from './types'
+import { SequencerState, OptionsInput, TUseSequencer } from './types'
 
-function useSequencer<TStepName extends string>(
-  options: OptionsInput<TStepName>,
-  beforeUpdate?: {
-    (api: SequencerApi): void
-  }
+function useSequencer<TStepName = string>(
+  options: OptionsInput<TStepName>
 ): TUseSequencer<TStepName> {
   const sequencerRef = useRef(new Sequencer<TStepName>(options))
-  const sequencerApi = sequencerRef.current.getApi()
-
-  if (beforeUpdate) {
-    beforeUpdate(sequencerApi)
-  }
-
-  const sequencerState = sequencerRef.current.getState()
-  const [_, setSequencer] = useState<SequencerState>(sequencerState)
-
+  const sequencerApi = useRef(sequencerRef.current.getApi())
+  const [sequencerState, setSequencer] = useState<SequencerState<TStepName>>(
+    sequencerRef.current.getState()
+  )
   useEffect(() => {
-    function handleStateChange(sequencerState: SequencerState) {
+    function handleStateChange(sequencerState: SequencerState<TStepName>) {
       setSequencer(sequencerState)
     }
     return sequencerRef.current.onChange(handleStateChange)
-  }, [sequencerRef])
-
-  return [sequencerState, sequencerApi]
+  }, [])
+  return [sequencerState, sequencerApi.current]
 }
 
 export default useSequencer
