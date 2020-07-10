@@ -10,9 +10,8 @@ A better way to do animations in React.
 
 ## Overview
 
-
-
 ### Introduction
+
 React sequencer lets you perform complex animations easily by tying them to a time-sequenced state machine. The simplest usage is to implement the `useSequencer` hook inside your function components, which will give you the sequencer state and an api to control it.
 
 You first define a set of steps for your sequence as tuples of names and durations:
@@ -21,7 +20,7 @@ You first define a set of steps for your sequence as tuples of names and duratio
 const steps = [
   ['initial', 100],
   ['middle', 100],
-  ['final', 0]
+  ['final', 0],
 ]
 ```
 
@@ -33,10 +32,10 @@ import { useSequencer } from 'react-sequencer'
 const steps = [
   ['initial', 100],
   ['middle', 100],
-  ['final', 0]
+  ['final', 0],
 ]
 
-const MyComponent = props => {
+const MyComponent = (props) => {
   let [state, api] = useSequencer({ steps })
   return (
     <div>
@@ -79,7 +78,7 @@ npm install react-sequencer
 ### useSequencer()
 
 ```typescript
-(options: Options) => [SequencerState, SequencerApi]
+;(options: Options) => [SequencerState, SequencerApi]
 ```
 
 The `useSequencer` hook is the recommended way to create a sequencer and inject its state into your component. It takes an options object as an argument.
@@ -96,15 +95,15 @@ The hook returns a tuple of a [SequencerState](#sequencer-state) and [SequencerA
 
 #### Example
 
-```
+```javascript
 const [state, api] = useSequencer({
   steps: [
     ['initial', 100],
     ['middle', 100],
-    ['final', 0]
+    ['final', 0],
   ],
   endMode: 'end',
-  complete: true
+  complete: true,
 })
 ```
 
@@ -129,8 +128,8 @@ useSequencer({
   steps: [
     ['initial', 100],
     ['middle', 100],
-    ['final', 0]
-  ]
+    ['final', 0],
+  ],
 })
 ```
 
@@ -143,7 +142,7 @@ const steps = [
   ['pre', 0],
   ['initial', 100],
   ['middle', 100],
-  ['final', 0]
+  ['final', 0],
 ]
 ```
 
@@ -279,14 +278,10 @@ If you prefer you may also use a wrapper component `<Sequencer>` to create a seq
 ```javascript
 import { Sequencer } from 'react-sequencer'
 
-const MyComponent = props => {
+const MyComponent = (props) => {
   return (
     <Sequencer steps={mySteps}>
-      {
-        (state, api) => (
-          <div>The current state is {state.current}</div>
-        )
-      }
+      {(state, api) => <div>The current state is {state.current}</div>}
     </Sequencer>
   )
 }
