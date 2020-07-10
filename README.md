@@ -4,11 +4,9 @@ A better way to do animations in React.
 
 ### Links
 
-- [Examples (V1)](https://amized.github.io/react-sequencer/)
+- [Examples](https://amized.github.io/react-sequencer/)
 - [Getting Started](#getting-started)
-- [useSequencer](#use-sequencer)
-- [Options](#options)
-- [\<Sequencer\>](#sequencer)
+- [Docs](#use-sequencer)
 
 ## Overview
 
@@ -84,7 +82,7 @@ npm install react-sequencer
 (options: Options) => [SequencerState, SequencerApi]
 ```
 
-The `useSequencer()` hook takes one paramerer:
+The `useSequencer` hook is the recommended way to create a sequencer and inject its state into your component. It takes an options object as an argument.
 
 #### options
 
@@ -95,6 +93,20 @@ A configuration object to initialize the sequencer.
 #### Returns
 
 The hook returns a tuple of a [SequencerState](#sequencer-state) and [SequencerApi](#sequencer-api).
+
+#### Example
+
+```
+const [state, api] = useSequencer({
+  steps: [
+    ['initial', 100],
+    ['middle', 100],
+    ['final', 0]
+  ],
+  endMode: 'end',
+  complete: true
+})
+```
 
 <a name="options"></a>
 
@@ -268,7 +280,7 @@ import { Sequencer } from 'react-sequencer'
 
 const MyComponent = props => {
   return (
-    <Sequencer steps={...} endMode={...} complete={...}>
+    <Sequencer steps={mySteps}>
       {
         (state, api) => (
           <div>The current state is {state.current}</div>
