@@ -111,6 +111,7 @@ const [state, api] = useSequencer({
 <a name="options"></a>
 
 <hr/>
+
 ### Options
 
 Options is an object passed to `useSequencer`. It contains the following properties:
