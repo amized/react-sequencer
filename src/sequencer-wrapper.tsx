@@ -9,7 +9,7 @@ interface Props<TStepName> extends OptionsInput<TStepName> {
   ): ReactElement
 }
 
-const SequencerWrapper = function<TStepName>(props: Props<TStepName>) {
+const SequencerWrapper = function <TStepName>(props: Props<TStepName>) {
   const { children, ...options } = props
   const [state, api] = useSequencer(options)
   return children(state, api)

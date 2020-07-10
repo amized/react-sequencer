@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import Sequencer from './sequencer'
 import { SequencerState, OptionsInput, TUseSequencer } from './types'
 
-function useSequencer<TStepName = string>(
+function useSequencer<TStepName>(
   options: OptionsInput<TStepName>
 ): TUseSequencer<TStepName> {
   const sequencerRef = useRef(new Sequencer<TStepName>(options))

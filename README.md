@@ -20,8 +20,8 @@ You first define a set of steps for your sequence as tuples of names and duratio
 
 ```javascript
 const steps = [
-  ['initial', 100], 
-  ['middle', 100], 
+  ['initial', 100],
+  ['middle', 100],
   ['final', 0]
 ]
 ```
@@ -32,8 +32,8 @@ Then pass this as configuration to useSequencer:
 import { useSequencer } from 'react-sequencer'
 
 const steps = [
-  ['initial', 100], 
-  ['middle', 100], 
+  ['initial', 100],
+  ['middle', 100],
   ['final', 0]
 ]
 
@@ -78,7 +78,7 @@ npm install react-sequencer
 ## useSequencer()
 
 ```typescript
-(options: Options) => [SequencerState, SequencerApi]
+;(options: Options) => [SequencerState, SequencerApi]
 ```
 
 The `useSequencer()` hook takes two parameters:
@@ -109,9 +109,9 @@ Pass an array of tuples that defines the steps of the sequence. The first value 
 ```javascript
 useSequencer({
   steps: [
-  	['initial', 100], 
-  	['middle', 100], 
-  	['final', 0]
+    ['initial', 100],
+    ['middle', 100],
+    ['final', 0]
   ]
 })
 ```
@@ -122,9 +122,9 @@ This is useful for creating an animation 'set up' state where you may want to pr
 
 ```javascript
 const steps = [
-  ['pre', 0], 
-  ['initial', 100], 
-  ['middle', 100], 
+  ['pre', 0],
+  ['initial', 100],
+  ['middle', 100],
   ['final', 0]
 ]
 ```
@@ -152,6 +152,7 @@ complete: boolean
 If set to `true`, the sequencer is initialized in the 'completed' state, meaning it is in the final step and idle. It will remain in this state until either `play()` or `stop()` is called.
 
 <a name="sequencer-state"></a>
+
 ## Sequencer State
 
 The sequencer state offers the following properties.
@@ -248,7 +249,8 @@ complete(): void
 
 Stops playback and puts the sequencer to the end of the final step.
 
-<a name="getting-started"></a>
+<a name="sequencer"></a>
+
 ## Sequencer component
 
 If you prefer you may also use a wrapper component `<Sequencer>` to create a sequencer. Here you pass all the `options` above as props, and you should pass a function as the child component with `state` and `api` as arguments:
@@ -258,13 +260,13 @@ import { Sequencer } from 'react-sequencer'
 
 const MyComponent = props => {
   return (
-  	<Sequencer steps={...} endMode={...} complete={...}>
-  	 {
-  	   (state, api) => (
-  	     <div>The current state is {state.current}</div>
-  	   )
-  	 }
-  	</Sequencer>
+    <Sequencer steps={...} endMode={...} complete={...}>
+      {
+        (state, api) => (
+          <div>The current state is {state.current}</div>
+        )
+      }
+    </Sequencer>
   )
 }
 ```
