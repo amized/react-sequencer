@@ -99,6 +99,7 @@ The hook returns a tuple of a [SequencerState](#sequencer-state) and [SequencerA
 <a name="options"></a>
 
 <hr/>
+
 ### Options
 
 Options is an object passed to `useSequencer`. It contains the following properties:
