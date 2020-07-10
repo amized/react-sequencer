@@ -2,19 +2,20 @@
 
 A better way to do animations in React.
 
-**Version 2 now with hooks!**
-
-## Docs
+### Links
 
 - [Examples (V1)](https://amized.github.io/react-sequencer/)
 - [Getting Started](#getting-started)
 - [useSequencer](#use-sequencer)
-- [API](#options)
+- [Options](#options)
 - [\<Sequencer\>](#sequencer)
 
 ## Overview
 
-React sequencer lets you perform complex animations easily by tying them to a time-sequenced set of states. The simplest usage is to implement the `useSequencer` hook inside your function components, which will give you the sequencer state and an api to control it.
+
+
+### Introduction
+React sequencer lets you perform complex animations easily by tying them to a time-sequenced state machine. The simplest usage is to implement the `useSequencer` hook inside your function components, which will give you the sequencer state and an api to control it.
 
 You first define a set of steps for your sequence as tuples of names and durations:
 
@@ -65,7 +66,7 @@ Allowing you to control your time sequenced events in this way has many benefits
 
 <a name="getting-started"></a>
 
-## Getting started
+### Getting started
 
 Install from NPM:
 
@@ -75,30 +76,34 @@ npm install react-sequencer
 
 <a name="use-sequencer"></a>
 
-## useSequencer()
+## Documentation
+
+### useSequencer()
 
 ```typescript
-;(options: Options) => [SequencerState, SequencerApi]
+(options: Options) => [SequencerState, SequencerApi]
 ```
 
-The `useSequencer()` hook takes two parameters:
+The `useSequencer()` hook takes one paramerer:
 
-### options
+#### options
 
 `options: Options`
 
 A configuration object to initialize the sequencer.
 
-### Returns
+#### Returns
 
 The hook returns a tuple of a [SequencerState](#sequencer-state) and [SequencerApi](#sequencer-api).
 
 <a name="options"></a>
-## Options
 
-Pass options to `useSequencer`.
+<hr/>
+### Options
 
-### steps
+Options is an object passed to `useSequencer`. It contains the following properties:
+
+#### steps
 
 ```typescript
 steps: Array<[any, number]>
@@ -131,7 +136,7 @@ const steps = [
 
 `pre` becomes the default state when your component mounts, until the sequencer is started, which moves on to `initial` on the next frame. By defining all the states explicitly in this fashion, it becomes easy to insert steps, change durations, swap steps and understand how your animation behaves.
 
-### endMode
+#### endMode
 
 ```typescript
 endMode: 'end' | 'start' | 'loop'
@@ -143,7 +148,7 @@ The end mode determines the behavior of the sequencer once it reaches the end of
 - **`'start'`**: The sequencer resets to the first step and becomes idle.
 - **`'loop'`**: The sequencer resets to the first step and continues looping until `stop()` or `pause()` is called.
 
-### complete
+#### complete
 
 ```typescript
 complete: boolean
@@ -151,13 +156,14 @@ complete: boolean
 
 If set to `true`, the sequencer is initialized in the 'completed' state, meaning it is in the final step and idle. It will remain in this state until either `play()` or `stop()` is called.
 
+<hr/>
 <a name="sequencer-state"></a>
 
-## Sequencer State
+### Sequencer State
 
-The sequencer state offers the following properties.
+The sequencer state is an object representing the current state of the sequencer. It includes these properties.
 
-### current
+#### current
 
 ```typescript
 current: any
@@ -165,7 +171,7 @@ current: any
 
 The current step of the sequencer, as specified by the step names provided in the config. While these examples use a string, you can actually use any type for your names.
 
-### index
+#### index
 
 ```typescript
 index: number
@@ -173,7 +179,7 @@ index: number
 
 The index of the current step.
 
-### isPlaying
+#### isPlaying
 
 ```typescript
 isPlaying: boolean
@@ -181,7 +187,7 @@ isPlaying: boolean
 
 `true` if the sequencer is playing.
 
-### isComplete
+#### isComplete
 
 ```typescript
 isComplete: boolean
@@ -189,7 +195,7 @@ isComplete: boolean
 
 `true` if the sequencer has finished sequencing through the steps and is idle. `endMode` must be set to `end` in order to reach this state.
 
-### isStopped
+#### isStopped
 
 ```typescript
 isStopped: boolean
@@ -197,11 +203,12 @@ isStopped: boolean
 
 `true` if the sequencer is in its first step and not playing.
 
+<hr/>
 <a name="sequencer-api"></a>
 
-## Sequencer Api
+### Sequencer Api
 
-### isBefore()
+#### isBefore()
 
 ```typescript
 isBefore(name: string): boolean
@@ -209,7 +216,7 @@ isBefore(name: string): boolean
 
 `true` if the sequencer has not yet reached the step with the provided name.
 
-### isAfter()
+#### isAfter()
 
 ```typescript
 isAfter(name: string): boolean
@@ -217,7 +224,7 @@ isAfter(name: string): boolean
 
 `true` if the sequencer has passed the step with the provided name.
 
-### play()
+#### play()
 
 ```typescript
 play(): void
@@ -225,7 +232,7 @@ play(): void
 
 Starts the sequencer, or continues playing if the sequencer was paused.
 
-### pause()
+#### pause()
 
 ```typescript
 pause(): void
@@ -233,7 +240,7 @@ pause(): void
 
 Pauses the sequencer. The sequencer tracks how far it is through the current step by the millisecond so that playback continues from the same moment.
 
-### stop()
+#### stop()
 
 ```typescript
 stop(): void
@@ -241,7 +248,7 @@ stop(): void
 
 Stops playback and resets the sequencer back to the first step.
 
-### complete()
+#### complete()
 
 ```typescript
 complete(): void
@@ -249,9 +256,10 @@ complete(): void
 
 Stops playback and puts the sequencer to the end of the final step.
 
+<hr/>
 <a name="sequencer"></a>
 
-## Sequencer component
+### Sequencer component
 
 If you prefer you may also use a wrapper component `<Sequencer>` to create a sequencer. Here you pass all the `options` above as props, and you should pass a function as the child component with `state` and `api` as arguments:
 
@@ -270,3 +278,7 @@ const MyComponent = props => {
   )
 }
 ```
+
+## LICENSE
+
+MIT
