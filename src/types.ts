@@ -20,6 +20,7 @@ export interface OptionsInput<TStepName> {
   loop?: boolean
   complete?: boolean
   endMode?: EndMode
+  autoplay?: boolean
 }
 
 export interface Options<TStepName> {
@@ -27,6 +28,7 @@ export interface Options<TStepName> {
   loop: boolean
   complete: boolean
   endMode: EndMode
+  autoplay: boolean
 }
 
 export interface Step<TStepName> {
