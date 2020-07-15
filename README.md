@@ -78,7 +78,7 @@ npm install react-sequencer
 ### useSequencer()
 
 ```typescript
-;(options: Options) => [SequencerState, SequencerApi]
+(options: Options) => [SequencerState, SequencerApi]
 ```
 
 The `useSequencer` hook is the recommended way to create a sequencer and inject its state into your component. It takes an options object as an argument.
