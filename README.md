@@ -78,7 +78,7 @@ npm install react-sequencer
 ### useSequencer()
 
 ```typescript
-;(options: Options) => [SequencerState, SequencerApi]
+(options: Options) => [SequencerState, SequencerApi]
 ```
 
 The `useSequencer` hook is the recommended way to create a sequencer and inject its state into your component. It takes an options object as an argument.
@@ -159,6 +159,14 @@ The end mode determines the behavior of the sequencer once it reaches the end of
 - **`'end'` (default)**: The sequencer remains in the last step.
 - **`'start'`**: The sequencer resets to the first step and becomes idle.
 - **`'loop'`**: The sequencer resets to the first step and continues looping until `stop()` or `pause()` is called.
+
+#### autoplay
+
+```typescript
+autoPlay: boolean
+```
+
+Set to `true` to start playing the sequencer when your component mounts.
 
 #### complete
 

@@ -8,7 +8,7 @@ import {
   SequencerApi,
   NotifyFunction,
   EndMode,
-  Options
+  Options,
 } from './types'
 
 import Ticker from './ticker'
@@ -30,7 +30,8 @@ class Sequencer<TStepName> {
       steps: [],
       loop: false,
       complete: false,
-      endMode: 'end'
+      endMode: 'end',
+      autoplay: false,
     }
     const options = { ...defaults, ...props }
     if (options.steps.length === 0) {
@@ -49,6 +50,10 @@ class Sequencer<TStepName> {
       this.goToStepByIndex(this.steps.length - 1)
     }
 
+    if (options.autoplay === true) {
+      this.play()
+    }
+
     this.prevState = this.getState()
   }
 
@@ -59,7 +64,7 @@ class Sequencer<TStepName> {
 
     let prev = 0
 
-    const steps = stepsInput.map(step => {
+    const steps = stepsInput.map((step) => {
       if (!Array.isArray(step) || step.length !== 2) {
         throw new Error('Invalid format. See docs for correct structure.')
       }
@@ -70,7 +75,7 @@ class Sequencer<TStepName> {
       return {
         startPos,
         endPos,
-        name: step[0]
+        name: step[0],
       }
     })
 
@@ -113,7 +118,7 @@ class Sequencer<TStepName> {
       state.index !== this.prevState.index ||
       state.isPlaying !== this.prevState.isPlaying
     ) {
-      this.subscriptions.forEach(fn => {
+      this.subscriptions.forEach((fn) => {
         fn(state)
       })
     }
@@ -132,7 +137,7 @@ class Sequencer<TStepName> {
   onChange = (fn: NotifyFunction<TStepName>) => {
     this.subscriptions.push(fn)
     return () => {
-      const index = this.subscriptions.findIndex(f => f === fn)
+      const index = this.subscriptions.findIndex((f) => f === fn)
       if (index !== -1) {
         this.subscriptions.splice(index, 1)
       }
@@ -189,7 +194,7 @@ class Sequencer<TStepName> {
   }
 
   isBefore = (stepName: TStepName): boolean => {
-    const stepIndex = this.steps.findIndex(step => step.name === stepName)
+    const stepIndex = this.steps.findIndex((step) => step.name === stepName)
     if (stepIndex === -1) {
       throw new Error(`Sequencer step ${stepName} not found.`)
     }
@@ -197,7 +202,7 @@ class Sequencer<TStepName> {
   }
 
   isAfter = (stepName: TStepName): boolean => {
-    const stepIndex = this.steps.findIndex(step => step.name === stepName)
+    const stepIndex = this.steps.findIndex((step) => step.name === stepName)
     if (stepIndex === -1) {
       throw new Error(`Sequencer step ${stepName} not found.`)
     }
@@ -210,7 +215,7 @@ class Sequencer<TStepName> {
       index: this.currentStepIndex,
       isPlaying: this.isPlaying(),
       isComplete: this.isComplete(),
-      isStopped: this.isStopped()
+      isStopped: this.isStopped(),
     }
 
     return state
@@ -224,7 +229,7 @@ class Sequencer<TStepName> {
       stop,
       complete,
       isBefore,
-      isAfter
+      isAfter,
     }
     return api
   }
